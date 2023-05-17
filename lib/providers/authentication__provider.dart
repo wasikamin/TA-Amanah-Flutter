@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import 'package:amanah/models/user.dart';
+import 'package:amanah/services/authentication_service.dart';
 
 class AuthenticationProvider with ChangeNotifier {
   bool _isLoggedIn = false;
