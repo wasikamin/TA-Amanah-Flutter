@@ -1,11 +1,16 @@
+import 'package:amanah/screens/Authentication/otp_screen.dart';
+import 'package:amanah/screens/home/homepage_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'dart:async';
 import 'package:amanah/services/authentication_service.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthenticationProvider with ChangeNotifier {
   bool _isLoggedIn = false;
   String _userId = "";
+  String _email = "";
+  String get email => _email;
   String get userId => _userId;
   bool get isLoggedIn => _isLoggedIn;
   final AuthenticationService _authenticationService = AuthenticationService();
@@ -13,11 +18,11 @@ class AuthenticationProvider with ChangeNotifier {
 
   //constructor
   AuthenticationProvider() {
-    checkAutoLogin();
+    checkLoginStatus();
   }
 
-  Future<void> checkAutoLogin() async {
-    final token = await _secureStorage.read(key: 'userId');
+  Future<void> checkLoginStatus() async {
+    final token = await _secureStorage.read(key: 'jwtToken');
 
     if (token != null) {
       print(token);
@@ -29,24 +34,63 @@ class AuthenticationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(String email, String password) async {
+  Future<void> login(
+      String email, String password, BuildContext context) async {
     try {
       print(password);
       print(email);
       var id = await _authenticationService.login(email, password);
+      email = (await _secureStorage.read(key: 'email'))!;
       _userId = id;
-      _isLoggedIn = true;
       notifyListeners();
+      if (_userId != "") {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpScreen(),
+          ),
+        );
+      }
     } catch (error) {
       print(error);
-      throw error;
+    }
+  }
+
+  Future<void> sendOtp(String Otp, String email, BuildContext context) async {
+    try {
+      await _authenticationService.sendOtp(Otp, email);
+      final token = await _secureStorage.read(key: 'jwtToken');
+      print(token);
+      if (token != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
+      }
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> resendOtp(String email) async {
+    try {
+      _authenticationService.resendOtp(email);
+    } catch (error) {
+      print(error);
     }
   }
 
   Future<void> logout() async {
     // Perform logout logic and update _isLoggedIn accordingly
     // ...
-
+    await _secureStorage.delete(key: 'userId');
+    await _secureStorage.delete(key: 'email');
+    await _secureStorage.delete(key: 'jwtToken');
+    _userId = "";
+    _email = "";
+    _isLoggedIn = false;
     notifyListeners();
   }
 }
