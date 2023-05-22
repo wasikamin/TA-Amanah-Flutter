@@ -1,22 +1,55 @@
-import 'package:amanah/models/user.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthenticationService {
-  Future<User> login(String email, String password) async {
-    // Simulating an asynchronous login process
-    await Future.delayed(Duration(seconds: 2));
+  static const String _baseUrl = 'https://ta-backend-api.as.r.appspot.com/api';
+  static const String _sendOtpEndpoint = '/authentication/login?action=login';
+  static const String _loginEndpoint = '/authentication/login?action=email-otp';
 
-    // Check if the login credentials are valid
-    if (email == 'example@gmail.com' && password == 'password') {
-      // Return the logged-in user
-      return User(id: 1, name: 'John Doe', email: email);
+  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+
+  Future<String> login(String email, String password) async {
+    final url = Uri.parse('$_baseUrl$_loginEndpoint');
+    final response = await http.post(url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({'email': email, 'password': password}));
+    print(json.decode(response.body));
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      final userId = responseBody['data']['userId'] as String;
+
+      await _secureStorage.write(key: 'userId', value: userId);
+
+      return responseBody['data']['userId'];
     } else {
-      throw Exception('Invalid email or password');
+      throw Exception('Failed to login');
+    }
+  }
+
+  Future<void> sendOtp(String Otp, String email) async {
+    final url = Uri.parse('$_baseUrl $_sendOtpEndpoint');
+    final response = await http.post(
+      url,
+      body: {
+        'email': email,
+        'otp': Otp,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // OTP sent successfully
+      final responseBody = json.decode(response.body);
+      final token = responseBody['data']['accessToken'] as String;
+      await _secureStorage.write(key: 'jwt_token', value: token);
+    } else {
+      throw Exception('Failed to send OTP');
     }
   }
 
   Future<void> logout() async {
-    // Simulating an asynchronous logout process
-    await Future.delayed(Duration(seconds: 1));
+    await _secureStorage.delete(key: 'jwt_token');
     // Perform logout logic here
   }
 }
