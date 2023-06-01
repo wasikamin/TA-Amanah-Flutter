@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(32))),
               onPressed: () async {
-                await authenticationProvider.logout();
+                await authenticationProvider.logout(context);
               },
               child: Text(
                 'Keluar',

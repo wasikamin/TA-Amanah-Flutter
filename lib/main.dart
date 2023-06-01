@@ -16,15 +16,16 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
       ],
       child: Consumer<AuthenticationProvider>(
-          builder: (context, authProvider, child) {
-        return MaterialApp(
-          title: 'P2P Lending App',
-          theme: ThemeData(fontFamily: 'Inter'
-              // Your app's theme configurations
-              ),
-          home: authProvider.isLoggedIn ? HomePage() : LoginScreen(),
-        );
-      }),
+        builder: (context, authProvider, child) {
+          return MaterialApp(
+            title: 'P2P Lending App',
+            theme: ThemeData(fontFamily: 'Inter'
+                // Your app's theme configurations
+                ),
+            home: authProvider.isLoggedIn ? HomePage() : LoginScreen(),
+          );
+        },
+      ),
     );
   }
 }

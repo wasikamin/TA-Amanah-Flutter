@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 class OtpField extends StatefulWidget {
   final int otpLength;
   final Function(String) onOTPEntered;
+  final Function onCompleted;
 
-  OtpField({required this.otpLength, required this.onOTPEntered});
+  OtpField({
+    required this.otpLength,
+    required this.onOTPEntered,
+    required this.onCompleted,
+  });
 
   @override
   _OtpFieldState createState() => _OtpFieldState();
@@ -30,6 +35,17 @@ class _OtpFieldState extends State<OtpField> {
       _controllers[i].dispose();
     }
     super.dispose();
+  }
+
+  void _checkComplete() {
+    bool isComplete =
+        _controllers.every((controller) => controller.text.isNotEmpty);
+    if (isComplete) {
+      // Perform the "on complete" action here
+      widget.onCompleted();
+      print('OTP complete');
+      // Example: Trigger verification or navigate to the next screen
+    }
   }
 
   @override
@@ -63,6 +79,7 @@ class _OtpFieldState extends State<OtpField> {
                   otp += _controllers[i].text;
                 }
                 widget.onOTPEntered(otp);
+                _checkComplete();
               },
               decoration: InputDecoration(
                   counterText: '', border: OutlineInputBorder()),

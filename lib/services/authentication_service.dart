@@ -27,7 +27,8 @@ class AuthenticationService {
 
       return responseBody['data']['userId'];
     } else {
-      throw Exception('Failed to login');
+      final responseBody = json.decode(response.body);
+      throw responseBody["message"];
     }
   }
 

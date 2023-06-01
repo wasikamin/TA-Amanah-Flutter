@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
-  PasswordField({required this.controller, super.key});
+  bool useValidator = true;
+  PasswordField(
+      {required this.controller, super.key, required this.useValidator});
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
@@ -10,12 +12,16 @@ class PasswordField extends StatefulWidget {
 
 class _PasswordFieldState extends State<PasswordField> {
   bool _obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: widget.controller,
       obscureText: _obscureText,
       validator: (value) {
+        if (widget.useValidator == false) {
+          return null;
+        }
         if (value!.isEmpty) {
           return 'Kolom tidak boleh kosong';
         }
@@ -51,7 +57,7 @@ class _PasswordFieldState extends State<PasswordField> {
         labelText: 'Password',
         border: UnderlineInputBorder(),
         suffixIcon: IconButton(
-          icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+          icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),
           onPressed: () {
             setState(() {
               _obscureText = !_obscureText;

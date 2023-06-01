@@ -1,3 +1,4 @@
+import 'package:amanah/screens/Authentication/login_screen.dart';
 import 'package:amanah/screens/Authentication/otp_screen.dart';
 import 'package:amanah/screens/home/homepage_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -10,8 +11,10 @@ class AuthenticationProvider with ChangeNotifier {
   bool _isLoggedIn = false;
   String _userId = "";
   String _email = "";
+  String _message = "";
   String get email => _email;
   String get userId => _userId;
+  String get message => _message;
   bool get isLoggedIn => _isLoggedIn;
   final AuthenticationService _authenticationService = AuthenticationService();
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
@@ -37,12 +40,13 @@ class AuthenticationProvider with ChangeNotifier {
   Future<void> login(
       String email, String password, BuildContext context) async {
     try {
-      print(password);
-      print(email);
+      // print(password);
+      // print(email);
       var id = await _authenticationService.login(email, password);
-      email = (await _secureStorage.read(key: 'email'))!;
+
       _userId = id;
       notifyListeners();
+
       if (_userId != "") {
         Navigator.push(
           context,
@@ -52,7 +56,7 @@ class AuthenticationProvider with ChangeNotifier {
         );
       }
     } catch (error) {
-      print(error);
+      throw error;
     }
   }
 
@@ -82,7 +86,7 @@ class AuthenticationProvider with ChangeNotifier {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
     // Perform logout logic and update _isLoggedIn accordingly
     // ...
     await _secureStorage.delete(key: 'userId');
@@ -92,5 +96,11 @@ class AuthenticationProvider with ChangeNotifier {
     _email = "";
     _isLoggedIn = false;
     notifyListeners();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+    );
   }
 }
