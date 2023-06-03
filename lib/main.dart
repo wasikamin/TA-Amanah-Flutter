@@ -1,4 +1,4 @@
-import 'package:amanah/screens/Authentication/login_screen.dart';
+import 'package:amanah/screens/Landing/landing_screen.dart';
 import 'package:amanah/screens/home/homepage_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +22,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(fontFamily: 'Inter'
                 // Your app's theme configurations
                 ),
-            home: authProvider.isLoggedIn ? HomePage() : LoginScreen(),
+            home: authProvider.isLoggedIn
+                ? const HomePage()
+                : const LandingScreen(),
           );
         },
       ),

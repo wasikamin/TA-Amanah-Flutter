@@ -1,7 +1,8 @@
 import 'package:amanah/providers/authentication__provider.dart';
-import 'package:amanah/widgets/card.dart';
-import 'package:amanah/widgets/loginLogo.dart';
-import 'package:amanah/widgets/passwordField.dart';
+import 'package:amanah/screens/Authentication/role_screen.dart';
+import 'package:amanah/widgets/Authentication/card.dart';
+import 'package:amanah/widgets/Authentication/Login/loginLogo.dart';
+import 'package:amanah/widgets/Authentication/passwordField.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:amanah/constants/app_theme.dart';
@@ -51,153 +52,170 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: false,
       body: Stack(children: [
         Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage("assets/images/background/background.png"),
-                  fit: BoxFit.cover)),
+          decoration: background,
           child: Form(
             key: _formKey,
-            child: SafeArea(
-                child: Padding(
-              padding: const EdgeInsets.only(left: 24, right: 24),
-              child: Column(
-                children: [
-                  const Flexible(
-                    flex: 1,
+            child: Stack(
+              children: [
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 24, right: 24),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        LoginLogo(),
+                        const Flexible(
+                          flex: 2,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              LoginLogo(),
+                            ],
+                          ),
+                        ),
+                        Flexible(
+                          flex: 5,
+                          child: CustomCard(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: double.infinity,
+                                  child: Text(
+                                    "Selamat Datang",
+                                    style: titleTextStyle.copyWith(
+                                        color: accentColor, fontSize: 24),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+
+                                //Login Text Field
+                                TextFormField(
+                                  controller: _emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Kolom tidak boleh kosong';
+                                    }
+                                    if (!RegExp(
+                                            r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                                        .hasMatch(value)) {
+                                      return 'Please enter a valid email address';
+                                    }
+                                    return null;
+                                  },
+                                  decoration: InputDecoration(
+                                    prefixIcon:
+                                        Icon(Icons.mail_outline_rounded),
+                                    labelText: 'Email',
+                                    border: UnderlineInputBorder(),
+                                  ),
+                                ),
+                                SizedBox(height: 16.0),
+
+                                //Password TextField
+                                PasswordField(
+                                  controller: _passwordController,
+                                  useValidator: false,
+                                ),
+
+                                //forget password
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Flexible(flex: 1, child: Container()),
+                                    Flexible(
+                                      flex: 1,
+                                      child: TextButton(
+                                        style: TextButton.styleFrom(
+                                            padding: EdgeInsets.zero),
+                                        onPressed: () {},
+                                        child: Text(
+                                          "Lupa Password?",
+                                          style: thinTextButtonTextStyle,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Center(
+                                  child: Text(
+                                    _errorMessage,
+                                    style: errorTextStyle,
+                                  ),
+                                ),
+                                //Login Button
+                                Container(
+                                  margin: EdgeInsets.only(top: 20),
+                                  child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: accentColor,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                        ),
+                                        minimumSize: Size.fromHeight(40)),
+                                    onPressed: () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        // login logic here
+                                        String email = _emailController.text;
+                                        String password =
+                                            _passwordController.text;
+                                        _login(email, password);
+                                      }
+                                    },
+                                    child: Text(
+                                      'Masuk',
+                                      style: buttonTextStyle,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 16,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Belum memiliki akun? ",
+                                      style: bodyTextStyle,
+                                    ),
+                                    TextButton(
+                                      style: textButton,
+                                      onPressed: () async {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    RoleScreen()));
+                                      },
+                                      child: Text(
+                                        "Daftar di Sini!",
+                                        style: textButtonTextStyle,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Flexible(flex: 1, child: Container()) //end of column
                       ],
                     ),
                   ),
-                  Flexible(
-                    flex: 3,
-                    child: CustomCard(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Masuk",
-                            style: titleTextStyle.copyWith(color: accentColor),
-                          ),
-                          const SizedBox(
-                            height: 16,
-                          ),
-
-                          //Login Text Field
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Kolom tidak boleh kosong';
-                              }
-                              if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
-                                  .hasMatch(value)) {
-                                return 'Please enter a valid email address';
-                              }
-                              return null;
-                            },
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              border: UnderlineInputBorder(),
-                            ),
-                          ),
-                          SizedBox(height: 16.0),
-
-                          //Password TextField
-                          PasswordField(
-                            controller: _passwordController,
-                            useValidator: false,
-                          ),
-
-                          //forget password
-                          Row(
-                            children: [
-                              Flexible(flex: 1, child: Container()),
-                              Flexible(
-                                flex: 1,
-                                child: TextButton(
-                                  style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero),
-                                  onPressed: () {},
-                                  child: Text(
-                                    "Lupa Password?",
-                                    style: thinTextButtonTextStyle,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Center(
-                            child: Text(
-                              _errorMessage,
-                              style: errorTextStyle,
-                            ),
-                          ),
-                          //Login Button
-                          Container(
-                            margin: EdgeInsets.only(top: 20),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: accentColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  minimumSize: Size.fromHeight(40)),
-                              onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
-                                  // login logic here
-                                  String email = _emailController.text;
-                                  String password = _passwordController.text;
-                                  _login(email, password);
-                                }
-                              },
-                              child: Text(
-                                'Masuk',
-                                style: buttonTextStyle,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 16,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Belum memiliki akun? ",
-                                style: bodyTextStyle,
-                              ),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero),
-                                onPressed: () async {},
-                                child: Text(
-                                  "Daftar di Sini!",
-                                  style: textButtonTextStyle,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                ),
+                Positioned(
+                  bottom: 10,
+                  left: 50,
+                  child: Text(
+                    "© AMANAH Fintech Syariah 2023, ALL RIGHT RESERVED",
+                    style: bodyTextStyle.copyWith(fontSize: 10),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: Center(
-                      child: Text(
-                        "© AMANAH Fintech Syariah 2023, ALL RIGHT RESERVED",
-                        style: bodyTextStyle.copyWith(fontSize: 10),
-                      ),
-                    ),
-                  )
-                  //end of column
-                ],
-              ),
-            )),
+                )
+              ],
+            ),
           ),
         ),
         isLoading == true

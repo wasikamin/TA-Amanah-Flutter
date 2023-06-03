@@ -1,8 +1,8 @@
-import 'package:amanah/constants/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class LoginLogo extends StatelessWidget {
-  const LoginLogo({super.key});
+class LogoBlue extends StatelessWidget {
+  const LogoBlue({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,10 +11,10 @@ class LoginLogo extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/images/Logo/LogoAmana2.png"),
+          SvgPicture.asset("assets/images/Logo/LogoAmanaBiru.svg"),
           Text(
             "MANAH",
-            style: TextStyle(fontSize: 40, color: secondaryColor),
+            style: TextStyle(fontSize: 40, color: Color(0xff19A7CE)),
           )
         ],
       ),

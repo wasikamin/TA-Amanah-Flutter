@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
-  bool useValidator = true;
+  final bool useValidator;
   PasswordField(
-      {required this.controller, super.key, required this.useValidator});
+      {required this.controller, super.key, this.useValidator = true});
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
@@ -27,33 +27,34 @@ class _PasswordFieldState extends State<PasswordField> {
         }
         // Check if the password is at least 8 characters long
         if (value.length < 8) {
-          return 'Password must be at least 8 characters long';
+          return 'Password harus berisi setidaknya 8 karakter';
         }
 
         // Check if the password contains at least one uppercase letter
         if (!RegExp(r'[A-Z]').hasMatch(value)) {
-          return 'Password must contain at least one uppercase letter';
+          return 'Password harus memiliki huruf kapital';
         }
 
         // Check if the password contains at least one lowercase letter
         if (!RegExp(r'[a-z]').hasMatch(value)) {
-          return 'Password must contain at least one lowercase letter';
+          return 'Password harus memiliki huruf kecil';
         }
 
         // Check if the password contains at least one special character (one of @$!%*?&)
         if (!RegExp(r'[@$!%*?&]').hasMatch(value)) {
-          return 'Password must contain at least one special character';
+          return 'Password harus memiliki spesial karekter';
         }
 
         // Check if the password can contain digits
         if (!RegExp(r'\d').hasMatch(value)) {
-          return 'Password can contain digits';
+          return 'Password harus memiliki angka';
         }
 
         return null;
       },
       //show password button
       decoration: InputDecoration(
+        prefixIcon: Icon(Icons.lock_outline_rounded),
         labelText: 'Password',
         border: UnderlineInputBorder(),
         suffixIcon: IconButton(
