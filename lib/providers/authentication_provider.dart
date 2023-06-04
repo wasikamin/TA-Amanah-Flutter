@@ -1,17 +1,21 @@
 import 'package:amanah/screens/Authentication/login_screen.dart';
 import 'package:amanah/screens/Authentication/otp_screen.dart';
-import 'package:amanah/screens/home/homepage_screen.dart';
-import 'package:flutter/foundation.dart';
+import 'package:amanah/screens/Authentication/verify_screen.dart';
+import 'package:amanah/screens/Borrower/borrower_homepage_screen.dart';
+import 'package:amanah/screens/Lenders/home/homepage_screen.dart';
 import 'dart:async';
 import 'package:amanah/services/authentication_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthenticationProvider with ChangeNotifier {
   bool _isLoggedIn = false;
   String _userId = "";
   String _email = "";
   String _message = "";
+  String _role = "";
+  String get role => _role;
   String get email => _email;
   String get userId => _userId;
   String get message => _message;
@@ -26,12 +30,14 @@ class AuthenticationProvider with ChangeNotifier {
 
   Future<void> checkLoginStatus() async {
     final token = await _secureStorage.read(key: 'jwtToken');
-
     if (token != null) {
-      print(token);
-      _isLoggedIn = true;
-    } else {
-      _isLoggedIn = false;
+      final jwtExpired = await checkJwt(token);
+      if (!jwtExpired) {
+        print(_role);
+        _isLoggedIn = true;
+      } else {
+        _isLoggedIn = false;
+      }
     }
 
     notifyListeners();
@@ -48,10 +54,35 @@ class AuthenticationProvider with ChangeNotifier {
       notifyListeners();
 
       if (_userId != "") {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => OtpScreen(),
+          ),
+        );
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> register(String email, String password, String name,
+      String phoneNumber, String roles, BuildContext context) async {
+    try {
+      // print(password);
+      // print(email);
+      var statusCode = await _authenticationService.register(
+          name: name,
+          email: email,
+          password: password,
+          phoneNumber: phoneNumber,
+          roles: roles);
+
+      if (statusCode == 201) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => VerifyScreen(),
           ),
         );
       }
@@ -64,12 +95,20 @@ class AuthenticationProvider with ChangeNotifier {
     try {
       await _authenticationService.sendOtp(Otp, email);
       final token = await _secureStorage.read(key: 'jwtToken');
+      checkJwt(token);
       print(token);
-      if (token != null) {
-        Navigator.push(
+      if (_role == "lender") {
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => HomePage(),
+          ),
+        );
+      } else if (_role == "borrower") {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BorrowerHomePage(),
           ),
         );
       }
@@ -102,5 +141,19 @@ class AuthenticationProvider with ChangeNotifier {
         builder: (context) => LoginScreen(),
       ),
     );
+  }
+
+  Future<bool> checkJwt(jwtToken) async {
+    bool hasExpired = JwtDecoder.isExpired(jwtToken);
+    //check expired date jwt
+    if (!hasExpired) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(jwtToken);
+      _role = decodedToken['roles'];
+      notifyListeners();
+      return false;
+    }
+    return true;
+
+    //fungsi refresh jwt
   }
 }

@@ -1,8 +1,11 @@
-import 'package:amanah/widgets/Authentication/otpField.dart';
+import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/screens/Authentication/login_screen.dart';
+import 'package:amanah/widgets/Authentication/Otp/otpField.dart';
+import 'package:amanah/widgets/Authentication/Otp/resendButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
-import '../../providers/authentication__provider.dart';
+import '../../providers/authentication_provider.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -45,6 +48,15 @@ class _OtpScreenState extends State<OtpScreen> {
       //appbar
       appBar: AppBar(
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+          },
+        ),
         iconTheme: IconThemeData(
           color: Colors.black, //change your color here
         ),
@@ -57,11 +69,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
       //body
       body: Container(
-        decoration: BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Colors.cyan.shade100, Colors.cyan])),
+        decoration: BoxDecoration(color: Color(0xffFAFAFA)),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -72,43 +80,49 @@ class _OtpScreenState extends State<OtpScreen> {
                   flex: 2,
                   child: Container(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
                           "Masukkan Kode OTP",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: bodyTextStyle.copyWith(fontSize: 24),
                         ),
-                        Text("Kami telah mengirimkan kode konfirmasi ke email"),
-                        Text(email),
-                        OtpField(
-                          otpLength: 5,
-                          onOTPEntered: (value) {
-                            setState(
-                              () {
-                                otp = value;
-                              },
-                            );
-                          },
-                          onCompleted: () async {
-                            await authenticationProvider.sendOtp(
-                                otp, email, context);
-                          },
+                        SizedBox(
+                          height: 8,
                         ),
-                        Text(otp),
-                        // ElevatedButton(
-                        //     onPressed: () async {
-                        //
-                        //     },
-                        //     child: Text("Kirim OTP")),
+                        Text(
+                          "Kami telah mengirimkan kode konfirmasi ke email",
+                          style: bodyTextStyle,
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        Text(
+                          email,
+                          style: subTitleTextStyle.copyWith(
+                              fontWeight: FontWeight.w700),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(top: 40),
+                          child: OtpField(
+                            otpLength: 5,
+                            onOTPEntered: (value) {
+                              setState(
+                                () {
+                                  otp = value;
+                                },
+                              );
+                            },
+                            onCompleted: () async {
+                              await authenticationProvider.sendOtp(
+                                  otp, email, context);
+                            },
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("Belum menerima code?"),
-                            TextButton(
-                                onPressed: () async {
-                                  authenticationProvider.resendOtp(email);
-                                },
-                                child: Text("Kirim ulang!"))
+                            resendOtpButton(email: email),
                           ],
                         )
                       ],

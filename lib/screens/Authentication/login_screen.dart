@@ -1,4 +1,4 @@
-import 'package:amanah/providers/authentication__provider.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/screens/Authentication/role_screen.dart';
 import 'package:amanah/widgets/Authentication/card.dart';
 import 'package:amanah/widgets/Authentication/Login/loginLogo.dart';
@@ -72,8 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
-                        Flexible(
-                          flex: 5,
+                        Expanded(
+                          flex: 6,
                           child: CustomCard(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,7 +201,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        Flexible(flex: 1, child: Container()) //end of column
+                        Expanded(flex: 1, child: Container()) //end of column
                       ],
                     ),
                   ),

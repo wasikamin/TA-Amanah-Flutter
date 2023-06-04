@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthenticationService {
-  static const String _baseUrl = 'https://ta-backend-api.as.r.appspot.com/api';
+  String _baseUrl = "";
   static const String _sendOtpEndpoint = '/authentication/login?action=login';
   static const String _loginEndpoint = '/authentication/login?action=email-otp';
   static const String _resendOtpEndpoint = '/authentication/login/otp/resend';
@@ -13,6 +14,7 @@ class AuthenticationService {
 
   //LOGIN
   Future<String> login(String email, String password) async {
+    _baseUrl = dotenv.env['API_BASE_URL'].toString();
     final url = Uri.parse('$_baseUrl$_loginEndpoint');
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
@@ -26,6 +28,33 @@ class AuthenticationService {
       await _secureStorage.write(key: 'email', value: email);
 
       return responseBody['data']['userId'];
+    } else {
+      final responseBody = json.decode(response.body);
+      throw responseBody["message"];
+    }
+  }
+
+  //Register
+  Future<int> register(
+      {required String name,
+      required String email,
+      required String phoneNumber,
+      required String roles,
+      required String password}) async {
+    _baseUrl = dotenv.env['API_BASE_URL'].toString();
+    final url = Uri.parse('$_baseUrl/authentication/register');
+    final response = await http.post(url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "email": email,
+          "name": name,
+          "phoneNumber": phoneNumber,
+          "roles": roles,
+          "password": password
+        }));
+    print(json.decode(response.body));
+    if (response.statusCode == 201) {
+      return response.statusCode.toInt();
     } else {
       final responseBody = json.decode(response.body);
       throw responseBody["message"];

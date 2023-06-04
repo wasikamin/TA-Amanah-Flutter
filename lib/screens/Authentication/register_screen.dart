@@ -1,7 +1,9 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/widgets/Authentication/passwordField.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key, required this.role});
@@ -12,13 +14,40 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _phoneNumController = TextEditingController();
+  final _passwordController = TextEditingController();
+  String _errorMessage = "";
+  bool isLoading = false;
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
-    final _emailController = TextEditingController();
-    final _nameController = TextEditingController();
-    final _phoneNumController = TextEditingController();
-    final _passwordController = TextEditingController();
+    final authenticationProvider = Provider.of<AuthenticationProvider>(context);
+
+    void _register(String email, String password, String name,
+        String phoneNumber, String roles) async {
+      print("test");
+      setState(() {
+        isLoading = true;
+      });
+
+      // Perform any async operation here (e.g., network request)
+      try {
+        await authenticationProvider.register(
+            email, password, name, phoneNumber, roles, context);
+      } catch (e) {
+        print(e.toString());
+        setState(() {
+          _errorMessage = e.toString();
+        });
+      }
+
+      // After the async operation is completed, update the loading state
+      setState(() {
+        isLoading = false;
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -125,7 +154,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 if (value!.isEmpty) {
                                   return 'Kolom tidak boleh kosong';
                                 }
-                                if (!RegExp(r'^[^\d\s]+$ ').hasMatch(value)) {
+                                if (!RegExp(r"^[A-Za-z\s'-]+$")
+                                    .hasMatch(value)) {
                                   return 'Tidak boleh terdapat angka';
                                 }
                                 return null;
@@ -147,9 +177,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 if (value!.isEmpty) {
                                   return 'Kolom tidak boleh kosong';
                                 }
-                                if (!RegExp(r'^\+62\d+$').hasMatch(value)) {
-                                  return 'Nomer harus dimulai dengan +62';
-                                }
                                 return null;
                               },
                               decoration: InputDecoration(
@@ -166,6 +193,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               controller: _passwordController,
                               useValidator: true,
                             ),
+                            SizedBox(height: 16.0),
+                            Center(
+                              child: Text(
+                                _errorMessage,
+                                style: errorTextStyle,
+                              ),
+                            ),
                             Container(
                               margin: EdgeInsets.only(top: 40),
                               height: 50,
@@ -181,8 +215,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     // login logic here
                                     String email = _emailController.text;
                                     String password = _passwordController.text;
-                                    String phone = _phoneNumController.text;
+                                    String phoneNumber =
+                                        _phoneNumController.text;
                                     String name = _nameController.text;
+                                    _register(email, password, name,
+                                        phoneNumber, widget.role.toLowerCase());
                                   }
                                 },
                                 child: Text(
@@ -199,6 +236,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
               ),
             ),
+            isLoading == true
+                ? Container(
+                    height: MediaQuery.of(context).size.height,
+                    color: Colors.white60,
+                    child: Center(
+                        child: Image.asset(
+                      "assets/images/Logo/amanah.gif",
+                      width: 100,
+                      height: 100,
+                    )),
+                  )
+                : SizedBox.shrink(),
           ],
         ),
       ),

@@ -1,10 +1,13 @@
+import 'package:amanah/screens/Borrower/borrower_homepage_screen.dart';
 import 'package:amanah/screens/Landing/landing_screen.dart';
-import 'package:amanah/screens/home/homepage_screen.dart';
+import 'package:amanah/screens/Lenders/home/homepage_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:amanah/providers/authentication__provider.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env");
   runApp(MyApp());
 }
 
@@ -23,7 +26,9 @@ class MyApp extends StatelessWidget {
                 // Your app's theme configurations
                 ),
             home: authProvider.isLoggedIn
-                ? const HomePage()
+                ? authProvider.role == "lender"
+                    ? const HomePage()
+                    : const BorrowerHomePage()
                 : const LandingScreen(),
           );
         },

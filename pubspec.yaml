@@ -38,6 +38,7 @@ dependencies:
   flutter_svg: ^2.0.6
   google_fonts: ^4.0.5
   http: ^1.0.0
+  jwt_decoder: ^2.0.1
   provider: ^6.0.5
 
 flutter_native_splash:
@@ -63,6 +64,7 @@ flutter:
     - assets/images/Logo/
     - assets/images/background/
     - assets/images/Illustration/
+    - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see
