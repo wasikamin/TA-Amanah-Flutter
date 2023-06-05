@@ -16,7 +16,7 @@ class CustomCard extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         child: Container(
           padding: this.padding == 0
-              ? EdgeInsets.fromLTRB(32, 30, 32, 10)
+              ? EdgeInsets.fromLTRB(30, 20, 30, 10)
               : EdgeInsets.all(padding),
           child: child,
         ),

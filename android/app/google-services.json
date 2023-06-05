@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "171309898689",
+    "project_id": "amanah-p2p-lending-syariah",
+    "storage_bucket": "amanah-p2p-lending-syariah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171309898689:android:b4ea1f79482d9e1a79ad40",
+        "android_client_info": {
+          "package_name": "com.example.amanah"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171309898689-phvn8suvjubcn1onlnl6ij886hspukgq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.amanah",
+            "certificate_hash": "e68268de322d4b8d5592e78bd2cad7fcfd86c9c8"
+          }
+        },
+        {
+          "client_id": "171309898689-iufpkknke50rlsi9kct37vrdnsg27tuu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAz8pXqq7Q7yoWQt8UffMcI3rLQLEGmbJk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171309898689-iufpkknke50rlsi9kct37vrdnsg27tuu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

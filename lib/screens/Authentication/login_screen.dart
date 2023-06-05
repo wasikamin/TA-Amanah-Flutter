@@ -4,6 +4,7 @@ import 'package:amanah/widgets/Authentication/card.dart';
 import 'package:amanah/widgets/Authentication/Login/loginLogo.dart';
 import 'package:amanah/widgets/Authentication/passwordField.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:amanah/constants/app_theme.dart';
 
@@ -57,13 +58,26 @@ class _LoginScreenState extends State<LoginScreen> {
             key: _formKey,
             child: Stack(
               children: [
+                Positioned(
+                  bottom: -20,
+                  right: -60,
+                  child: Opacity(
+                    opacity: 0.5,
+                    child: SizedBox(
+                        height: 200,
+                        width: 300,
+                        child: SvgPicture.asset(
+                          "assets/images/Logo/LogoAmanaBiru.svg",
+                          fit: BoxFit.fill,
+                        )),
+                  ),
+                ),
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.only(left: 24, right: 24),
                     child: Column(
                       children: [
-                        const Flexible(
-                          flex: 2,
+                        const Expanded(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.end,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,10 +87,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         Expanded(
-                          flex: 6,
+                          flex: 4,
                           child: CustomCard(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Container(
                                   width: double.infinity,
@@ -107,6 +122,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     return null;
                                   },
                                   decoration: InputDecoration(
+                                    isDense: true,
                                     prefixIcon:
                                         Icon(Icons.mail_outline_rounded),
                                     labelText: 'Email',
@@ -206,12 +222,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-                Positioned(
+                Positioned.fill(
                   bottom: 10,
-                  left: 50,
-                  child: Text(
-                    "© AMANAH Fintech Syariah 2023, ALL RIGHT RESERVED",
-                    style: bodyTextStyle.copyWith(fontSize: 10),
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Text(
+                      "© AMANAH Fintech Syariah 2023, ALL RIGHT RESERVED",
+                      style: bodyTextStyle.copyWith(fontSize: 10),
+                    ),
                   ),
                 )
               ],

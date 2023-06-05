@@ -15,7 +15,7 @@ class RoleSelect extends StatelessWidget {
         Expanded(
           child: GestureDetector(
             onTap: () {
-              Navigator.push(
+              Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                       builder: (context) => RegisterScreen(role: "Lender")));
@@ -49,7 +49,7 @@ class RoleSelect extends StatelessWidget {
         Expanded(
             child: GestureDetector(
           onTap: () {
-            Navigator.push(
+            Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => RegisterScreen(role: "Borrower")));

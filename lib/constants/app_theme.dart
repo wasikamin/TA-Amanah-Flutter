@@ -34,10 +34,7 @@ TextStyle errorTextStyle = GoogleFonts.plusJakartaSans(
 
 //background
 
-BoxDecoration background = BoxDecoration(
-    image: DecorationImage(
-        image: AssetImage("assets/images/background/background.png"),
-        fit: BoxFit.cover));
+BoxDecoration background = BoxDecoration(color: accentColor);
 
 BoxDecoration backgroundWhite = BoxDecoration(
     // image: DecorationImage(

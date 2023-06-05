@@ -54,6 +54,7 @@ class _PasswordFieldState extends State<PasswordField> {
       },
       //show password button
       decoration: InputDecoration(
+        isDense: true,
         prefixIcon: Icon(Icons.lock_outline_rounded),
         labelText: 'Password',
         border: UnderlineInputBorder(),

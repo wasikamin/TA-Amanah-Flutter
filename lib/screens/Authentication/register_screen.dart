@@ -87,12 +87,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     )),
               ),
             ),
-            Positioned(
+            Positioned.fill(
               bottom: 10,
-              left: 50,
-              child: Text(
-                "© AMANAH Fintech Syariah 2023, ALL RIGHT RESERVED",
-                style: bodyTextStyle.copyWith(fontSize: 10),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text(
+                  "© AMANAH Fintech Syariah 2023, ALL RIGHT RESERVED",
+                  style: bodyTextStyle.copyWith(fontSize: 10),
+                ),
               ),
             ),
             SafeArea(
@@ -138,6 +140,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 return null;
                               },
                               decoration: InputDecoration(
+                                isDense: true,
                                 prefixIcon: Icon(Icons.email_outlined),
                                 labelText: 'Email',
                                 border: UnderlineInputBorder(),
@@ -161,6 +164,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 return null;
                               },
                               decoration: InputDecoration(
+                                isDense: true,
                                 prefixIcon: Icon(Icons.person_outline),
                                 labelText: 'Nama Lengkap',
                                 border: UnderlineInputBorder(),
@@ -180,6 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 return null;
                               },
                               decoration: InputDecoration(
+                                isDense: true,
                                 prefixIcon: Icon(Icons.phone_android_outlined),
                                 labelText: 'Nomor Handphone',
                                 border: UnderlineInputBorder(),

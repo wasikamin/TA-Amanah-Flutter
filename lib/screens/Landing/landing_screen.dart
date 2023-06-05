@@ -3,10 +3,42 @@ import 'package:amanah/screens/Authentication/login_screen.dart';
 import 'package:amanah/screens/Authentication/role_screen.dart';
 // import 'package:amanah/widgets/Authentication/Login/loginLogo.dart';
 import 'package:amanah/widgets/Landing/landingCarousel.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 
-class LandingScreen extends StatelessWidget {
+class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
+
+  @override
+  State<LandingScreen> createState() => _LandingScreenState();
+}
+
+class _LandingScreenState extends State<LandingScreen> {
+  FirebaseDynamicLinks dynamicLinks = FirebaseDynamicLinks.instance;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initDynamicLinks();
+  }
+
+  Future initDynamicLinks() async {
+    dynamicLinks.onLink.listen((event) {
+      // navigator ke halaman forget password
+      print('MASUKKKKKKKK');
+      var uid = event.link.queryParameters['uid'];
+      var token = event.link.queryParameters['token'];
+      print('dynmic link: ${event.link}');
+      print('userId: ' + uid.toString());
+      print('token: ' + token.toString());
+
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()));
+    }).onError((error) {
+      print('error ${error.message}');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,15 +120,16 @@ class LandingScreen extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
+          Positioned.fill(
             bottom: 10,
-            left: 50,
-            child: Text(
-              "© AMANAH Fintech Syariah 2023, ALL RIGHT RESERVED",
-              style: bodyTextStyle.copyWith(fontSize: 10),
-              textAlign: TextAlign.center,
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Text(
+                "© AMANAH Fintech Syariah 2023, ALL RIGHT RESERVED",
+                style: bodyTextStyle.copyWith(fontSize: 10),
+              ),
             ),
-          ),
+          )
         ],
       ),
     );

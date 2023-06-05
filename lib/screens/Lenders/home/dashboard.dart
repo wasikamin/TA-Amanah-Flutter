@@ -1,4 +1,5 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/widgets/Lender/saldo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -69,7 +70,7 @@ class Dashboard extends StatelessWidget {
                           borderRadius: BorderRadius.all(Radius.circular(20))),
                       padding: EdgeInsets.all(14),
                       width: double.infinity,
-                      height: screenHeight * 0.25,
+                      height: screenHeight * 0.27,
                       child: Stack(
                         children: [
                           Positioned(
@@ -88,10 +89,7 @@ class Dashboard extends StatelessWidget {
                                 style: bodyTextStyle.copyWith(fontSize: 24),
                               ),
                               SizedBox(height: 10),
-                              Text(
-                                'RP. 1.000.000',
-                                style: TextStyle(fontSize: 20),
-                              ),
+                              Saldo(),
                               SizedBox(
                                 height: screenHeight * 0.03,
                               ),
