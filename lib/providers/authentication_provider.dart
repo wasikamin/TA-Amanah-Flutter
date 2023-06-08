@@ -1,7 +1,7 @@
 import 'package:amanah/screens/Authentication/login_screen.dart';
 import 'package:amanah/screens/Authentication/otp_screen.dart';
 import 'package:amanah/screens/Authentication/verify_screen.dart';
-import 'package:amanah/screens/Borrower/borrower_homepage_screen.dart';
+import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
 import 'package:amanah/screens/Lenders/home/homepage_screen.dart';
 import 'dart:async';
 import 'package:amanah/services/authentication_service.dart';
@@ -103,7 +103,8 @@ class AuthenticationProvider with ChangeNotifier {
           MaterialPageRoute(
             builder: (context) => HomePage(),
           ),
-        );
+        ).then((value) =>
+            Navigator.of(context).popUntil((route) => route.isFirst));
       } else if (_role == "borrower") {
         Navigator.pushReplacement(
           context,

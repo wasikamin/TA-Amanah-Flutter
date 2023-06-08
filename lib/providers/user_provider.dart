@@ -10,9 +10,9 @@ class UserProvider with ChangeNotifier {
   final UserService _userService = UserService();
 
   //constructor
-  UserProvider() {
-    checkSaldo();
-  }
+  // UserProvider() {
+  //   checkSaldo();
+  // }
 
   Future<void> checkSaldo() async {
     var saldo = await _userService.getBalance();
