@@ -9,6 +9,7 @@ class AuthenticationService {
   static const String _sendOtpEndpoint = '/authentication/login?action=login';
   static const String _loginEndpoint = '/authentication/login?action=email-otp';
   static const String _resendOtpEndpoint = '/authentication/login/otp/resend';
+  static const String _refreshTokenEndpoint = '/authentication/token/refresh';
 
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
@@ -73,7 +74,9 @@ class AuthenticationService {
       // OTP sent successfully
       final responseBody = json.decode(response.body);
       final token = responseBody['data']['accessToken'] as String;
+      final refreshToken = responseBody['data']['refreshToken'] as String;
       await _secureStorage.write(key: 'jwtToken', value: token);
+      await _secureStorage.write(key: 'refreshToken', value: refreshToken);
     } else {
       print('Failed to send OTP');
     }
@@ -95,8 +98,22 @@ class AuthenticationService {
     }
   }
 
-  // Future<void> logout() async {
-  //   await _secureStorage.delete(key: 'jwt_token');
-  //   // Perform logout logic here
-  // }
+  Future<void> refreshToken() async {
+    // Perform refresh token logic here
+    final url = Uri.parse('$_baseUrl$_refreshTokenEndpoint');
+    final refreshToken = await _secureStorage.read(key: 'refreshToken');
+    final response = await http.post(url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({'refreshToken': refreshToken}));
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      final jwtToken = responseBody['data']['accessToken'] as String;
+      final newRefreshToken = responseBody['data']['refreshToken'] as String;
+      await _secureStorage.write(key: 'jwtToken', value: jwtToken);
+      await _secureStorage.write(key: 'refreshToken', value: newRefreshToken);
+      return responseBody['message'];
+    } else {
+      throw Exception('Failed to refresh token');
+    }
+  }
 }

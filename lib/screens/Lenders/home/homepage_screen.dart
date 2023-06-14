@@ -1,3 +1,4 @@
+import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/screens/Lenders/home/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +37,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         body: _pages[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
+          selectedIconTheme: IconThemeData(color: primaryColor, size: 30),
           currentIndex: _currentIndex,
           onTap: (int index) {
             setState(() {
@@ -44,7 +46,10 @@ class _HomePageState extends State<HomePage> {
           },
           items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+              icon: Icon(
+                Icons.home,
+                color: primaryColor,
+              ),
               label: 'Home',
             ),
             BottomNavigationBarItem(

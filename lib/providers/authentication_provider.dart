@@ -15,11 +15,13 @@ class AuthenticationProvider with ChangeNotifier {
   String _email = "";
   String _message = "";
   String _role = "";
+  String _kyced = "";
   String get role => _role;
   String get email => _email;
   String get userId => _userId;
   String get message => _message;
   bool get isLoggedIn => _isLoggedIn;
+  String get kyced => _kyced;
   final AuthenticationService _authenticationService = AuthenticationService();
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
@@ -136,25 +138,44 @@ class AuthenticationProvider with ChangeNotifier {
     _email = "";
     _isLoggedIn = false;
     notifyListeners();
-    Navigator.pushReplacement(
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(
         builder: (context) => LoginScreen(),
       ),
+      (Route<dynamic> route) => false,
     );
   }
 
   Future<bool> checkJwt(jwtToken) async {
-    bool hasExpired = JwtDecoder.isExpired(jwtToken);
-    //check expired date jwt
-    if (!hasExpired) {
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(jwtToken);
-      _role = decodedToken['roles'];
-      notifyListeners();
+    try {
+      bool hasExpired = JwtDecoder.isExpired(jwtToken);
+      //check expired date jwt
+      if (!hasExpired) {
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(jwtToken);
+        // print(decodedToken);
+        _role = decodedToken['roles'];
+        _kyced = decodedToken['verifiedKYC'];
+        notifyListeners();
+        return false;
+      } else {
+        _authenticationService.refreshToken();
+        final token = await _secureStorage.read(key: 'jwtToken');
+        checkJwt(token);
+      }
+      return true;
+    } catch (e) {
+      print(e);
       return false;
     }
-    return true;
+  }
 
-    //fungsi refresh jwt
+  Future<void> checkKyc() async {
+    try {
+      _kyced = "verified";
+      notifyListeners();
+    } catch (error) {
+      print(error);
+    }
   }
 }

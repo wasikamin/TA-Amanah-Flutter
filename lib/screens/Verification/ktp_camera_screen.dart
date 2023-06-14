@@ -1,16 +1,20 @@
 import 'dart:io';
 
 // import 'package:amanah/widgets/Verification/IdCardFrame.dart';
+import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/kyc_provider.dart';
+import 'package:amanah/screens/Verification/take_picture_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:provider/provider.dart';
 
-class TakePictureScreen extends StatefulWidget {
-  const TakePictureScreen({super.key});
+class KTPCamera extends StatefulWidget {
+  const KTPCamera({super.key});
   @override
-  State<TakePictureScreen> createState() => _TakePictureScreenState();
+  State<KTPCamera> createState() => _KTPCameraState();
 }
 
-class _TakePictureScreenState extends State<TakePictureScreen> {
+class _KTPCameraState extends State<KTPCamera> {
   CameraController? _controller;
   Future<void>? _initializeControllerFuture;
   bool _isFlashEnabled = true;
@@ -46,6 +50,9 @@ class _TakePictureScreenState extends State<TakePictureScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        centerTitle: true,
         title: Text('Ambil Foto KTP'),
       ),
       body: FutureBuilder<void>(
@@ -148,11 +155,61 @@ class DisplayPictureScreen extends StatefulWidget {
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   @override
   Widget build(BuildContext context) {
+    final kycProvider = Provider.of<KycProvider>(context);
+    final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      appBar: AppBar(title: const Text('Display the Picture')),
+      appBar: AppBar(
+        title: const Text('Preview Foto KTP'),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        automaticallyImplyLeading: false,
+      ),
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
-      body: Image.file(File(widget.imagePath)),
+      body: Column(
+        children: [
+          Image.file(File(widget.imagePath)),
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                Expanded(
+                  child: SizedBox(
+                    height: height * 0.06,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColor),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: Text("Ambil Ulang")),
+                  ),
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                Expanded(
+                  child: SizedBox(
+                    height: height * 0.06,
+                    child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: primaryColor),
+                        onPressed: () async {
+                          await kycProvider.setIdCardImage(widget.imagePath);
+                          Navigator.push((context),
+                              MaterialPageRoute(builder: (context) {
+                            return const SelfieScreen();
+                          }));
+                        },
+                        child: Text("Selanjutnya")),
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

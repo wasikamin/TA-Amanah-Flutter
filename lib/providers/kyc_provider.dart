@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:amanah/services/user_service.dart';
 
 class KycProvider with ChangeNotifier {
-  final UserService _userService = UserService();
-
   String _ktpImage = "";
   get ktpImage => _ktpImage;
 
@@ -68,9 +65,5 @@ class KycProvider with ChangeNotifier {
     _relativeContactRelation2 = relativeContactRelation2;
     _relativeContactPhone2 = relativeContactPhone2;
     notifyListeners();
-  }
-
-  Future<void> kycUser() async {
-    await _userService.kycUser();
   }
 }

@@ -1,5 +1,5 @@
 import "package:amanah/constants/app_theme.dart";
-import "package:amanah/screens/Verification/TakePictureScreen.dart";
+import 'package:amanah/screens/Verification/ktp_camera_screen.dart';
 import "package:amanah/widgets/Lender/saldo.dart";
 import "package:amanah/widgets/Lender/verticalCarousel.dart";
 import "package:flutter/material.dart";
@@ -69,7 +69,7 @@ class cardSaldo extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => TakePictureScreen()));
+                                builder: (context) => const KTPCamera()));
                       },
                       child: Container(
                         decoration: BoxDecoration(

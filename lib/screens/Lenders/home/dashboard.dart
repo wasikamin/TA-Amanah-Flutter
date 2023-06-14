@@ -1,7 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/widgets/Lender/cardSaldo.dart';
-import 'package:amanah/widgets/Lender/topBackground.dart';
+import 'package:amanah/widgets/topBackground.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

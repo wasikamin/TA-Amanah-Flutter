@@ -32,6 +32,7 @@ dependencies:
   camera: ^0.10.5+2
   carousel_slider: ^4.2.1
   cupertino_icons: ^1.0.2
+  dropdown_search: ^5.0.6
   firebase_core: ^2.13.1
   firebase_dynamic_links: ^5.3.2
   flutter:
@@ -41,8 +42,9 @@ dependencies:
   flutter_secure_storage: ^8.0.0
   flutter_svg: ^2.0.6
   google_fonts: ^4.0.5
-  http: any
-  image_cropper: any
+  http: ^1.0.0
+  http_parser: ^4.0.2
+  intl: ^0.18.1
   jwt_decoder: ^2.0.1
   path: ^1.8.3
   path_provider: ^2.0.15
@@ -69,6 +71,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/Logo/
+    - assets/images/Logo/Bank/
     - assets/images/background/
     - assets/images/Illustration/
     - .env

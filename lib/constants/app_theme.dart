@@ -8,6 +8,18 @@ Color accentColor = Color(0xff0297c6);
 Color bodyTextColor = Color(0xff000405);
 Color backGroundColor = Color(0xffcdf3fe);
 
+class vSpace extends StatelessWidget {
+  final double height;
+  const vSpace({super.key, this.height = 10});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: height,
+    );
+  }
+}
+
 TextStyle titleTextStyle = GoogleFonts.plusJakartaSans(
     fontWeight: FontWeight.bold, color: primaryColor, fontSize: 30);
 
