@@ -17,13 +17,15 @@ class KycProvider with ChangeNotifier {
       _relativeContactPhone1 = "",
       _relativeContactName2 = "",
       _relativeContactRelation2 = "",
-      _relativeContactPhone2 = "";
+      _relativeContactPhone2 = "",
+      _idCardNumber = "";
 
   get fullName => _fullName;
   get gender => _gender;
   get birthDate => _birthDate;
   get work => _work;
   get salary => _salary;
+  get idCardNumber => _idCardNumber;
   get relativeContactName1 => _relativeContactName1;
   get relativeContactRelation1 => _relativeContactRelation1;
   get relativeContactPhone1 => _relativeContactPhone1;
@@ -42,12 +44,14 @@ class KycProvider with ChangeNotifier {
   }
 
   // make set funtion for all variable above
-  Future<void> personal(String name, gender, birthDate, work, salary) async {
+  Future<void> personal(
+      String name, gender, birthDate, work, salary, idCardNumber) async {
     _fullName = name;
     _birthDate = birthDate;
     _work = work;
     _salary = salary;
     _gender = gender;
+    _idCardNumber = idCardNumber;
     notifyListeners();
   }
 

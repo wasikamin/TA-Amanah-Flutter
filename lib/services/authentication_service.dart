@@ -10,6 +10,7 @@ class AuthenticationService {
   static const String _loginEndpoint = '/authentication/login?action=email-otp';
   static const String _resendOtpEndpoint = '/authentication/login/otp/resend';
   static const String _refreshTokenEndpoint = '/authentication/token/refresh';
+  static const String _getKYCStatus = '/authentication/account/status';
 
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
@@ -114,6 +115,21 @@ class AuthenticationService {
       return responseBody['message'];
     } else {
       throw Exception('Failed to refresh token');
+    }
+  }
+
+  Future<dynamic> getKYCStatus() async {
+    try {
+      final url = Uri.parse('$_baseUrl$_getKYCStatus');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        return responseBody['data']['kyc'];
+      } else {
+        throw Exception('Failed to get KYC status');
+      }
+    } catch (e) {
+      throw e;
     }
   }
 }

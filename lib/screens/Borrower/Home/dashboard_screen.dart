@@ -1,7 +1,9 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/authentication_provider.dart';
-import 'package:amanah/screens/Borrower/pembayaran_screen.dart';
+import 'package:amanah/screens/Borrower/pengajuan_pinjaman/ajukan_pinjaman_screen.dart';
+import 'package:amanah/screens/Borrower/pembayaran_pinjaman/pembayaran_screen.dart';
 import 'package:amanah/screens/Verification/personal_information_screen.dart';
+import 'package:amanah/widgets/Borrower/pembayaranBulanIni.dart';
 import 'package:amanah/widgets/topBackground.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -118,7 +120,13 @@ class _DashboardState extends State<Dashboard> {
                                   ),
                                 if (authenticationProvider.kyced == "verified")
                                   ElevatedButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  AjukanPinjamanScreen()));
+                                    },
                                     child: Text(
                                       "Ajukan Pinjaman",
                                       style: buttonTextStyle,
@@ -157,9 +165,7 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             child: Row(
                               children: [
-                                Text("Rp. 0",
-                                    style:
-                                        bodyTextStyle.copyWith(fontSize: 24)),
+                                pembayaranBulanIni(),
                                 Spacer(),
                                 if (authenticationProvider.kyced == "verified")
                                   TextButton(

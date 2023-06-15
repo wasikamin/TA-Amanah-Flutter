@@ -1,3 +1,4 @@
+import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Authentication/login_screen.dart';
 import 'package:amanah/screens/Authentication/otp_screen.dart';
 import 'package:amanah/screens/Authentication/verify_screen.dart';
@@ -137,6 +138,7 @@ class AuthenticationProvider with ChangeNotifier {
     _userId = "";
     _email = "";
     _isLoggedIn = false;
+    await UserProvider().deleteAll();
     notifyListeners();
     Navigator.pushAndRemoveUntil(
       context,
@@ -172,7 +174,8 @@ class AuthenticationProvider with ChangeNotifier {
 
   Future<void> checkKyc() async {
     try {
-      _kyced = "verified";
+      String status = await _authenticationService.getKYCStatus();
+      _kyced = status;
       notifyListeners();
     } catch (error) {
       print(error);

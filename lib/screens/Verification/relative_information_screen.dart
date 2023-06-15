@@ -73,6 +73,12 @@ class _RelativeInformationScreenState extends State<RelativeInformationScreen> {
                     height: height * 0.02,
                   ),
                   DropdownSearch<String>(
+                    popupProps: PopupProps.menu(
+                      fit: FlexFit.loose,
+                      menuProps: MenuProps(
+                        elevation: 10,
+                      ),
+                    ),
                     items: [
                       "Ayah Kandung",
                       "Ibu Kandung",
@@ -124,6 +130,12 @@ class _RelativeInformationScreenState extends State<RelativeInformationScreen> {
                     height: height * 0.02,
                   ),
                   DropdownSearch<String>(
+                    popupProps: PopupProps.menu(
+                      fit: FlexFit.loose,
+                      menuProps: MenuProps(
+                        elevation: 10,
+                      ),
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Hubungan Dengan Kerabat tidak boleh kosong';

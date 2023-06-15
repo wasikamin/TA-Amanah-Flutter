@@ -24,6 +24,7 @@ class KycService {
       'personal.birthDate': kycProvider.birthDate,
       'personal.work.name': kycProvider.work,
       'personal.work.salary': kycProvider.salary,
+      'personal.idCardNumber': kycProvider.idCardNumber,
       'relativesContact.firstRelative.name': kycProvider.relativeContactName1,
       'relativesContact.firstRelative.relation':
           kycProvider.relativeContactRelation1,
@@ -51,7 +52,7 @@ class KycService {
       print(await response.stream.bytesToString());
       return response.statusCode;
     } else {
-      print(response.reasonPhrase);
+      print(await response.stream.bytesToString());
       return response.statusCode;
     }
   }

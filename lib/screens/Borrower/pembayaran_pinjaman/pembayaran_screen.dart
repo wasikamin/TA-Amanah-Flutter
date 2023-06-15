@@ -1,5 +1,5 @@
 import 'package:amanah/constants/app_theme.dart';
-import 'package:amanah/screens/Borrower/pilih_bank_screen.dart';
+import 'package:amanah/screens/Borrower/pembayaran_pinjaman/pilih_bank_screen.dart';
 import 'package:flutter/material.dart';
 
 class PembayaranScreen extends StatelessWidget {

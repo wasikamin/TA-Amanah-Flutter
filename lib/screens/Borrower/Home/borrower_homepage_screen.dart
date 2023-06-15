@@ -1,5 +1,6 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/screens/Borrower/Home/dashboard_screen.dart';
+import 'package:amanah/screens/Borrower/Home/riwayat_pinjaman_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/authentication_provider.dart';
@@ -13,8 +14,8 @@ class BorrowerHomePage extends StatefulWidget {
 class _BorrowerHomePage extends State<BorrowerHomePage> {
   int _currentIndex = 0;
   List<Widget> _pages = [
-    Dashboard(),
-    Page2(),
+    const Dashboard(),
+    RiwayatPinjamanScreen(),
     Page3(),
   ];
 
@@ -60,15 +61,6 @@ class _BorrowerHomePage extends State<BorrowerHomePage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class Page2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Halaman Riwayat Peminjaman'),
     );
   }
 }

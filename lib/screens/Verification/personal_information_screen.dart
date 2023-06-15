@@ -30,6 +30,8 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   //create variable named 'birthDateController' with type TextEditingController
   final birthDateController = TextEditingController();
 
+  final idCardNumberController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final kycProvider = Provider.of<KycProvider>(context);
@@ -58,14 +60,24 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
               key: _formKey,
               child: Column(
                 children: [
-                  TextFormField(
-                    decoration: InputDecoration(labelText: "Nama Lengkap"),
+                  PersonalTextFormField(
                     controller: nameController,
+                    label: "Nama Lengkap",
+                  ),
+                  PersonalTextFormField(
+                    label: "NIK",
+                    controller: idCardNumberController,
                   ),
                   vSpace(
                     height: height * 0.02,
                   ),
                   DropdownSearch<String>(
+                    popupProps: PopupProps.menu(
+                      fit: FlexFit.loose,
+                      menuProps: MenuProps(
+                        elevation: 10,
+                      ),
+                    ),
                     items: ["Laki-laki", "Perempuan"],
                     dropdownDecoratorProps: DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
@@ -87,6 +99,12 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     height: height * 0.02,
                   ),
                   DropdownSearch<String>(
+                    popupProps: PopupProps.menu(
+                      fit: FlexFit.loose,
+                      menuProps: MenuProps(
+                        elevation: 10,
+                      ),
+                    ),
                     items: [
                       "Wiraswasta",
                       "Wirausaha",
@@ -111,6 +129,12 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     height: height * 0.02,
                   ),
                   DropdownSearch<String>(
+                    popupProps: PopupProps.menu(
+                      fit: FlexFit.loose,
+                      menuProps: MenuProps(
+                        elevation: 10,
+                      ),
+                    ),
                     items: [
                       "< 1.000.000",
                       "1.000.000-5.000.000",
@@ -141,8 +165,13 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             backgroundColor: primaryColor),
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            await kycProvider.personal(nameController.text,
-                                gender, birthDateController.text, work, salary);
+                            await kycProvider.personal(
+                                nameController.text,
+                                gender,
+                                birthDateController.text,
+                                work,
+                                salary,
+                                idCardNumberController.text);
                             Navigator.push((context),
                                 MaterialPageRoute(builder: (context) {
                               return RelativeInformationScreen();
@@ -156,6 +185,31 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
             ),
           ),
         ));
+  }
+}
+
+class PersonalTextFormField extends StatelessWidget {
+  const PersonalTextFormField({
+    super.key,
+    required this.controller,
+    required this.label,
+  });
+
+  final TextEditingController controller;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      decoration: InputDecoration(labelText: label),
+      controller: controller,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return 'Please enter a value';
+        } else
+          return null;
+      },
+    );
   }
 }
 //
