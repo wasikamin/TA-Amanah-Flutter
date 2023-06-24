@@ -27,7 +27,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0xfff2f7fa),
-      resizeToAvoidBottomInset: false,
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

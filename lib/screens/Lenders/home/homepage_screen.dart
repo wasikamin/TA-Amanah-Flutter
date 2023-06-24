@@ -1,5 +1,6 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/screens/Lenders/home/dashboard.dart';
+import 'package:amanah/screens/Lenders/home/list_pendanaan_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/authentication_provider.dart';
@@ -14,7 +15,8 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   List<Widget> _pages = [
     Dashboard(),
-    Page2(),
+    Page3(),
+    ListPendanaanScreen(),
     Page3(),
   ];
 
@@ -37,7 +39,11 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         body: _pages[_currentIndex],
         bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           selectedIconTheme: IconThemeData(color: primaryColor, size: 30),
+          unselectedIconTheme: IconThemeData(color: Colors.grey, size: 20),
+          selectedItemColor: primaryColor,
+          unselectedItemColor: Colors.grey,
           currentIndex: _currentIndex,
           onTap: (int index) {
             setState(() {
@@ -48,30 +54,24 @@ class _HomePageState extends State<HomePage> {
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
-                color: primaryColor,
               ),
               label: 'Home',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(Icons.pie_chart_rounded),
               label: 'Portofolio',
             ),
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
+              icon: Icon(Icons.request_quote_rounded),
+              label: 'Pendanaan',
+            ),
+            const BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Profile',
             ),
           ],
         ),
       ),
-    );
-  }
-}
-
-class Page2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Page 2'),
     );
   }
 }
@@ -88,7 +88,7 @@ class Page3 extends StatelessWidget {
       onPressed: () async {
         await authenticationProvider.logout(context);
       },
-      child: Text(
+      child: const Text(
         'Keluar',
       ),
     ));

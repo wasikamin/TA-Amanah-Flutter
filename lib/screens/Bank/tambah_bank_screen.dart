@@ -54,6 +54,12 @@ class _TambahBankScreenState extends State<TambahBankScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DropdownSearch(
+                    popupProps: PopupProps.menu(
+                      fit: FlexFit.loose,
+                      menuProps: MenuProps(
+                        elevation: 10,
+                      ),
+                    ),
                     items: [
                       'BCA',
                       'CIMB Niaga',

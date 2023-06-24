@@ -1,4 +1,5 @@
 import 'package:amanah/providers/kyc_provider.dart';
+import 'package:amanah/providers/loan_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
 import 'package:amanah/screens/Landing/landing_screen.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthenticationProvider()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => KycProvider()),
+        ChangeNotifierProvider(create: (_) => LoanProvider()),
       ],
       child: Consumer<AuthenticationProvider>(
         builder: (context, authProvider, child) {
