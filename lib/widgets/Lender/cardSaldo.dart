@@ -1,5 +1,6 @@
 import "package:amanah/constants/app_theme.dart";
-import 'package:amanah/screens/Verification/ktp_camera_screen.dart';
+import "package:amanah/screens/Bank/pilih_bank_screen.dart";
+import "package:amanah/screens/Lenders/Balance/top_up_screen.dart";
 import "package:amanah/widgets/Lender/saldo.dart";
 import "package:amanah/widgets/Lender/verticalCarousel.dart";
 import "package:flutter/material.dart";
@@ -42,15 +43,24 @@ class cardSaldo extends StatelessWidget {
                 Spacer(flex: 1),
                 Column(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: primaryColor,
-                          borderRadius: BorderRadius.all(Radius.circular(10))),
-                      padding: const EdgeInsets.all(2),
-                      width: 30,
-                      child: Icon(
-                        Icons.arrow_upward_outlined,
-                        color: whiteColor,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const TopUpScreen()));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: primaryColor,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10))),
+                        padding: const EdgeInsets.all(2),
+                        width: 30,
+                        child: Icon(
+                          Icons.arrow_upward_outlined,
+                          color: whiteColor,
+                        ),
                       ),
                     ),
                     SizedBox(
@@ -69,7 +79,7 @@ class cardSaldo extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const KTPCamera()));
+                                builder: (context) => const PilihBankScreen()));
                       },
                       child: Container(
                         decoration: BoxDecoration(

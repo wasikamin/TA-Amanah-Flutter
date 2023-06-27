@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Authentication/login_screen.dart';
 import 'package:amanah/screens/Authentication/otp_screen.dart';
@@ -74,21 +76,25 @@ class AuthenticationProvider with ChangeNotifier {
     try {
       // print(password);
       // print(email);
-      var statusCode = await _authenticationService.register(
+      var response = await _authenticationService.register(
           name: name,
           email: email,
           password: password,
           phoneNumber: phoneNumber,
           roles: roles);
+      final responseBody = json.decode(response.body);
+      print(responseBody);
+      // if (responseBody == 201) {
 
-      if (statusCode == 201) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => VerifyScreen(),
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VerifyScreen(
+            email: responseBody['data']['email'],
           ),
-        );
-      }
+        ),
+      );
+      // }
     } catch (error) {
       throw error;
     }
@@ -174,8 +180,28 @@ class AuthenticationProvider with ChangeNotifier {
 
   Future<void> checkKyc() async {
     try {
+      // print("Test");
+
       String status = await _authenticationService.getKYCStatus();
-      _kyced = status;
+      print(status);
+      if (status == _kyced) {
+        print("berhasil");
+        _kyced == status;
+      } else {
+        await refreshToken();
+      }
+      notifyListeners();
+    } catch (error) {
+      print(error);
+    }
+  }
+
+  Future<void> refreshToken() async {
+    try {
+      await _authenticationService.refreshToken();
+      final token = await _secureStorage.read(key: 'jwtToken');
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+      _kyced = decodedToken['verifiedKYC'];
       notifyListeners();
     } catch (error) {
       print(error);

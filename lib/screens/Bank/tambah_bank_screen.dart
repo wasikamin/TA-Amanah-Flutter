@@ -1,4 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/models/availableBank.dart';
+import 'package:amanah/screens/Bank/pilih_bank_screen.dart';
+import 'package:amanah/services/balance_service.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
@@ -11,6 +14,10 @@ class TambahBankScreen extends StatefulWidget {
 
 class _TambahBankScreenState extends State<TambahBankScreen> {
   var formKey;
+  final balanceService = BalanceService();
+  // List<AvailableBank> availableBank = [];
+  AvailableBank? bank;
+  TextEditingController noRekeningController = TextEditingController();
   @override
   void initState() {
     // TODO: implement initState
@@ -22,9 +29,6 @@ class _TambahBankScreenState extends State<TambahBankScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-
-    var namaBank = "";
-    final noRekeningController = TextEditingController();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: const Color(0xfff2f7fa),
@@ -54,21 +58,50 @@ class _TambahBankScreenState extends State<TambahBankScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   DropdownSearch(
+                    itemAsString: (item) => item.name,
+                    asyncItems: (dynamic text) async {
+                      try {
+                        List response = await balanceService.getAvailableBank();
+                        // print(response[1].bank_code);
+                        List<AvailableBank> allBank = [];
+
+                        for (var element in response) {
+                          allBank.add(AvailableBank(
+                            bank_code: element.bank_code,
+                            name: element.name,
+                            fee: element.fee,
+                            queue: element.queue,
+                            status: element.status,
+                          ));
+                        }
+
+                        return allBank as List<dynamic>;
+                      } catch (e) {
+                        print(e);
+                        return [];
+                      }
+                    },
                     popupProps: PopupProps.menu(
+                      showSearchBox: true,
+                      searchFieldProps: TextFieldProps(
+                        decoration: InputDecoration(
+                          hintText: "Cari Bank",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
                       fit: FlexFit.loose,
                       menuProps: MenuProps(
                         elevation: 10,
                       ),
                     ),
-                    items: [
-                      'BCA',
-                      'CIMB Niaga',
-                      'Mandiri',
-                      'BNI',
-                      'Permata',
-                      'BRI',
-                      'BSI'
-                    ],
+                    validator: (value) {
+                      if (value == null) {
+                        return "Bank tidak boleh kosong";
+                      }
+                      return null;
+                    },
                     dropdownDecoratorProps: DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                       border: OutlineInputBorder(),
@@ -77,16 +110,22 @@ class _TambahBankScreenState extends State<TambahBankScreen> {
                     )),
                     onChanged: (value) {
                       setState(() {
-                        namaBank = value!;
+                        bank = value!;
                       });
                     },
                   ),
                   vSpace(height: height * 0.02),
                   TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "No. Rekening tidak boleh kosong";
+                      }
+                      return null;
+                    },
                     controller: noRekeningController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: "No. Rekening/VA",
-                      hintStyle: bodyTextStyle,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
@@ -105,7 +144,30 @@ class _TambahBankScreenState extends State<TambahBankScreen> {
                 style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
-                    print(namaBank);
+                    try {
+                      await balanceService.addBankAccount(bank!.bank_code,
+                          int.parse(noRekeningController.text));
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return PilihBankScreen();
+                      }));
+                    } catch (e) {
+                      print(e);
+                    }
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        backgroundColor: Color.fromARGB(
+                            255, 211, 59, 59), // Customize the background color
+                        duration:
+                            Duration(seconds: 2), // Customize the duration
+                        behavior:
+                            SnackBarBehavior.floating, // Customize the behavior
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(
+                              10), // Customize the border radius
+                        ),
+                        content: Text(
+                            "Pilih Bank dan Isi Nomor Rekening terlebih dahulu")));
                   }
                 },
                 child: Text("Selanjutnya")),

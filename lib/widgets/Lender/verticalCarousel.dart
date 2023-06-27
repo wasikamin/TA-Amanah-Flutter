@@ -1,6 +1,9 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class VerticalCarousel extends StatefulWidget {
   @override
@@ -41,6 +44,11 @@ class _VerticalCarouselState extends State<VerticalCarousel> {
 
 class ImbalHasil extends StatelessWidget {
   const ImbalHasil({super.key});
+  String formatCurrency(int amount) {
+    final formatCurrency =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    return formatCurrency.format(amount);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +59,13 @@ class ImbalHasil extends StatelessWidget {
         Text(
           "Keuntungan imbal hasil:",
         ),
-        Text(
-          "Rp. 100.000.000",
-          style: bodyTextStyle.copyWith(fontSize: 20),
-        )
+        Provider.of<UserProvider>(context).loading == true
+            ? SizedBox(
+                height: 10, width: 10, child: CircularProgressIndicator())
+            : Text(
+                formatCurrency(Provider.of<UserProvider>(context).totalYield),
+                style: bodyTextStyle,
+              ),
       ],
     );
   }
@@ -63,6 +74,12 @@ class ImbalHasil extends StatelessWidget {
 class DanaTersalur extends StatelessWidget {
   const DanaTersalur({super.key});
 
+  String formatCurrency(int amount) {
+    final formatCurrency =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    return formatCurrency.format(amount);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -70,10 +87,13 @@ class DanaTersalur extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Dana tersalurkan"),
-        Text(
-          "Rp. 0",
-          style: bodyTextStyle.copyWith(fontSize: 20),
-        )
+        Provider.of<UserProvider>(context).loading == true
+            ? SizedBox(
+                height: 10, width: 10, child: CircularProgressIndicator())
+            : Text(
+                formatCurrency(Provider.of<UserProvider>(context).totalFunding),
+                style: bodyTextStyle,
+              ),
       ],
     );
   }

@@ -69,20 +69,22 @@ class _SelfieCameraState extends State<SelfieCamera> {
                         child: _controller!.buildPreview(),
                       ),
                       Positioned(
-                        top: 60,
+                        top: 100,
                         left: 0,
                         right: 0,
                         child: Align(
                           alignment: Alignment.center,
                           child: Container(
                             decoration: BoxDecoration(
-                                border: Border.all(
-                                    color: const Color.fromARGB(
-                                        255, 255, 255, 255),
-                                    width: 4.0),
-                                borderRadius: BorderRadius.circular(10)),
-                            width: size.width * 0.9,
-                            height: 200,
+                              border: Border.all(
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  width: 4.0),
+                              borderRadius: BorderRadius.all(
+                                  Radius.elliptical(400.0, 350.0)),
+                            ),
+                            width: size.width * 0.55,
+                            height: size.height * 0.3,
                           ),
                         ),
                       ),
@@ -203,11 +205,13 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                               await KycService().kycUser(kycProvider);
                           if (responseCode == 200) {
                             // print("Berhasil");
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        WaitingVerificationScreen()));
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      WaitingVerificationScreen()),
+                              (Route<dynamic> route) => false,
+                            );
                           }
                         },
                         child: Text("Selanjutnya")),

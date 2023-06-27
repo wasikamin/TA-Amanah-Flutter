@@ -1,12 +1,16 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class WaitingVerificationScreen extends StatelessWidget {
   const WaitingVerificationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    AuthenticationProvider authProvider =
+        Provider.of<AuthenticationProvider>(context);
     return Scaffold(
         body: SafeArea(
       child: Padding(
@@ -32,11 +36,15 @@ class WaitingVerificationScreen extends StatelessWidget {
             TextButton(
               child: Text('Kembali ke halaman utama'),
               style: textButton,
-              onPressed: () {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => BorrowerHomePage()));
+              onPressed: () async {
+                await authProvider.refreshToken();
+                await authProvider.checkKyc();
+                print("berhasil");
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => BorrowerHomePage()),
+                  (Route<dynamic> route) => false,
+                );
               },
             ),
           ],

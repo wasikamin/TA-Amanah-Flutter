@@ -5,7 +5,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthenticationService {
-  String _baseUrl = "";
   static const String _sendOtpEndpoint = '/authentication/login?action=login';
   static const String _loginEndpoint = '/authentication/login?action=email-otp';
   static const String _resendOtpEndpoint = '/authentication/login/otp/resend';
@@ -16,8 +15,8 @@ class AuthenticationService {
 
   //LOGIN
   Future<String> login(String email, String password) async {
-    _baseUrl = dotenv.env['API_BASE_URL'].toString();
-    final url = Uri.parse('$_baseUrl$_loginEndpoint');
+    final baseUrl = dotenv.env['API_BASE_URL'].toString();
+    final url = Uri.parse('$baseUrl$_loginEndpoint');
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'email': email, 'password': password}));
@@ -37,14 +36,14 @@ class AuthenticationService {
   }
 
   //Register
-  Future<int> register(
+  Future<dynamic> register(
       {required String name,
       required String email,
       required String phoneNumber,
       required String roles,
       required String password}) async {
-    _baseUrl = dotenv.env['API_BASE_URL'].toString();
-    final url = Uri.parse('$_baseUrl/authentication/register');
+    final baseUrl = dotenv.env['API_BASE_URL'].toString();
+    final url = Uri.parse('$baseUrl/authentication/register');
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
@@ -54,9 +53,10 @@ class AuthenticationService {
           "roles": roles,
           "password": password
         }));
-    print(json.decode(response.body));
+    // print(json.decode(response.body));
     if (response.statusCode == 201) {
-      return response.statusCode.toInt();
+      // final responseBody = json.decode(response.body);
+      return response;
     } else {
       final responseBody = json.decode(response.body);
       throw responseBody["message"];
@@ -65,7 +65,8 @@ class AuthenticationService {
 
   //SENDING OTP
   Future<void> sendOtp(String Otp, String email) async {
-    final url = Uri.parse('$_baseUrl$_sendOtpEndpoint');
+    final baseUrl = dotenv.env['API_BASE_URL'].toString();
+    final url = Uri.parse('$baseUrl$_sendOtpEndpoint');
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'email': email, 'otp': Otp}));
@@ -84,7 +85,8 @@ class AuthenticationService {
   }
 
   Future<void> resendOtp(String email) async {
-    final url = Uri.parse('$_baseUrl$_resendOtpEndpoint');
+    final baseUrl = dotenv.env['API_BASE_URL'].toString();
+    final url = Uri.parse('$baseUrl$_resendOtpEndpoint');
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'email': email}));
@@ -101,7 +103,8 @@ class AuthenticationService {
 
   Future<void> refreshToken() async {
     // Perform refresh token logic here
-    final url = Uri.parse('$_baseUrl$_refreshTokenEndpoint');
+    final baseUrl = dotenv.env['API_BASE_URL'].toString();
+    final url = Uri.parse('$baseUrl$_refreshTokenEndpoint');
     final refreshToken = await _secureStorage.read(key: 'refreshToken');
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
@@ -112,6 +115,7 @@ class AuthenticationService {
       final newRefreshToken = responseBody['data']['refreshToken'] as String;
       await _secureStorage.write(key: 'jwtToken', value: jwtToken);
       await _secureStorage.write(key: 'refreshToken', value: newRefreshToken);
+      print(responseBody);
       return responseBody['message'];
     } else {
       throw Exception('Failed to refresh token');
@@ -120,12 +124,20 @@ class AuthenticationService {
 
   Future<dynamic> getKYCStatus() async {
     try {
-      final url = Uri.parse('$_baseUrl$_getKYCStatus');
-      final response = await http.get(url);
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final url = Uri.parse('$baseUrl$_getKYCStatus');
+      final token = await _secureStorage.read(key: 'jwtToken');
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "authorization": "bearer $token"
+      });
+      // print(response.statusCode.toString());
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
+        // print("berhasil");
         return responseBody['data']['kyc'];
       } else {
+        print(response.statusCode.toString());
         throw Exception('Failed to get KYC status');
       }
     } catch (e) {

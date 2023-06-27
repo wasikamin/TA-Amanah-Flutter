@@ -1,8 +1,10 @@
 import "package:amanah/constants/app_theme.dart";
+import "package:amanah/screens/Authentication/login_screen.dart";
 import "package:flutter/material.dart";
 
 class VerifyScreen extends StatelessWidget {
-  const VerifyScreen({super.key});
+  const VerifyScreen({super.key, required this.email});
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +36,22 @@ class VerifyScreen extends StatelessWidget {
                 height: 20,
               ),
               Text(
-                "Test@gmail.com",
+                email,
                 style:
                     titleTextStyle.copyWith(color: Colors.black, fontSize: 20),
               ),
+              TextButton(
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  child: Text(
+                    "Kembali ke Login",
+                    style: textButtonTextStyle,
+                  )),
             ],
           ),
         )),

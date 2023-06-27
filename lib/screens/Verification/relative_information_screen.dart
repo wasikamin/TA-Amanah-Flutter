@@ -103,6 +103,7 @@ class _RelativeInformationScreenState extends State<RelativeInformationScreen> {
                   TextFormField(
                     decoration:
                         InputDecoration(labelText: "Nomor Handphone Kerabat"),
+                    keyboardType: TextInputType.number,
                     controller: relativeContactPhone1,
                   ),
                   vSpace(
@@ -166,6 +167,7 @@ class _RelativeInformationScreenState extends State<RelativeInformationScreen> {
                   TextFormField(
                     decoration:
                         InputDecoration(labelText: "Nomor Handphone Kerabat"),
+                    keyboardType: TextInputType.number,
                     controller: relativeContactPhone2,
                   ),
                   vSpace(

@@ -1,7 +1,9 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/pengajuan_loan_provider.dart';
 import 'package:amanah/screens/Bank/pilih_bank_screen.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AjukanPinjamanScreen extends StatefulWidget {
   const AjukanPinjamanScreen({super.key});
@@ -23,6 +25,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pengajuanLoanProvider = Provider.of<PengajuanLoanProvider>(context);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -60,7 +63,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             border: OutlineInputBorder(),
                             label: Text("Jumlah Pinjaman"),
                             hintText: "Masukkan Jumlah Pinjaman",
-                            helperText: 'Pinjaman harus kelipatan Rp. 50.0000',
+                            helperText: 'Pinjaman harus kelipatan Rp. 50.000',
                           ),
                           keyboardType: TextInputType.number,
                           validator: (value) {
@@ -87,6 +90,12 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                               elevation: 10,
                             ),
                           ),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Pilih durasi pinjaman';
+                            }
+                            return null; // Return null if the input is valid
+                          },
                           items: ["3 Bulan", "6 Bulan", "12 Bulan"],
                           dropdownDecoratorProps: DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
@@ -109,13 +118,10 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             border: OutlineInputBorder(),
                             label: Text("Imbal Hasil"),
                             hintText: "Masukkan Imbal Hasil",
-                            helperText: 'Minimal 10% dari jumlah pinjaman',
+                            helperText: 'Minimal Rp. 50.000',
                           ),
                           keyboardType: TextInputType.number,
                           validator: (value) {
-                            double? loanAmount =
-                                double.tryParse(amountController.text);
-                            double minimumYield = 0.1 * loanAmount!;
                             if (value!.isEmpty) {
                               return 'Masukkan imbal hasil';
                             }
@@ -123,9 +129,8 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             if (yield == null) {
                               return 'Invalid number';
                             }
-                            if (yield < minimumYield) {
-                              return 'Minimum (10%): Rp. ' +
-                                  minimumYield.toString();
+                            if (yield < 50000) {
+                              return 'Minimum: Rp. 50.000';
                             }
                             return null; // Return null if the input is valid
                           },
@@ -147,6 +152,12 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             labelText: "Kategori",
                             hintText: "Pilih Kategori Pinjaman",
                           )),
+                          validator: (value) {
+                            if (value?.isEmpty ?? true) {
+                              return 'Masukkan kategori pinjaman';
+                            }
+                            return null; // Return null if the input is valid
+                          },
                           onChanged: (value) {
                             setState(() {
                               kategori = value!;
@@ -210,12 +221,20 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                                   backgroundColor: primaryColor),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
+                                  await pengajuanLoanProvider.setBorrowing(
+                                      kategori,
+                                      tujuanController.text,
+                                      scheme.name,
+                                      durasi,
+                                      int.parse(amountController.text),
+                                      int.parse(yieldController.text));
                                   // print(amountController.text +
                                   //     durasi +
                                   //     yieldController.text +
                                   //     scheme.name +
                                   //     kategori +
                                   //     tujuanController.text);
+
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(

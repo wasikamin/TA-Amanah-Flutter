@@ -67,7 +67,7 @@ class _KTPCameraState extends State<KTPCamera> {
                         child: _controller!.buildPreview(),
                       ),
                       Positioned(
-                        top: 60,
+                        top: 150,
                         left: 0,
                         right: 0,
                         child: Align(
