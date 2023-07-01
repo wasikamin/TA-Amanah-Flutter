@@ -1,5 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
+import 'package:amanah/widgets/Lender/Dashboard/KycStatusCard.dart';
 import 'package:amanah/widgets/Lender/cardSaldo.dart';
 import 'package:amanah/widgets/topBackground.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: const Color(0xfff2f7fa),
@@ -29,6 +32,8 @@ class _DashboardState extends State<Dashboard> {
         onRefresh: () async {
           //use method checkSaldo() in userProvider
           await Provider.of<UserProvider>(context, listen: false).checkSaldo();
+          await Provider.of<AuthenticationProvider>(context, listen: false)
+              .checkKyc();
         },
         child: SingleChildScrollView(
           child: Stack(
@@ -59,8 +64,14 @@ class _DashboardState extends State<Dashboard> {
                         height: screenHeight * 0.025,
                       ),
                       cardSaldo(screenHeight: screenHeight),
+                      SizedBox(
+                        height: screenHeight * 0.025,
+                      ),
+                      //card status kyc
+                      KycStatusCard(width: width),
+                      //space
                       Container(
-                        height: screenHeight * 1,
+                        height: screenHeight * 0.5,
                       )
                     ],
                   ),

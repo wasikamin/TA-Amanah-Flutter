@@ -183,9 +183,9 @@ class AuthenticationProvider with ChangeNotifier {
       // print("Test");
 
       String status = await _authenticationService.getKYCStatus();
-      print(status);
+      // print(status);
       if (status == _kyced) {
-        print("berhasil");
+        // print("berhasil");
         _kyced == status;
       } else {
         await refreshToken();

@@ -2,6 +2,7 @@ import 'dart:io';
 
 // import 'package:amanah/widgets/Verification/IdCardFrame.dart';
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/providers/kyc_provider.dart';
 import 'package:amanah/screens/Verification/waiting_verification_screen.dart';
 import 'package:amanah/services/kyc_service.dart';
@@ -161,6 +162,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   Widget build(BuildContext context) {
     final kycProvider = Provider.of<KycProvider>(context);
     final height = MediaQuery.of(context).size.height;
+    final authProvider = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Preview Foto Selfie'),
@@ -201,8 +203,9 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                             backgroundColor: primaryColor),
                         onPressed: () async {
                           await kycProvider.setFaceImage(widget.imagePath);
-                          var responseCode =
-                              await KycService().kycUser(kycProvider);
+                          var responseCode = authProvider.role == "lender"
+                              ? await KycService().kycLender(kycProvider)
+                              : await KycService().kycBorrower(kycProvider);
                           if (responseCode == 200) {
                             // print("Berhasil");
                             Navigator.pushAndRemoveUntil(

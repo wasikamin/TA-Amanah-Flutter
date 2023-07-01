@@ -1,6 +1,8 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/models/loan.dart';
 import 'package:amanah/providers/loan_provider.dart';
+import 'package:amanah/screens/Lenders/Pendanaan/detail_pendanaan_screen.dart';
+import 'package:amanah/widgets/ToolTip.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -216,7 +218,17 @@ class _LoanListState extends State<LoanList> {
                                 ),
                                 Spacer(),
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailPendanaanScreen(
+                                          loanId: loan.loanId,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   child: Text(
                                     "Lihat Detail",
                                     style: bodyTextStyle.copyWith(
@@ -230,13 +242,15 @@ class _LoanListState extends State<LoanList> {
                           ],
                         ),
                       ),
+
+                      //label category
                       Positioned(
                         top: 0,
                         left: 0,
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 11),
                           alignment: Alignment.centerLeft,
-                          width: width * 0.25,
+                          width: width * 0.3,
                           height: height * 0.05,
                           decoration: BoxDecoration(
                             color: primaryColor,
@@ -245,13 +259,21 @@ class _LoanListState extends State<LoanList> {
                               bottomRight: Radius.circular(20),
                             ),
                           ),
-                          child: Text(
-                            loan.borrowingCategory,
-                            style: bodyTextStyle.copyWith(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                          ),
+                          child: loan.borrowingCategory.length > 8
+                              ? CustomToolTip(
+                                  text: loan.borrowingCategory,
+                                  textStyle: bodyTextStyle.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : Text(
+                                  loan.borrowingCategory,
+                                  style: bodyTextStyle.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
                         ),
                       ),
                     ]),

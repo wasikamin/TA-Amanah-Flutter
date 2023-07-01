@@ -1,7 +1,9 @@
 //import material.dart from flutter
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/providers/kyc_provider.dart';
 import 'package:amanah/screens/Verification/relative_information_screen.dart';
+import 'package:amanah/screens/Verification/take_ktp_screen.dart';
 import 'package:amanah/widgets/Verification/datePicker.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -35,6 +37,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
   @override
   Widget build(BuildContext context) {
     final kycProvider = Provider.of<KycProvider>(context);
+    final authProvider = Provider.of<AuthenticationProvider>(context);
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
     // TODO: implement build
@@ -172,10 +175,17 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                                 work,
                                 salary,
                                 idCardNumberController.text);
-                            Navigator.push((context),
-                                MaterialPageRoute(builder: (context) {
-                              return RelativeInformationScreen();
-                            }));
+                            if (authProvider.role == "lender") {
+                              Navigator.push((context),
+                                  MaterialPageRoute(builder: (context) {
+                                return const KtpScreen();
+                              }));
+                            } else {
+                              Navigator.push((context),
+                                  MaterialPageRoute(builder: (context) {
+                                return RelativeInformationScreen();
+                              }));
+                            }
                           }
                         },
                         child: Text("Selanjutnya")),

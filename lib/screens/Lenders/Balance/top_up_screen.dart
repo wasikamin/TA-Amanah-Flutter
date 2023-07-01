@@ -1,6 +1,8 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/screens/Lenders/Balance/transaction_history_screen.dart';
 import 'package:amanah/screens/web/web_view_screen.dart';
 import 'package:amanah/services/balance_service.dart';
+import 'package:amanah/widgets/CustomAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
@@ -28,14 +30,23 @@ class _TopUpScreenState extends State<TopUpScreen> {
     return Scaffold(
       backgroundColor: const Color(0xfff2f7fa),
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: Colors.black,
-        title: Text("Top Up",
-            style: bodyTextStyle.copyWith(
-                fontSize: 16, fontWeight: FontWeight.bold)),
-        centerTitle: true,
+      appBar: CustomAppBar(
+        title: "Top Up",
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            const TransactionHistoryScreen()));
+              },
+              icon: const Icon(
+                color: Colors.grey,
+                Icons.restore_page_rounded,
+                size: 25,
+              ))
+        ],
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(

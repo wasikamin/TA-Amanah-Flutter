@@ -1,6 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
+import 'package:amanah/screens/Lenders/home/homepage_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,7 +43,10 @@ class WaitingVerificationScreen extends StatelessWidget {
                 print("berhasil");
                 Navigator.pushAndRemoveUntil(
                   context,
-                  MaterialPageRoute(builder: (context) => BorrowerHomePage()),
+                  MaterialPageRoute(
+                      builder: (context) => authProvider.role == "lender"
+                          ? HomePage()
+                          : BorrowerHomePage()),
                   (Route<dynamic> route) => false,
                 );
               },

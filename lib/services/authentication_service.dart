@@ -115,7 +115,7 @@ class AuthenticationService {
       final newRefreshToken = responseBody['data']['refreshToken'] as String;
       await _secureStorage.write(key: 'jwtToken', value: jwtToken);
       await _secureStorage.write(key: 'refreshToken', value: newRefreshToken);
-      print(responseBody);
+      // print(responseBody);
       return responseBody['message'];
     } else {
       throw Exception('Failed to refresh token');
@@ -137,7 +137,7 @@ class AuthenticationService {
         // print("berhasil");
         return responseBody['data']['kyc'];
       } else {
-        print(response.statusCode.toString());
+        // print(response.statusCode.toString());
         throw Exception('Failed to get KYC status');
       }
     } catch (e) {

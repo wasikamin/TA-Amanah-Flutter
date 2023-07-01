@@ -146,7 +146,7 @@ class _TambahBankScreenState extends State<TambahBankScreen> {
                   if (formKey.currentState!.validate()) {
                     try {
                       await balanceService.addBankAccount(bank!.bank_code,
-                          int.parse(noRekeningController.text));
+                          int.parse(noRekeningController.text), bank!.name);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
                         return PilihBankScreen();

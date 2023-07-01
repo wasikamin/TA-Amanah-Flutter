@@ -3,11 +3,11 @@ import 'package:amanah/models/bank.dart';
 import 'package:amanah/services/balance_service.dart';
 import 'package:amanah/services/user_service.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:jwt_decoder/jwt_decoder.dart';
+// import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+// import 'package:jwt_decoder/jwt_decoder.dart';
 
 class UserProvider with ChangeNotifier {
-  final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
+  // final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   int _balance = 0;
   int? _tagihan;
   Map<dynamic, dynamic>? _active;
@@ -64,13 +64,13 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> checkKyc() async {
-    final token = await _secureStorage.read(key: 'jwtToken').toString();
-    Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-    print(decodedToken);
-    // _kyc = kyc;
-    // notifyListeners();
-  }
+  // Future<void> checkKyc() async {
+  //   final token = await _secureStorage.read(key: 'jwtToken').toString();
+  //   Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+  //   print(decodedToken);
+  //   // _kyc = kyc;
+  //   // notifyListeners();
+  // }
 
   deleteAll() async {
     print("hapus semua");
@@ -89,6 +89,7 @@ class UserProvider with ChangeNotifier {
       var response = await _balanceService.getBankAccount();
       for (var element in response) {
         _banks.add(Bank(
+          bankName: element.bankName,
           accountNumber: element.accountNumber,
           bankCode: element.bankCode,
           id: element.id,

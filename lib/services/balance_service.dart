@@ -56,7 +56,8 @@ class BalanceService {
     }
   }
 
-  Future<dynamic> addBankAccount(String bankCode, int accountNumber) async {
+  Future<dynamic> addBankAccount(
+      String bankCode, int accountNumber, String bankName) async {
     try {
       final _baseUrl = dotenv.env['API_BASE_URL'].toString();
       final _addBankUrl = '/balance/account';
@@ -68,8 +69,11 @@ class BalanceService {
           "Content-Type": "application/json",
           "Authorization": "Bearer $token"
         },
-        body:
-            json.encode({"bankCode": bankCode, "accountNumber": accountNumber}),
+        body: json.encode({
+          "bankCode": bankCode,
+          "accountNumber": accountNumber,
+          "bankName": bankName
+        }),
       );
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);

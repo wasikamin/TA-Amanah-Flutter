@@ -1,6 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/screens/Lenders/home/dashboard.dart';
 import 'package:amanah/screens/Lenders/home/list_pendanaan_screen.dart';
+import 'package:amanah/screens/Lenders/home/portofolio_tab_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/authentication_provider.dart';
@@ -15,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
   List<Widget> _pages = [
     Dashboard(),
-    Page3(),
+    PortofolioTabScreen(),
     ListPendanaanScreen(),
     Page3(),
   ];

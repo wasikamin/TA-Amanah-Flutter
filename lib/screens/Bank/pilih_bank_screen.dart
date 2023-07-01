@@ -6,6 +6,8 @@ import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Bank/tambah_bank_screen.dart';
 import 'package:amanah/screens/Borrower/pengajuan_pinjaman/konfirmasi_pinjaman_screen.dart';
 import 'package:amanah/screens/Lenders/Balance/withdraw_screen.dart';
+import 'package:amanah/widgets/CustomAppBar.dart';
+import 'package:amanah/widgets/ToolTip.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,13 +44,12 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
 
     return Scaffold(
       backgroundColor: const Color(0xfff2f7fa),
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title:
-            Text("Pilih Rekening", style: bodyTextStyle.copyWith(fontSize: 20)),
-        foregroundColor: Colors.black,
+      appBar: CustomAppBar(
+        title: "Pilih Akun Bank",
+        actions: [
+          IconButton(
+              onPressed: () {}, icon: const Icon(Icons.restore_page_rounded))
+        ],
       ),
       body: RefreshIndicator(
         key: refreshKey,
@@ -167,32 +168,31 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                                             });
                                           }),
                                           DataCell(
-                                              Text(
-                                                bank.bankCode.length < 10
-                                                    ? bank.bankCode
-                                                        .toUpperCase()
-                                                    : bank.bankCode
-                                                        .replaceRange(
-                                                            10,
-                                                            bank.bankCode
-                                                                .length,
-                                                            '...')
-                                                        .toUpperCase(),
-                                                style: bodyTextStyle.copyWith(
-                                                    fontSize: 12),
-                                              ), onTap: () {
-                                            setState(() {
-                                              if (isSelected) {
-                                                selectedRowIndex = index;
-                                                selectedBank = bank;
-                                                // print(selectedBank?.bankCode);
-                                              } else {
-                                                selectedRowIndex = index;
-                                                selectedBank = bank;
-                                                // print(selectedBank?.bankCode);
-                                              }
-                                            });
-                                          }),
+                                            bank.bankName.length < 8
+                                                ? Text(
+                                                    bank.bankName,
+                                                    style: bodyTextStyle,
+                                                  )
+                                                : CustomToolTip(
+                                                    text: bank.bankName,
+                                                    textStyle: bodyTextStyle,
+                                                  ),
+                                            onTap: () {
+                                              setState(
+                                                () {
+                                                  if (isSelected) {
+                                                    selectedRowIndex = index;
+                                                    selectedBank = bank;
+                                                    // print(selectedBank?.bankCode);
+                                                  } else {
+                                                    selectedRowIndex = index;
+                                                    selectedBank = bank;
+                                                    // print(selectedBank?.bankCode);
+                                                  }
+                                                },
+                                              );
+                                            },
+                                          ),
                                           DataCell(Icon(
                                             Icons.edit,
                                             size: 12,

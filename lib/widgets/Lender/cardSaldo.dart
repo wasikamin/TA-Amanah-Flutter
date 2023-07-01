@@ -1,9 +1,11 @@
 import "package:amanah/constants/app_theme.dart";
+import "package:amanah/providers/authentication_provider.dart";
 import "package:amanah/screens/Bank/pilih_bank_screen.dart";
 import "package:amanah/screens/Lenders/Balance/top_up_screen.dart";
 import "package:amanah/widgets/Lender/saldo.dart";
 import "package:amanah/widgets/Lender/verticalCarousel.dart";
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 
 class cardSaldo extends StatelessWidget {
   const cardSaldo({
@@ -15,6 +17,7 @@ class cardSaldo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthenticationProvider>(context);
     return Card(
       elevation: 3,
       child: Container(
@@ -45,10 +48,28 @@ class cardSaldo extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const TopUpScreen()));
+                        authProvider.kyced == 'verified'
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const TopUpScreen()))
+                            : ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    backgroundColor: Color.fromARGB(
+                                        255,
+                                        211,
+                                        59,
+                                        59), // Customize the background color
+                                    duration: Duration(
+                                        seconds: 2), // Customize the duration
+                                    behavior: SnackBarBehavior
+                                        .floating, // Customize the behavior
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          10), // Customize the border radius
+                                    ),
+                                    content: Text(
+                                        "Silahkan lakukan KYC terlebih dahulu")));
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -76,10 +97,29 @@ class cardSaldo extends StatelessWidget {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PilihBankScreen()));
+                        authProvider.kyced == "verified"
+                            ? Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const PilihBankScreen()))
+                            : ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                    backgroundColor: Color.fromARGB(
+                                        255,
+                                        211,
+                                        59,
+                                        59), // Customize the background color
+                                    duration: Duration(
+                                        seconds: 2), // Customize the duration
+                                    behavior: SnackBarBehavior
+                                        .floating, // Customize the behavior
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          10), // Customize the border radius
+                                    ),
+                                    content: Text(
+                                        "Silahkan lakukan KYC terlebih dahulu")));
                       },
                       child: Container(
                         decoration: BoxDecoration(
