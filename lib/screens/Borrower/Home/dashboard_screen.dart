@@ -1,9 +1,11 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/authentication_provider.dart';
-import 'package:amanah/screens/Borrower/pengajuan_pinjaman/ajukan_pinjaman_screen.dart';
+import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Borrower/pembayaran_pinjaman/pembayaran_screen.dart';
-import 'package:amanah/screens/Verification/personal_information_screen.dart';
+import 'package:amanah/widgets/Borrower/JadwalPembayaran.dart';
+import 'package:amanah/widgets/Borrower/borrowerTopCard.dart';
 import 'package:amanah/widgets/Borrower/pembayaranBulanIni.dart';
+import 'package:amanah/widgets/Borrower/pinjamanAktif.dart';
 import 'package:amanah/widgets/topBackground.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +21,24 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<RefreshIndicatorState> refreshKey =
       GlobalKey<RefreshIndicatorState>();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkLoan();
+    checkKyc();
+  }
+
+  checkLoan() async {
+    await Provider.of<UserProvider>(context, listen: false).checkPinjaman();
+  }
+
+  checkKyc() async {
+    await Provider.of<AuthenticationProvider>(context, listen: false)
+        .checkKyc();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -26,12 +46,14 @@ class _DashboardState extends State<Dashboard> {
       backgroundColor: const Color(0xfff2f7fa),
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      body: Consumer<AuthenticationProvider>(
-          builder: (context, authenticationProvider, _) {
+      body: Consumer2<AuthenticationProvider, UserProvider>(
+          builder: (context, authenticationProvider, userProvider, _) {
+        // print(userProvider.active!["totalFund"]);
         return RefreshIndicator(
           key: refreshKey,
           onRefresh: () async {
             await authenticationProvider.checkKyc();
+            await userProvider.checkPinjaman();
           },
           child: SingleChildScrollView(
             child: Stack(
@@ -59,91 +81,8 @@ class _DashboardState extends State<Dashboard> {
                               ),
                             ],
                           ),
-                          Container(
-                            height: screenHeight * 0.25,
-                            width: double.infinity,
-                            margin: EdgeInsets.only(top: 20),
-                            decoration: BoxDecoration(
-                              color: whiteColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text("Limit Tersedia",
-                                    style:
-                                        bodyTextStyle.copyWith(fontSize: 24)),
-                                Text("Rp. 11.000.000",
-                                    style:
-                                        bodyTextStyle.copyWith(fontSize: 24)),
-                                SizedBox(
-                                  height: screenHeight * 0.015,
-                                ),
-                                Text("Maksimal Limit: Rp. 11.000.000"),
-                                SizedBox(
-                                  height: screenHeight * 0.025,
-                                ),
-                                if (authenticationProvider.kyced ==
-                                    "not verified")
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  PersonalInformationScreen()));
-                                    },
-                                    child: Text(
-                                      "Verifikasi Data",
-                                      style: buttonTextStyle,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        backgroundColor: primaryColor),
-                                  ),
-                                if (authenticationProvider.kyced == "pending")
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 20),
-                                    decoration: BoxDecoration(
-                                      color: primaryColor.withOpacity(0.1),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(30)),
-                                    ),
-                                    child: Text(
-                                        "Status Verifikasi: ${authenticationProvider.kyced}",
-                                        style: bodyTextStyle.copyWith(
-                                          fontSize: 16,
-                                          color: primaryColor,
-                                        )),
-                                  ),
-                                if (authenticationProvider.kyced == "verified")
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  AjukanPinjamanScreen()));
-                                    },
-                                    child: Text(
-                                      "Ajukan Pinjaman",
-                                      style: buttonTextStyle,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 30),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          side: BorderSide(color: primaryColor),
-                                        ),
-                                        backgroundColor: primaryColor),
-                                  ),
-                              ],
-                            ),
-                          ),
+                          const BorrowerTopCard(),
+                          const PinjamanAktif(),
                           Container(
                             margin: EdgeInsets.symmetric(vertical: 20),
                             child: SizedBox(
@@ -156,7 +95,7 @@ class _DashboardState extends State<Dashboard> {
                           Container(
                             height: screenHeight * 0.1,
                             width: double.infinity,
-                            padding: EdgeInsets.all(16),
+                            padding: const EdgeInsets.all(16),
                             alignment: Alignment.centerLeft,
                             decoration: BoxDecoration(
                               color: whiteColor,
@@ -165,8 +104,8 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             child: Row(
                               children: [
-                                pembayaranBulanIni(),
-                                Spacer(),
+                                const pembayaranBulanIni(),
+                                const Spacer(),
                                 if (authenticationProvider.kyced == "verified")
                                   TextButton(
                                       onPressed: () {
@@ -174,7 +113,7 @@ class _DashboardState extends State<Dashboard> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    PembayaranScreen()));
+                                                    const PembayaranScreen()));
                                       },
                                       child: Text(
                                         "Bayar",
@@ -190,37 +129,17 @@ class _DashboardState extends State<Dashboard> {
                               constraints: BoxConstraints(
                                 minHeight: 100,
                               ),
-                              padding: EdgeInsets.all(16),
-                              margin: EdgeInsets.symmetric(vertical: 20),
+                              padding: const EdgeInsets.all(16),
+                              margin: const EdgeInsets.symmetric(vertical: 20),
                               alignment: Alignment.topLeft,
                               decoration: BoxDecoration(
                                 color: whiteColor,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(20)),
                               ),
-                              child: Wrap(
-                                direction: Axis.vertical,
-                                children: <Widget>[
-                                  // Daftar item dalam list
-                                  Row(
-                                    children: [
-                                      Icon(Icons.schedule_outlined),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        "Jadwal Pembayaran",
-                                        style: bodyTextStyle.copyWith(
-                                            fontSize: 20),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 20),
-                                  Center(
-                                      child: Text(
-                                          "Belum ada tagihan untuk bulan ini")),
-                                ],
-                              )),
+                              child: const JadwalPembayaran()),
                           Container(
-                            height: 150,
+                            height: 20,
                           )
                         ]),
                   ),

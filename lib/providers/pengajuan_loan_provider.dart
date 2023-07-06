@@ -5,7 +5,7 @@ class PengajuanLoanProvider with ChangeNotifier {
   String _borrowingCategory = "", _purpose = "", _paymentSchema = "";
 
   Bank? _bank;
-
+  String _loanId = "";
   int _tenor = 0, _amount = 0, _yieldReturn = 0;
 
   get borrowingCategory => _borrowingCategory;
@@ -15,6 +15,7 @@ class PengajuanLoanProvider with ChangeNotifier {
   get amount => _amount;
   get yieldReturn => _yieldReturn;
   get bank => _bank;
+  get loanId => _loanId;
 
   Future<void> setBorrowing(String borrowingCategory, String purpose,
       String paymentScheme, String tenor, int amount, int yieldReturn) async {
@@ -49,8 +50,9 @@ class PengajuanLoanProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setBank(Bank bank) async {
+  Future<void> setDisbursementData(Bank bank, String loanId) async {
     _bank = bank;
+    _loanId = loanId;
     notifyListeners();
   }
 }

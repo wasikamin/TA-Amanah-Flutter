@@ -57,9 +57,15 @@ class _TransactionHistoryScreenState extends State<TransactionHistoryScreen> {
             ],
           ),
         ),
-        body: const TabBarView(
-          children: [DepositHistory(), WithdrawHistory()],
-        ),
+        body: Provider.of<TransactionHistoryProvider>(context, listen: true)
+                    .isLoading ==
+                true
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : const TabBarView(
+                children: [DepositHistory(), WithdrawHistory()],
+              ),
       ),
     );
   }

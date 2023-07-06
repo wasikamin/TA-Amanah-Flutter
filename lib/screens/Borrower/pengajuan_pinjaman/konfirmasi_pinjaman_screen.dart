@@ -23,82 +23,66 @@ class KonfirmasiPinjaman extends StatelessWidget {
       ),
       body: Consumer<PengajuanLoanProvider>(
           builder: (context, pengajuanLoanProvider, _) {
-        return SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-                horizontal: width * 0.05, vertical: height * 0.02),
-            child: Column(
-              children: [
-                Card(
-                  elevation: 2,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.05, vertical: height * 0.03),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Informasi Pinjaman",
-                            style: titleTextStyle.copyWith(fontSize: 16),
-                          ),
-                          vSpace(height: height * 0.01),
-                          CustomRow(
-                              leftText: "Jumlah Pinjaman",
-                              rightText:
-                                  pengajuanLoanProvider.amount.toString()),
-                          CustomRow(
-                              leftText: "Imbal Hasil",
-                              rightText:
-                                  pengajuanLoanProvider.yieldReturn.toString()),
-                          CustomRow(
-                              leftText: "Tenor",
-                              rightText:
-                                  pengajuanLoanProvider.tenor.toString()),
-                          CustomRow(
-                              leftText: "Skema Pembayaran",
-                              rightText: pengajuanLoanProvider.paymentSchema),
-                          CustomRow(
-                            leftText: "Kategori",
-                            rightText: pengajuanLoanProvider.borrowingCategory,
-                          ),
-                          CustomRow(
-                              leftText: "Tujuan Penggunaan",
-                              rightText: pengajuanLoanProvider.purpose),
-                          vSpace(height: height * 0.01),
-                          Text(
-                            "Informasi Rekening",
-                            style: titleTextStyle.copyWith(fontSize: 16),
-                          ),
-                          vSpace(height: height * 0.01),
-                          CustomRow(
-                            leftText: "Nama Bank",
-                            rightText: pengajuanLoanProvider.bank.bankCode,
-                          ),
-                          CustomRow(
-                            leftText: "Nomor Rekening",
-                            rightText: pengajuanLoanProvider.bank.accountNumber,
-                          ),
-                        ]),
-                  ),
+        return Container(
+          padding: EdgeInsets.symmetric(
+              horizontal: width * 0.05, vertical: height * 0.02),
+          child: Column(
+            children: [
+              Card(
+                elevation: 2,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: width * 0.05, vertical: height * 0.03),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Informasi Pinjaman",
+                          style: titleTextStyle.copyWith(fontSize: 16),
+                        ),
+                        vSpace(height: height * 0.01),
+                        CustomRow(
+                            leftText: "Jumlah Pinjaman",
+                            rightText: pengajuanLoanProvider.amount.toString()),
+                        CustomRow(
+                            leftText: "Imbal Hasil",
+                            rightText:
+                                pengajuanLoanProvider.yieldReturn.toString()),
+                        CustomRow(
+                            leftText: "Tenor",
+                            rightText: pengajuanLoanProvider.tenor.toString()),
+                        CustomRow(
+                            leftText: "Skema Pembayaran",
+                            rightText: pengajuanLoanProvider.paymentSchema),
+                        CustomRow(
+                          leftText: "Kategori",
+                          rightText: pengajuanLoanProvider.borrowingCategory,
+                        ),
+                        CustomRow(
+                            leftText: "Tujuan Penggunaan",
+                            rightText: pengajuanLoanProvider.purpose),
+                        vSpace(height: height * 0.01),
+                      ]),
                 ),
-                Container(
-                    margin: EdgeInsets.only(top: height * 0.1),
-                    width: double.infinity,
-                    height: height * 0.06,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            primary: primaryColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20))),
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => KontrakPengajuan()));
-                        },
-                        child: Text("Konfirmasi"))),
-              ],
-            ),
+              ),
+              Spacer(),
+              Container(
+                  margin: EdgeInsets.only(bottom: height * 0.05),
+                  width: double.infinity,
+                  height: height * 0.07,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: primaryColor,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30))),
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => KontrakPengajuan()));
+                      },
+                      child: Text("Konfirmasi"))),
+            ],
           ),
         );
       }),

@@ -42,7 +42,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
                             const TransactionHistoryScreen()));
               },
               icon: const Icon(
-                color: Colors.grey,
+                color: Colors.black,
                 Icons.restore_page_rounded,
                 size: 25,
               ))

@@ -81,7 +81,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                         elevation: 10,
                       ),
                     ),
-                    items: ["Laki-laki", "Perempuan"],
+                    items: ["pria", "wanita"],
                     dropdownDecoratorProps: DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                       labelText: "Jenis Kelamin",

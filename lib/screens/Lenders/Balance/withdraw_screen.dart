@@ -122,7 +122,7 @@ class WithdrawScreen extends StatelessWidget {
                       print(e);
                     }
                   },
-                  child: Text("Top Up"),
+                  child: Text("Withdraw"),
                   style: ElevatedButton.styleFrom(
                       primary: primaryColor,
                       shape: RoundedRectangleBorder(

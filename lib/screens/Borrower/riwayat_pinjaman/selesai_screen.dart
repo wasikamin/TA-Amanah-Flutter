@@ -17,6 +17,11 @@ class _SelesaiScreentState extends State<SelesaiScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Consumer<UserProvider>(builder: (context, userProvider, _) {
+      if (userProvider.loading == true) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
       if (userProvider.history.isNotEmpty) {
         return RefreshIndicator(
           onRefresh: () async {
@@ -30,7 +35,8 @@ class _SelesaiScreentState extends State<SelesaiScreen> {
                   DateTime date =
                       DateTime.parse(userProvider.history[index]["date"]);
                   String formattedDate = DateFormat('dd MMM yyyy').format(date);
-                  String formattedAmount = NumberFormat.currency(symbol: 'Rp. ')
+                  String formattedAmount = NumberFormat.currency(
+                          symbol: 'Rp. ', decimalDigits: 0, locale: 'id_ID')
                       .format(userProvider.history[index]["amount"]);
                   return Card(
                     child: ExpansionTile(

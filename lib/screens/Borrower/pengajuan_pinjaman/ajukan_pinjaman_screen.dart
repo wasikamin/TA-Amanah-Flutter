@@ -1,6 +1,6 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/pengajuan_loan_provider.dart';
-import 'package:amanah/screens/Bank/pilih_bank_screen.dart';
+import 'package:amanah/screens/Borrower/pengajuan_pinjaman/konfirmasi_pinjaman_screen.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +63,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             border: OutlineInputBorder(),
                             label: Text("Jumlah Pinjaman"),
                             hintText: "Masukkan Jumlah Pinjaman",
-                            helperText: 'Pinjaman harus kelipatan Rp. 50.000',
+                            helperText: 'Kelipatan 50.000 dan minimal 500.000',
                           ),
                           keyboardType: TextInputType.number,
                           validator: (value) {
@@ -75,7 +75,10 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                               return 'Invalid number';
                             }
                             if (parsedValue % 50000 != 0) {
-                              return 'Pinjaman harus kelipatan 50.000';
+                              return 'Pinjaman harus kelipatan Rp. 50.000';
+                            }
+                            if (parsedValue < 500000) {
+                              return 'Minimal pinjaman Rp. 500.000';
                             }
                             return null; // Return null if the input is valid
                           },
@@ -145,7 +148,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                               elevation: 10,
                             ),
                           ),
-                          items: ["Personal", "Pendidikan"],
+                          items: ["Pribadi", "Usaha", "Hiburan", "Pendidikan"],
                           dropdownDecoratorProps: DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -172,7 +175,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             label: Text("Tujuan Pinjaman"),
-                            hintText: "Masukkan Imbal Hasil",
+                            hintText: "Masukkan Tujuan Pinjaman",
                             helperText: 'Tuliskan detail tujuan pinjaman',
                           ),
                           validator: (value) {
@@ -239,7 +242,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                                       context,
                                       MaterialPageRoute(
                                           builder: (context) =>
-                                              const PilihBankScreen()));
+                                              const KonfirmasiPinjaman()));
                                 }
                               },
                               child: Text("Selanjutnya")),

@@ -1,5 +1,5 @@
 // import 'dart:async';
-import 'dart:io';
+// import 'dart:io';
 
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/pengajuan_loan_provider.dart';
@@ -8,8 +8,8 @@ import 'package:amanah/services/loan_service.dart';
 import 'package:amanah/utils/pdfController.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:open_file/open_file.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:open_file/open_file.dart';
+// import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 class KontrakPengajuan extends StatelessWidget {
@@ -22,10 +22,7 @@ class KontrakPengajuan extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final String text =
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam mollis vulputate condimentum. Maecenas ut ex purus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed dolor mi, lacinia ut mollis ut, vehicula consectetur arcu. Nulla ut justo mauris. Mauris dictum et nunc sed elementum.";
-    final String text2 =
-        "Quisque ornare nulla et iaculis bibendum. Aenean hendrerit rhoncus nibh, porttitor vehicula lacus mollis sed. Integer at felis feugiat, accumsan orci eget, tristique mauris. Donec auctor vulputate mi, at tincidunt dui rutrum at. Nam sollicitudin arcu arcu, non ornare tellus maximus a. Aenean congue nulla sit amet viverra efficitur.";
-
+        "Pihak Peminjam dan Pihak Pemberi Pinjaman, yang selanjutnya disebut sebagai'Pihak-pihak' dengan ini sepakat untuk mengatur perjanjian pinjaman peer-to-peer (P2P) lending syariah berikut ini";
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -58,17 +55,14 @@ class KontrakPengajuan extends StatelessWidget {
                         children: [
                           Center(
                             child: Text(
-                              "Kontrak Pinjaman",
-                              style: titleTextStyle.copyWith(fontSize: 20),
+                              "Perjanjian Pinjaman Amanah Peer-to-Peer Lending Syariah",
+                              style: titleTextStyle.copyWith(fontSize: 16),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                           vSpace(height: height * 0.02),
                           Text(
                             text,
-                            textAlign: TextAlign.justify,
-                          ),
-                          Text(
-                            text2,
                             textAlign: TextAlign.justify,
                           ),
                           Text(
@@ -96,44 +90,44 @@ class KontrakPengajuan extends StatelessWidget {
                           ),
                         ]),
                   ),
-                  SizedBox(
-                      height: height * 0.06,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: styleFrom.copyWith(
-                          side: MaterialStatePropertyAll(
-                            BorderSide(color: primaryColor, width: 1),
-                          ),
-                          foregroundColor:
-                              MaterialStatePropertyAll(Colors.black),
-                          backgroundColor:
-                              MaterialStatePropertyAll(Colors.white),
-                        ),
-                        onPressed: () async {
-                          try {
-                            await pdfController.setContract(
-                                "Penerima Pinjaman",
-                                pengajuanLoanProvider.tenor,
-                                pengajuanLoanProvider.amount,
-                                pengajuanLoanProvider.yieldReturn);
-                            var pdf = await pdfController.generateContract();
-                            final output = await getTemporaryDirectory();
-                            var filePath = '${output.path}/Kontrak.pdf';
-                            var file = await File(filePath);
-                            print(file.path);
-                            await file.writeAsBytes(pdf);
+                  // SizedBox(
+                  //     height: height * 0.06,
+                  //     width: double.infinity,
+                  //     child: ElevatedButton(
+                  //       style: styleFrom.copyWith(
+                  //         side: MaterialStatePropertyAll(
+                  //           BorderSide(color: primaryColor, width: 1),
+                  //         ),
+                  //         foregroundColor:
+                  //             MaterialStatePropertyAll(Colors.black),
+                  //         backgroundColor:
+                  //             MaterialStatePropertyAll(Colors.white),
+                  //       ),
+                  //       onPressed: () async {
+                  //         try {
+                  //           await pdfController.setContract(
+                  //               "Penerima Pinjaman",
+                  //               pengajuanLoanProvider.tenor,
+                  //               pengajuanLoanProvider.amount,
+                  //               pengajuanLoanProvider.yieldReturn);
+                  //           var pdf = await pdfController.generateContract();
+                  //           final output = await getTemporaryDirectory();
+                  //           var filePath = '${output.path}/Kontrak.pdf';
+                  //           var file = await File(filePath);
+                  //           print(file.path);
+                  //           await file.writeAsBytes(pdf);
 
-                            // print(file);
-                            if (filePath.isNotEmpty) {
-                              await OpenFile.open(filePath);
-                            }
-                          } catch (e) {
-                            print(e);
-                          }
-                        },
-                        child: Text('Unduh File Kontrak'),
-                      )),
-                  vSpace(height: height * 0.02),
+                  //           // print(file);
+                  //           if (filePath.isNotEmpty) {
+                  //             await OpenFile.open(filePath);
+                  //           }
+                  //         } catch (e) {
+                  //           print(e);
+                  //         }
+                  //       },
+                  //       child: Text('Unduh File Kontrak'),
+                  //     )),
+                  // vSpace(height: height * 0.02),
                   SizedBox(
                     height: height * 0.06,
                     width: double.infinity,

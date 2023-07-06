@@ -4,7 +4,7 @@ import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/providers/pengajuan_loan_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Bank/tambah_bank_screen.dart';
-import 'package:amanah/screens/Borrower/pengajuan_pinjaman/konfirmasi_pinjaman_screen.dart';
+import 'package:amanah/screens/Lenders/Balance/transaction_history_screen.dart';
 import 'package:amanah/screens/Lenders/Balance/withdraw_screen.dart';
 import 'package:amanah/widgets/CustomAppBar.dart';
 import 'package:amanah/widgets/ToolTip.dart';
@@ -40,6 +40,7 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final pengajuanLoanProvider = Provider.of<PengajuanLoanProvider>(context);
+    final userProvider = Provider.of<UserProvider>(context);
     final authProvider = Provider.of<AuthenticationProvider>(context);
 
     return Scaffold(
@@ -47,8 +48,17 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
       appBar: CustomAppBar(
         title: "Pilih Akun Bank",
         actions: [
-          IconButton(
-              onPressed: () {}, icon: const Icon(Icons.restore_page_rounded))
+          authProvider.role == "lender"
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const TransactionHistoryScreen()));
+                  },
+                  icon: const Icon(Icons.restore_page_rounded))
+              : SizedBox.shrink(),
         ],
       ),
       body: RefreshIndicator(
@@ -241,12 +251,8 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                                           bankCode: selectedBank!.bankCode,
                                         )));
                           } else {
-                            await pengajuanLoanProvider.setBank(selectedBank!);
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        KonfirmasiPinjaman()));
+                            await pengajuanLoanProvider.setDisbursementData(
+                                selectedBank!, userProvider.active["loanId"]);
                           }
                         }
                       },

@@ -20,11 +20,7 @@ class _RiwayatBerjalanState extends State<RiwayatBerjalan> {
   }
 
   checkLoan() async {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      if (Provider.of<UserProvider>(context, listen: false).tagihan == null) {
-        await Provider.of<UserProvider>(context, listen: false).checkPinjaman();
-      }
-    });
+    await Provider.of<UserProvider>(context, listen: false).checkPinjaman();
   }
 
   @override
@@ -32,16 +28,17 @@ class _RiwayatBerjalanState extends State<RiwayatBerjalan> {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Consumer<UserProvider>(builder: (context, userProvider, _) {
-      if (userProvider.active?.isEmpty == true) {
+      if (userProvider.loading == true) {
         return Center(
           child: CircularProgressIndicator(),
         );
       }
-      if (userProvider.active?.isNotEmpty == true) {
-        DateTime date = DateTime.parse(userProvider.active?["date"]);
+      if (userProvider.active.isNotEmpty == true) {
+        DateTime date = DateTime.parse(userProvider.active["date"]);
         String formattedDate = DateFormat('dd MMM yyyy').format(date);
-        String formattedAmount = NumberFormat.currency(symbol: 'Rp. ')
-            .format(userProvider.active?["amount"]);
+        String formattedAmount = NumberFormat.currency(
+                symbol: 'Rp. ', decimalDigits: 0, locale: 'id-ID')
+            .format(userProvider.active["amount"]);
         return RefreshIndicator(
           onRefresh: () async {
             await Provider.of<UserProvider>(context, listen: false)
@@ -65,17 +62,20 @@ class _RiwayatBerjalanState extends State<RiwayatBerjalan> {
                       ListTile(
                         title: Text('Imbal Hasil'),
                         subtitle: Text(NumberFormat.currency(symbol: 'Rp. ')
-                            .format(userProvider.active?["yieldReturn"])),
+                            .format(userProvider.active["yieldReturn"])),
+                      ),
+                      ListTile(
+                        title: Text('Status'),
+                        subtitle: Text(userProvider.active["status"]),
                       ),
                       ListTile(
                         title: Text('Tenor'),
-                        subtitle:
-                            Text("${userProvider.active?["tenor"]} bulan"),
+                        subtitle: Text("${userProvider.active["tenor"]} bulan"),
                       ),
                       ListTile(
                         title: Text('Kategori'),
                         subtitle:
-                            Text(userProvider.active?["borrowingCategory"]),
+                            Text(userProvider.active["borrowingCategory"]),
                       ),
                     ],
                   ),

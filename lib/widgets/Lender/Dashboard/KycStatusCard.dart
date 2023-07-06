@@ -93,12 +93,10 @@ class _KycStatusCardState extends State<KycStatusCard> {
                               ),
                             ],
                           )))
-                  : Icon(
-                      Icons.access_time_rounded,
-                      color: authenticationProvider.kyced == "pending"
-                          ? Colors.orange
-                          : primaryColor,
-                    ),
+                  : authenticationProvider.kyced == "pending"
+                      ? const Icon(Icons.access_time_rounded,
+                          color: Colors.orange)
+                      : const Icon(Icons.check_rounded, color: Colors.green),
             ],
           ),
         ),

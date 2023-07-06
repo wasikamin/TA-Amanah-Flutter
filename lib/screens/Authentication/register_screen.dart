@@ -19,12 +19,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _nameController = TextEditingController();
   final _phoneNumController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _phoneNumController.text = "62";
+  }
+
   String _errorMessage = "";
   bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     final authenticationProvider = Provider.of<AuthenticationProvider>(context);
-
     void _register(String email, String password, String name,
         String phoneNumber, String roles) async {
       print("test");
@@ -50,6 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
         title: Text(
           "Registrasi",
@@ -61,23 +69,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xffB1E8FD),
-              Color(0xff3EA8D0),
-            ],
-          ),
-        ),
         child: Stack(
           children: [
             Positioned(
               bottom: -30,
               right: -50,
               child: Opacity(
-                opacity: 0.2,
+                opacity: 0.15,
                 child: SizedBox(
                     height: 200,
                     width: 300,
@@ -186,7 +184,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               decoration: InputDecoration(
                                 isDense: true,
                                 prefixIcon: Icon(Icons.phone_android_outlined),
-                                labelText: 'Nomor Handphone',
+                                labelText: 'Nomor Handphone (62)',
                                 border: UnderlineInputBorder(),
                               ),
                             ),

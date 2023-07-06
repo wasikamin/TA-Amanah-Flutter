@@ -1,8 +1,26 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/user_provider.dart';
+import 'package:amanah/screens/Lenders/Portofolio/portofolio_berjalan_screen.dart';
+import 'package:amanah/screens/Lenders/Portofolio/portofolio_selesai_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class PortofolioTabScreen extends StatelessWidget {
+class PortofolioTabScreen extends StatefulWidget {
   const PortofolioTabScreen({super.key});
+
+  @override
+  State<PortofolioTabScreen> createState() => _PortofolioTabScreenState();
+}
+
+class _PortofolioTabScreenState extends State<PortofolioTabScreen> {
+  initState() {
+    super.initState();
+    getPortofolio();
+  }
+
+  getPortofolio() async {
+    await Provider.of<UserProvider>(context, listen: false).getPortofolio();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +48,15 @@ class PortofolioTabScreen extends StatelessWidget {
               style: bodyTextStyle.copyWith(fontSize: 16),
             ),
           ),
-          body: const TabBarView(
-            children: [
-              Icon(Icons.directions_car),
-              Icon(Icons.directions_transit),
-            ],
-          ),
+          body: Provider.of<UserProvider>(context, listen: true).portofolio ==
+                  null
+              ? const Center(child: const CircularProgressIndicator())
+              : const TabBarView(
+                  children: [
+                    PortofolioBerjalan(),
+                    PortofolioSelesai(),
+                  ],
+                ),
         ),
       ),
     );

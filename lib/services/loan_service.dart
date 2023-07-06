@@ -50,6 +50,38 @@ class LoanService {
     }
   }
 
+  //dishbursement
+  Future<dynamic> postDisbursement(
+      PengajuanLoanProvider pengajuanLoanProvider) async {
+    try {
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final token = await _secureStorage.read(key: 'jwtToken');
+      const postDisbursementUrl = "/borrowers/loan/disbursement";
+      final url = Uri.parse('$baseUrl$postDisbursementUrl');
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode({
+          "loanId": pengajuanLoanProvider.loanId,
+          "bankId": pengajuanLoanProvider.bank!.id,
+        }),
+      );
+      if (response.statusCode < 400) {
+        final responseBody = json.decode(response.body);
+        print(responseBody);
+        return responseBody;
+      } else {
+        final responseBody = json.decode(response.body);
+        throw responseBody["message"];
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   //Get Available Loan
   Future<dynamic> getAvailableLoan(
       {int tenorMin = 0,
@@ -205,6 +237,32 @@ class LoanService {
         final responseBody = json.decode(response.body);
         print(responseBody['data']);
         return responseBody['data'];
+      } else {
+        final responseBody = json.decode(response.body);
+        throw responseBody["message"];
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getPortofolio() async {
+    try {
+      final token = await _secureStorage.read(key: 'jwtToken');
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      const portofolioUrl = "/lenders/funding";
+      final url = Uri.parse('$baseUrl$portofolioUrl');
+      final response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+      );
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        final loanData = responseBody['data'];
+        return loanData;
       } else {
         final responseBody = json.decode(response.body);
         throw responseBody["message"];

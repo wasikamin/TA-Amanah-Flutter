@@ -1,12 +1,18 @@
 import 'package:amanah/constants/app_theme.dart';
-import 'package:amanah/screens/Borrower/pembayaran_pinjaman/pilih_bank_screen.dart';
+import 'package:amanah/providers/user_provider.dart';
+import 'package:amanah/screens/web/web_view_screen.dart';
+import 'package:amanah/services/user_service.dart';
+import 'package:amanah/widgets/Borrower/pembayaranBulanIni.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PembayaranScreen extends StatelessWidget {
   const PembayaranScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
+    final userService = UserService();
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -41,11 +47,7 @@ class PembayaranScreen extends StatelessWidget {
                       style: bodyTextStyle.copyWith(fontSize: 16),
                     ),
                     const Spacer(),
-                    Text(
-                      "Rp. 0",
-                      style: bodyTextStyle.copyWith(
-                          fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
+                    const pembayaranBulanIni(),
                     const Spacer(),
                     Row(
                       children: [
@@ -78,15 +80,18 @@ class PembayaranScreen extends StatelessWidget {
               ),
             ),
             Spacer(),
-            Container(
+            SizedBox(
                 width: double.infinity,
                 height: height * 0.07,
                 child: ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
+                    final paymentLink = await userService.payLoan(userProvider);
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => PilihBankScreen()));
+                            builder: (context) => WebViewScreen(
+                                  url: paymentLink["paymentLink"],
+                                )));
                   },
                   style: ElevatedButton.styleFrom(
                       padding:
@@ -97,7 +102,7 @@ class PembayaranScreen extends StatelessWidget {
                       ),
                       backgroundColor: primaryColor),
                   child: Text(
-                    "Pilih Bank",
+                    "Bayar Sekarang",
                     style: buttonTextStyle,
                   ),
                 ))

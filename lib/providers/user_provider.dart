@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:amanah/models/bank.dart';
 import 'package:amanah/services/balance_service.dart';
+import 'package:amanah/services/loan_service.dart';
 import 'package:amanah/services/user_service.dart';
 import 'package:flutter/widgets.dart';
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,26 +10,31 @@ import 'package:flutter/widgets.dart';
 class UserProvider with ChangeNotifier {
   // final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   int _balance = 0;
-  int? _tagihan;
-  Map<dynamic, dynamic>? _active;
+  Map<dynamic, dynamic>? _tagihan;
+  List<dynamic>? _paymentSchedule;
+  Map<dynamic, dynamic> _active = {};
   List _history = [];
   bool _loading = true;
   bool _kyc = false;
   List<Bank> _banks = [];
   int _totalYield = 0;
   int _totalFunding = 0;
+  Map<dynamic, dynamic>? _portofolio;
 
   List<Bank> get banks => _banks;
   List get history => _history;
-  Map<dynamic, dynamic>? get active => _active;
+  Map<dynamic, dynamic> get active => _active;
   int get totalYield => _totalYield;
   int get totalFunding => _totalFunding;
   bool get kyc => _kyc;
-  int? get tagihan => _tagihan;
+  Map<dynamic, dynamic>? get tagihan => _tagihan;
+  List<dynamic>? get paymentSchedule => _paymentSchedule;
   int get balance => _balance;
   bool get loading => _loading;
+  Map<dynamic, dynamic>? get portofolio => _portofolio;
   final UserService _userService = UserService();
   final _balanceService = BalanceService();
+  final _loanservice = LoanService();
 
   //constructor
   // UserProvider() {
@@ -50,17 +56,18 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<void> checkPinjaman() async {
+    await Future.delayed(Duration.zero, () async {
+      // print("test");
+      _loading = true;
+      _active = {};
+      _history = [];
+      notifyListeners();
+    });
     Map<dynamic, dynamic> pinjaman = await _userService.getLoan();
     Map<dynamic, dynamic> active = pinjaman['active'];
-    // print(pinjaman['active']);
-
-    if (active.isEmpty) {
-      _tagihan = 0;
-    } else {
-      _tagihan = active['amount'];
-      _active = active;
-    }
+    _active = active;
     _history = pinjaman['history'];
+    _loading = false;
     notifyListeners();
   }
 
@@ -74,12 +81,17 @@ class UserProvider with ChangeNotifier {
 
   deleteAll() async {
     print("hapus semua");
-    _active = null;
+    _active = {};
     _balance = 0;
     _tagihan = null;
     _history = [];
     _loading = true;
     _kyc = false;
+    _banks = [];
+    _totalYield = 0;
+    _totalFunding = 0;
+    _portofolio = null;
+    _paymentSchedule = [];
     notifyListeners();
   }
 
@@ -98,6 +110,44 @@ class UserProvider with ChangeNotifier {
       // print(_banks);
       notifyListeners();
     } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> getPortofolio() async {
+    try {
+      await Future.delayed(Duration.zero, () async {
+        _portofolio = null;
+        notifyListeners();
+      });
+
+      _portofolio = await _loanservice.getPortofolio();
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> checkTagihan() async {
+    try {
+      await Future.delayed(Duration.zero, () async {
+        // _tagihan = {};
+        // _paymentSchedule = [];
+        _loading = true;
+        notifyListeners();
+      });
+
+      Map<dynamic, dynamic> payment = await _userService.getPaymentSchedule();
+      // print(payment['paymentSchedule']);
+      _paymentSchedule = payment['paymentSchedule'];
+      _tagihan = {
+        'currentMonth': payment['currentMonth'],
+        'loanId': payment['loanId'],
+      };
+      _loading = false;
+      notifyListeners();
+    } catch (e) {
+      print("error");
       print(e);
     }
   }

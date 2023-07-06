@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class PortofolioBerjalan extends StatelessWidget {
-  const PortofolioBerjalan({super.key});
+class PortofolioSelesai extends StatelessWidget {
+  const PortofolioSelesai({super.key});
   String formatCurrency(int amount) {
     final formatCurrency =
         NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
@@ -19,7 +19,7 @@ class PortofolioBerjalan extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Consumer<UserProvider>(builder: (context, userProvider, _) {
-      List<dynamic> funding = userProvider.portofolio!["active"]["funding"];
+      List<dynamic> funding = userProvider.portofolio!["done"]["funding"];
       return Padding(
         padding: EdgeInsets.symmetric(
             horizontal: width * 0.05, vertical: height * 0.02),
@@ -68,7 +68,7 @@ class PortofolioBerjalan extends StatelessWidget {
                                 ),
                                 Text(
                                     formatCurrency(
-                                        userProvider.portofolio!["active"]
+                                        userProvider.portofolio!["done"]
                                             ["summary"]["totalFunding"]),
                                     style: bodyTextStyle.copyWith(
                                         color: whiteColor)),
@@ -86,7 +86,7 @@ class PortofolioBerjalan extends StatelessWidget {
                                 ),
                                 Text(
                                     formatCurrency(userProvider
-                                        .portofolio!["active"]["summary"]
+                                        .portofolio!["done"]["summary"]
                                             ["totalYield"]
                                         .round()),
                                     style: bodyTextStyle.copyWith(
@@ -104,7 +104,7 @@ class PortofolioBerjalan extends StatelessWidget {
             vSpace(height: height * 0.02),
             funding.isEmpty
                 ? Center(
-                    child: Text("Tidak ada pendanaan berjalan"),
+                    child: Text("Tidak ada pendanaan Selesai"),
                   )
                 : Column(
                     children: funding.map((fund) {

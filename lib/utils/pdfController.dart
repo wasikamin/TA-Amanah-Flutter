@@ -31,7 +31,8 @@ class PdfController {
                 crossAxisAlignment: pw.CrossAxisAlignment.start,
                 children: [
                   pw.Header(
-                    text: "Kontrak Pinjaman",
+                    text:
+                        "Perjanjian Pinjaman Amanah Peer-to-Peer Lending Syariah",
                     level: 0,
                     textStyle: pw.TextStyle(
                       font: font,
@@ -39,13 +40,15 @@ class PdfController {
                     ),
                   ),
                   pw.Paragraph(
-                    text: pw.LoremText().paragraph(70),
+                    text:
+                        "Pihak Peminjam dan Pihak Pemberi Pinjaman, yang selanjutnya disebut sebagai 'Pihak-pihak' dengan ini sepakat untuk mengatur perjanjian pinjaman peer-to-peer(P2P) lending syariah berikut ini:",
                     style: pw.TextStyle(
                       font: font,
-                      fontSize: 24,
+                      fontSize: 16,
                       fontWeight: pw.FontWeight.bold,
                     ),
                   ),
+                  pw.Center(child: pw.Text("A. Pendahuluan")),
                   pw.Text("Jumlah Pinjaman:" + amount.toString(),
                       style: pw.TextStyle(
                           font: font,
