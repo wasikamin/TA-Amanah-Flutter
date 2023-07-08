@@ -2,6 +2,7 @@ import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/screens/Lenders/home/dashboard.dart';
 import 'package:amanah/screens/Lenders/home/list_pendanaan_screen.dart';
 import 'package:amanah/screens/Lenders/home/portofolio_tab_screen.dart';
+import 'package:amanah/screens/Lenders/home/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/authentication_provider.dart';
@@ -14,11 +15,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _currentIndex = 0;
-  List<Widget> _pages = [
-    Dashboard(),
-    PortofolioTabScreen(),
+  final List<Widget> _pages = [
+    const Dashboard(),
+    const PortofolioTabScreen(),
     ListPendanaanScreen(),
-    Page3(),
+    const LenderProfile(),
   ];
 
   @override
@@ -42,7 +43,8 @@ class _HomePageState extends State<HomePage> {
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           selectedIconTheme: IconThemeData(color: primaryColor, size: 30),
-          unselectedIconTheme: IconThemeData(color: Colors.grey, size: 20),
+          unselectedIconTheme:
+              const IconThemeData(color: Colors.grey, size: 20),
           selectedItemColor: primaryColor,
           unselectedItemColor: Colors.grey,
           currentIndex: _currentIndex,
@@ -52,7 +54,7 @@ class _HomePageState extends State<HomePage> {
             });
           },
           items: [
-            BottomNavigationBarItem(
+            const BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
               ),

@@ -4,6 +4,7 @@ import 'package:amanah/providers/user_provider.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class UserService {
   static const String _checkBalanceUrl = '/balance';
@@ -11,6 +12,7 @@ class UserService {
   static const String _getPaymentSchedule = "/borrowers/payment/schedule";
   static const String payoutUrl = "/borrowers/loan/repayment";
   static const String disbursement = "/borrowers/loan/disbursement";
+  static String getProfileUrl = "";
 
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
 
@@ -91,7 +93,7 @@ class UserService {
     }
   }
 
-  Future<dynamic> getDisbursement() async {
+  Future<dynamic> getDisbursement(UserProvider userProvider) async {
     try {
       final _baseUrl = dotenv.env['API_BASE_URL'].toString();
       final token = await _secureStorage.read(key: 'jwtToken');
@@ -105,6 +107,8 @@ class UserService {
       );
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
+        userProvider.setDisbursement(responseBody['data']);
+        // print("disbursement: ${responseBody['data']}");
         return responseBody['data'];
       } else {
         final responseBody = json.decode(response.body);
@@ -158,6 +162,40 @@ class UserService {
       );
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
+        return responseBody['data'];
+      } else {
+        final responseBody = json.decode(response.body);
+        throw responseBody["message"];
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<dynamic> getProfile() async {
+    try {
+      final String? token = await _secureStorage.read(key: 'jwtToken');
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token!);
+      // print(decodedToken);
+      String role = decodedToken['roles'];
+      if (role == "lender") {
+        getProfileUrl = "/lenders/profile";
+      } else {
+        getProfileUrl = "/borrowers/profile";
+      }
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+
+      final url = Uri.parse('$baseUrl$getProfileUrl');
+      final response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+      );
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        // print(responseBody['data']);
         return responseBody['data'];
       } else {
         final responseBody = json.decode(response.body);

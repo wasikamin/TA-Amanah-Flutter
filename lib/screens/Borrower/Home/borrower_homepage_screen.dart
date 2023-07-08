@@ -1,9 +1,8 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/screens/Borrower/Home/borrower_profile_screen.dart';
 import 'package:amanah/screens/Borrower/Home/dashboard_screen.dart';
 import 'package:amanah/screens/Borrower/Home/riwayat_pinjaman_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../../providers/authentication_provider.dart';
 
 class BorrowerHomePage extends StatefulWidget {
   const BorrowerHomePage({super.key});
@@ -13,10 +12,10 @@ class BorrowerHomePage extends StatefulWidget {
 
 class _BorrowerHomePage extends State<BorrowerHomePage> {
   int _currentIndex = 0;
-  List<Widget> _pages = [
+  final List<Widget> _pages = [
     const Dashboard(),
     RiwayatPinjamanScreen(),
-    Page3(),
+    const BorrowerProfile(),
   ];
 
   @override
@@ -62,24 +61,5 @@ class _BorrowerHomePage extends State<BorrowerHomePage> {
         ),
       ),
     );
-  }
-}
-
-class Page3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    final authenticationProvider = Provider.of<AuthenticationProvider>(context);
-    return Center(
-        child: ElevatedButton(
-      style: ElevatedButton.styleFrom(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(32))),
-      onPressed: () async {
-        await authenticationProvider.logout(context);
-      },
-      child: Text(
-        'Keluar',
-      ),
-    ));
   }
 }

@@ -4,8 +4,10 @@ import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/providers/pengajuan_loan_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Bank/tambah_bank_screen.dart';
+import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
 import 'package:amanah/screens/Lenders/Balance/transaction_history_screen.dart';
 import 'package:amanah/screens/Lenders/Balance/withdraw_screen.dart';
+import 'package:amanah/services/loan_service.dart';
 import 'package:amanah/widgets/CustomAppBar.dart';
 import 'package:amanah/widgets/ToolTip.dart';
 import 'package:flutter/material.dart';
@@ -251,8 +253,18 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                                           bankCode: selectedBank!.bankCode,
                                         )));
                           } else {
+                            final loanService = LoanService();
                             await pengajuanLoanProvider.setDisbursementData(
-                                selectedBank!, userProvider.active["loanId"]);
+                                selectedBank!,
+                                userProvider.disbursement["loanId"]);
+                            loanService.postDisbursement(pengajuanLoanProvider);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const BorrowerHomePage()),
+                              (Route<dynamic> route) => false,
+                            );
                           }
                         }
                       },

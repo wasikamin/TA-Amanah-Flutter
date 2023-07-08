@@ -1,8 +1,10 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/pengajuan_loan_provider.dart';
+import 'package:amanah/providers/user_profile_provider.dart';
 import 'package:amanah/screens/Borrower/pengajuan_pinjaman/konfirmasi_pinjaman_screen.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class AjukanPinjamanScreen extends StatefulWidget {
@@ -22,10 +24,16 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
   final tujuanController = TextEditingController();
   PaymentScheme scheme = PaymentScheme.Lunas;
   final _formKey = GlobalKey<FormState>();
+  String formatCurrency(int? amount) {
+    final formatCurrency =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    return formatCurrency.format(amount);
+  }
 
   @override
   Widget build(BuildContext context) {
     final pengajuanLoanProvider = Provider.of<PengajuanLoanProvider>(context);
+    final userProfileProvider = Provider.of<UserProfileProvider>(context);
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -59,7 +67,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                       children: [
                         TextFormField(
                           controller: amountController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             label: Text("Jumlah Pinjaman"),
                             hintText: "Masukkan Jumlah Pinjaman",
@@ -79,6 +87,10 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             }
                             if (parsedValue < 500000) {
                               return 'Minimal pinjaman Rp. 500.000';
+                            }
+                            if (parsedValue >
+                                int.parse(userProfileProvider.loanLimit)) {
+                              return 'Limit pinjaman anda: ${formatCurrency(int.parse(userProfileProvider.loanLimit))}';
                             }
                             return null; // Return null if the input is valid
                           },

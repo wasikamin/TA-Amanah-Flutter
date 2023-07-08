@@ -143,6 +143,9 @@ class AuthenticationProvider with ChangeNotifier {
     await _secureStorage.delete(key: 'jwtToken');
     _userId = "";
     _email = "";
+    _kyced = "";
+    _role = "";
+    _message = "";
     _isLoggedIn = false;
     await UserProvider().deleteAll();
     notifyListeners();

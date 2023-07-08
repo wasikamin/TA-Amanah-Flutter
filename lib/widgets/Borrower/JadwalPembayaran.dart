@@ -46,7 +46,7 @@ class JadwalPembayaran extends StatelessWidget {
             userProvider.loading == true
                 ? Center(child: CircularProgressIndicator())
                 : userProvider.paymentSchedule == null
-                    ? Center(child: Text("Belum ada tagihan"))
+                    ? const Center(child: Text("Belum ada tagihan"))
                     : Column(
                         children: userProvider.paymentSchedule!.map((schedule) {
                           DateTime date = DateTime.parse(schedule["date"]);
@@ -59,14 +59,21 @@ class JadwalPembayaran extends StatelessWidget {
                                 Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 5),
+                                  constraints:
+                                      BoxConstraints(minWidth: width * 0.3),
                                   decoration: BoxDecoration(
-                                    color: Colors.red[100],
+                                    color: schedule["status"] == "unpaid"
+                                        ? Colors.red[100]
+                                        : Colors.green[100],
                                     borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: Text(
                                     formattedDate,
                                     style: bodyTextStyle.copyWith(
-                                        fontSize: 14, color: Colors.red[400]),
+                                        fontSize: 14,
+                                        color: schedule["status"] == "unpaid"
+                                            ? Colors.red[400]
+                                            : Colors.green[400]),
                                   ),
                                 ),
                                 Spacer(),
@@ -81,6 +88,33 @@ class JadwalPembayaran extends StatelessWidget {
                           );
                         }).toList(),
                       ),
+            Row(
+              children: [
+                Container(
+                  width: 10,
+                  height: 10,
+                  margin: const EdgeInsets.only(right: 5),
+                  decoration: BoxDecoration(color: Colors.green[100]),
+                ),
+                Text(
+                  "Paid",
+                  style: bodyTextStyle.copyWith(fontSize: 11),
+                ),
+                const SizedBox(
+                  width: 50,
+                ),
+                Container(
+                  width: 10,
+                  height: 10,
+                  margin: const EdgeInsets.only(right: 5),
+                  decoration: BoxDecoration(color: Colors.red[100]),
+                ),
+                Text(
+                  "Unpaid",
+                  style: bodyTextStyle.copyWith(fontSize: 11),
+                )
+              ],
+            )
           ],
         ),
       );

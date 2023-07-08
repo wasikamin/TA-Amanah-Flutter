@@ -1,21 +1,29 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/authentication_provider.dart';
+import 'package:amanah/providers/user_profile_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Borrower/pengajuan_pinjaman/ajukan_pinjaman_screen.dart';
 import 'package:amanah/screens/Verification/personal_information_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class BorrowerTopCard extends StatelessWidget {
   const BorrowerTopCard({
     super.key,
   });
+  String formatCurrency(int? amount) {
+    final formatCurrency =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    return formatCurrency.format(amount);
+  }
 
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    return Consumer2<AuthenticationProvider, UserProvider>(
-        builder: (context, authenticationProvider, userProvider, _) {
+    return Consumer3<AuthenticationProvider, UserProvider, UserProfileProvider>(
+        builder: (context, authenticationProvider, userProvider,
+            userProfileProvider, _) {
       return Container(
         height: screenHeight * 0.25,
         width: double.infinity,
@@ -29,7 +37,8 @@ class BorrowerTopCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             Text("Limit Tersedia", style: bodyTextStyle.copyWith(fontSize: 24)),
-            Text("Rp. 11.000.000", style: bodyTextStyle.copyWith(fontSize: 24)),
+            Text(formatCurrency(int.parse(userProfileProvider.loanLimit)),
+                style: bodyTextStyle.copyWith(fontSize: 24)),
             SizedBox(
               height: screenHeight * 0.015,
             ),

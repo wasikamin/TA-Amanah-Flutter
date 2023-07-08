@@ -71,7 +71,7 @@ class LoanService {
       );
       if (response.statusCode < 400) {
         final responseBody = json.decode(response.body);
-        print(responseBody);
+        // print(responseBody);
         return responseBody;
       } else {
         final responseBody = json.decode(response.body);
@@ -90,6 +90,7 @@ class LoanService {
       yieldMax = 1000000000}) async {
     try {
       final _baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final token = await _secureStorage.read(key: 'jwtToken');
       final _getAvailableLoanUrl =
           "/loans/available?sort=createdDate&order=desc&page=1&limit=10&tenor_min=$tenorMin&tenor_max=$tenorMax&yield_min=$yieldMin&yield_max=$yieldMax";
       final url = Uri.parse('$_baseUrl$_getAvailableLoanUrl');
@@ -97,6 +98,7 @@ class LoanService {
         url,
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
         },
       );
       if (response.statusCode == 200) {

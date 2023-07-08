@@ -1,5 +1,6 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/authentication_provider.dart';
+import 'package:amanah/providers/user_profile_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Borrower/pembayaran_pinjaman/pembayaran_screen.dart';
 import 'package:amanah/widgets/Borrower/JadwalPembayaran.dart';
@@ -28,6 +29,7 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
     checkLoan();
     checkKyc();
+    checkProfile();
   }
 
   checkLoan() async {
@@ -39,6 +41,10 @@ class _DashboardState extends State<Dashboard> {
         .checkKyc();
   }
 
+  checkProfile() async {
+    await Provider.of<UserProfileProvider>(context, listen: false).getProfile();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -46,16 +52,20 @@ class _DashboardState extends State<Dashboard> {
       backgroundColor: const Color(0xfff2f7fa),
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
-      body: Consumer2<AuthenticationProvider, UserProvider>(
-          builder: (context, authenticationProvider, userProvider, _) {
+      body:
+          Consumer3<AuthenticationProvider, UserProvider, UserProfileProvider>(
+              builder: (context, authenticationProvider, userProvider,
+                  userProfileProvider, _) {
         // print(userProvider.active!["totalFund"]);
         return RefreshIndicator(
           key: refreshKey,
           onRefresh: () async {
             await authenticationProvider.checkKyc();
             await userProvider.checkPinjaman();
+            await userProfileProvider.getProfile();
           },
           child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Stack(
               children: [
                 topBackground(screenHeight: screenHeight),
@@ -138,9 +148,6 @@ class _DashboardState extends State<Dashboard> {
                                     BorderRadius.all(Radius.circular(20)),
                               ),
                               child: const JadwalPembayaran()),
-                          Container(
-                            height: 20,
-                          )
                         ]),
                   ),
                 ),

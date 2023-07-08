@@ -2,10 +2,16 @@ import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/pengajuan_loan_provider.dart';
 import 'package:amanah/screens/Borrower/pengajuan_pinjaman/kontrak_pengajuan_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class KonfirmasiPinjaman extends StatelessWidget {
   const KonfirmasiPinjaman({super.key});
+  String formatCurrency(int? amount) {
+    final formatCurrency =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    return formatCurrency.format(amount);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +46,18 @@ class KonfirmasiPinjaman extends StatelessWidget {
                           "Informasi Pinjaman",
                           style: titleTextStyle.copyWith(fontSize: 16),
                         ),
-                        vSpace(height: height * 0.01),
+                        vSpace(height: height * 0.02),
                         CustomRow(
                             leftText: "Jumlah Pinjaman",
-                            rightText: pengajuanLoanProvider.amount.toString()),
+                            rightText:
+                                formatCurrency(pengajuanLoanProvider.amount)),
                         CustomRow(
                             leftText: "Imbal Hasil",
-                            rightText:
-                                pengajuanLoanProvider.yieldReturn.toString()),
+                            rightText: formatCurrency(
+                                pengajuanLoanProvider.yieldReturn)),
                         CustomRow(
                             leftText: "Tenor",
-                            rightText: pengajuanLoanProvider.tenor.toString()),
+                            rightText: "${pengajuanLoanProvider.tenor} bulan"),
                         CustomRow(
                             leftText: "Skema Pembayaran",
                             rightText: pengajuanLoanProvider.paymentSchema),
@@ -104,10 +111,10 @@ class CustomRow extends StatelessWidget {
         children: [
           Text(
             leftText,
-            style: bodyTextStyle,
+            style: bodyTextStyle.copyWith(fontSize: 12),
           ),
           Spacer(),
-          Text(rightText, style: bodyTextStyle),
+          Text(rightText, style: bodyTextStyle.copyWith(fontSize: 12)),
         ],
       ),
     );

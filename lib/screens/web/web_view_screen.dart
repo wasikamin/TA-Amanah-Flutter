@@ -1,6 +1,9 @@
 import "package:amanah/constants/app_theme.dart";
+import "package:amanah/providers/authentication_provider.dart";
+import "package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart";
 import "package:amanah/screens/Lenders/home/homepage_screen.dart";
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 import "package:webview_flutter/webview_flutter.dart";
 
 class WebViewScreen extends StatefulWidget {
@@ -14,7 +17,6 @@ class WebViewScreen extends StatefulWidget {
 class _WebViewScreenState extends State<WebViewScreen> {
   WebViewController? _controller;
   var loadingPercentage = 0;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -44,6 +46,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final authProvider = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -57,10 +60,18 @@ class _WebViewScreenState extends State<WebViewScreen> {
             color: Colors.black,
           ),
           onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const HomePage()),
-                (Route<dynamic> route) => false);
+            if (authProvider.role == 'lender') {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomePage()),
+                  (Route<dynamic> route) => false);
+            } else {
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const BorrowerHomePage()),
+                  (Route<dynamic> route) => false);
+            }
           },
         ),
         actions: [
@@ -114,8 +125,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
         children: [
           WebViewWidget(controller: _controller!),
           if (loadingPercentage < 100)
-            LinearProgressIndicator(
-              value: loadingPercentage / 100.0,
+            Center(
+              child: LinearProgressIndicator(
+                value: loadingPercentage / 100.0,
+              ),
             ),
         ],
       ),

@@ -41,7 +41,9 @@ class _pembayaranBulanIniState extends State<pembayaranBulanIni> {
           : Text(
               userProvider.tagihan?["currentMonth"] == 0
                   ? formatCurrency(0)
-                  : formatCurrency(userProvider.tagihan?["currentMonth"]),
+                  : userProvider.tagihan?["currentMonth"] == null
+                      ? formatCurrency(0)
+                      : formatCurrency(userProvider.tagihan?["currentMonth"]),
               style: bodyTextStyle.copyWith(fontSize: 22),
             );
     });

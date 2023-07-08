@@ -110,6 +110,7 @@ class PortofolioBerjalan extends StatelessWidget {
                     children: funding.map((fund) {
                       final parsedDate =
                           DateTime.parse(fund["funds"]["repaymentDate"]);
+                      // print(fund["funds"]);
                       String formattedDate =
                           DateFormat.yMMMMd().format(parsedDate);
                       return Card(

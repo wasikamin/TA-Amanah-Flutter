@@ -37,7 +37,6 @@ class PengajuanLoanProvider with ChangeNotifier {
         _tenor = 0;
         break;
     }
-
     switch (paymentScheme) {
       case 'Lunas':
         _paymentSchema = 'Pelunasan Langsung';
@@ -50,7 +49,7 @@ class PengajuanLoanProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setDisbursementData(Bank bank, String loanId) async {
+  Future<void> setDisbursementData(Bank bank, dynamic loanId) async {
     _bank = bank;
     _loanId = loanId;
     notifyListeners();

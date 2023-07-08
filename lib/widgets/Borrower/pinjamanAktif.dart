@@ -1,12 +1,30 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Bank/pilih_bank_screen.dart';
+import 'package:amanah/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class PinjamanAktif extends StatelessWidget {
+class PinjamanAktif extends StatefulWidget {
   const PinjamanAktif({super.key});
+
+  @override
+  State<PinjamanAktif> createState() => _PinjamanAktifState();
+}
+
+class _PinjamanAktifState extends State<PinjamanAktif> {
+  final userService = UserService();
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checkDisbursement();
+  }
+
+  checkDisbursement() async {
+    Provider.of<UserProvider>(context, listen: false).getDisbursement();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +85,7 @@ class PinjamanAktif extends StatelessWidget {
                         color: primaryColor,
                       )),
                   const Spacer(),
-                  if (userProvider.active["totalFund"] ==
-                      userProvider.active["amount"])
+                  if (userProvider.disbursement.isNotEmpty)
                     TextButton(
                         style: IconButton.styleFrom(
                           padding: const EdgeInsets.only(right: 10),

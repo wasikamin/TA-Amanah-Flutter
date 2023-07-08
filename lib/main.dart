@@ -2,6 +2,7 @@ import 'package:amanah/providers/kyc_provider.dart';
 import 'package:amanah/providers/loan_provider.dart';
 import 'package:amanah/providers/pengajuan_loan_provider.dart';
 import 'package:amanah/providers/transaction_history_provider.dart';
+import 'package:amanah/providers/user_profile_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
 import 'package:amanah/screens/Landing/landing_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoanProvider()),
         ChangeNotifierProvider(create: (_) => PengajuanLoanProvider()),
         ChangeNotifierProvider(create: (_) => TransactionHistoryProvider()),
+        ChangeNotifierProvider(create: (_) => UserProfileProvider())
       ],
       child: Consumer<AuthenticationProvider>(
         builder: (context, authProvider, child) {
@@ -50,29 +52,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// class MyHomePage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     final authenticationProvider = Provider.of<AuthenticationProvider>(context);
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('P2P Lending App'),
-//       ),
-//       body: Center(
-//         child: Consumer<AuthenticationProvider>(
-//           builder: (context, provider, child) {
-//             return Text(provider.isLoggedIn ? 'Logged In' : 'Not Logged In');
-//           },
-//         ),
-//       ),
-//       floatingActionButton: FloatingActionButton(
-//         onPressed: () {
-//           authenticationProvider.login('testing8021@yopmail.com', 'Test@123');
-//         },
-//         child: Icon(Icons.login),
-//       ),
-//     );
-//   }
-// }

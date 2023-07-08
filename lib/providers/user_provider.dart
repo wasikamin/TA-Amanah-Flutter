@@ -20,6 +20,7 @@ class UserProvider with ChangeNotifier {
   int _totalYield = 0;
   int _totalFunding = 0;
   Map<dynamic, dynamic>? _portofolio;
+  Map<dynamic, dynamic> disbursement = {};
 
   List<Bank> get banks => _banks;
   List get history => _history;
@@ -32,6 +33,7 @@ class UserProvider with ChangeNotifier {
   int get balance => _balance;
   bool get loading => _loading;
   Map<dynamic, dynamic>? get portofolio => _portofolio;
+  Map<dynamic, dynamic> get disburse => disbursement;
   final UserService _userService = UserService();
   final _balanceService = BalanceService();
   final _loanservice = LoanService();
@@ -126,6 +128,27 @@ class UserProvider with ChangeNotifier {
     } catch (e) {
       print(e);
     }
+  }
+
+  getDisbursement() async {
+    try {
+      await Future.delayed(Duration.zero, () async {
+        disbursement = {};
+        notifyListeners();
+      });
+
+      disbursement = await _userService.getDisbursement(this);
+      // print(disbursement);
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  setDisbursement(Map<dynamic, dynamic> data) {
+    disbursement = data;
+    // print(data);
+    notifyListeners();
   }
 
   Future<void> checkTagihan() async {

@@ -176,12 +176,11 @@ class PortofolioSelesai extends StatelessWidget {
                                   right:
                                       formatCurrency(fund["funds"]["amount"])),
                               InformationRow(
-                                  left: "Est. Imbal Hasil",
+                                  left: "Imbal Hasil",
                                   right: formatCurrency(
                                       fund["funds"]["yieldReturn"].round())),
                               InformationRow(
-                                  left: "Est. Pengembalian",
-                                  right: formattedDate),
+                                  left: "Pengembalian", right: formattedDate),
                             ],
                           ),
                         ),
