@@ -1,6 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/screens/Lenders/home/homepage_screen.dart';
 import 'package:amanah/services/balance_service.dart';
+import 'package:amanah/widgets/sweat_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
 
@@ -75,6 +76,7 @@ class WithdrawScreen extends StatelessWidget {
                   vSpace(height: height * 0.05),
                   TextField(
                     controller: _amountController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: "Nominal",
                       hintText: "Masukkan Nominal Withdraw",
@@ -111,15 +113,16 @@ class WithdrawScreen extends StatelessWidget {
                       } else {
                         await _balanceservice.withdraw(accountNumber, bankCode,
                             _amountController.numberValue.toInt());
-                        Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomePage()),
-                          (Route<dynamic> route) => false,
-                        );
+                        successAlert(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const HomePage()),
+                            "Withdraw Berhasil",
+                            "Mohon tunggu selambat-lambatnya 1x24 jam untuk diproses");
                       }
                     } catch (e) {
                       print(e);
+                      failedAlert(context, "Withdraw Gagal", "$e");
                     }
                   },
                   child: Text("Withdraw"),

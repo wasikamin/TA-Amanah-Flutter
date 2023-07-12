@@ -85,7 +85,8 @@ class _PinjamanAktifState extends State<PinjamanAktif> {
                         color: primaryColor,
                       )),
                   const Spacer(),
-                  if (userProvider.disbursement.isNotEmpty)
+                  if (userProvider.disbursement.isNotEmpty &&
+                      userProvider.disbursement["status"] != "pending")
                     TextButton(
                         style: IconButton.styleFrom(
                           padding: const EdgeInsets.only(right: 10),
@@ -104,6 +105,13 @@ class _PinjamanAktifState extends State<PinjamanAktif> {
                                 fontSize: 14,
                                 color: Colors.blue[700],
                                 fontWeight: FontWeight.bold)))
+                  else if (userProvider.disbursement.isNotEmpty &&
+                      userProvider.disbursement["status"] == "pending")
+                    Text("Pending",
+                        style: bodyTextStyle.copyWith(
+                            fontSize: 14,
+                            color: Colors.yellow[700],
+                            fontWeight: FontWeight.bold))
                 ],
               ),
             ],

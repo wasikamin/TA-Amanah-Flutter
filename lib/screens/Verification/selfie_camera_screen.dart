@@ -160,7 +160,7 @@ class DisplayPictureScreen extends StatefulWidget {
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   @override
   Widget build(BuildContext context) {
-    final kycProvider = Provider.of<KycProvider>(context);
+    final kycProvider = Provider.of<KycProvider>(context, listen: true);
     final height = MediaQuery.of(context).size.height;
     final authProvider = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
@@ -173,58 +173,66 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       ),
       // The image is stored as a file on the device. Use the `Image.file`
       // constructor with the given path to display the image.
-      body: Column(
-        children: [
-          Image.file(File(widget.imagePath)),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Row(
+      body: kycProvider.loading == true
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : Column(
               children: [
-                Expanded(
-                  child: SizedBox(
-                    height: height * 0.06,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text("Ambil Ulang")),
+                Image.file(File(widget.imagePath)),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: height * 0.06,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: primaryColor),
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Ambil Ulang")),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 50,
+                      ),
+                      Expanded(
+                        child: SizedBox(
+                          height: height * 0.06,
+                          child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: primaryColor),
+                              onPressed: () async {
+                                kycProvider.setLoading(true);
+                                await kycProvider
+                                    .setFaceImage(widget.imagePath);
+                                var responseCode = authProvider.role == "lender"
+                                    ? await KycService().kycLender(kycProvider)
+                                    : await KycService()
+                                        .kycBorrower(kycProvider);
+                                if (responseCode == 200) {
+                                  // print("Berhasil");
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            WaitingVerificationScreen()),
+                                    (Route<dynamic> route) => false,
+                                  );
+                                }
+                                kycProvider.setLoading(false);
+                              },
+                              child: Text("Selanjutnya")),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(
-                  width: 50,
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: height * 0.06,
-                    child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor),
-                        onPressed: () async {
-                          await kycProvider.setFaceImage(widget.imagePath);
-                          var responseCode = authProvider.role == "lender"
-                              ? await KycService().kycLender(kycProvider)
-                              : await KycService().kycBorrower(kycProvider);
-                          if (responseCode == 200) {
-                            // print("Berhasil");
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      WaitingVerificationScreen()),
-                              (Route<dynamic> route) => false,
-                            );
-                          }
-                        },
-                        child: Text("Selanjutnya")),
-                  ),
-                ),
+                )
               ],
             ),
-          )
-        ],
-      ),
     );
   }
 }

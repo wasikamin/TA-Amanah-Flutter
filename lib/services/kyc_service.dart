@@ -49,10 +49,11 @@ class KycService {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      kycProvider.setLoading(false);
+      // print(await response.stream.bytesToString());
       return response.statusCode;
     } else {
-      print(await response.stream.bytesToString());
+      // print(await response.stream.bytesToString());
       return response.statusCode;
     }
   }
@@ -85,10 +86,11 @@ class KycService {
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
+      kycProvider.setLoading(false);
+      // print(await response.stream.bytesToString());
       return response.statusCode;
     } else {
-      print(await response.stream.bytesToString());
+      // print(await response.stream.bytesToString());
       return response.statusCode;
     }
   }

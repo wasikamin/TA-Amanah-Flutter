@@ -136,7 +136,7 @@ class BalanceService {
         }),
       );
       if (response.statusCode == 200) {
-        print(response.body);
+        // print(response.body);
         final responseBody = json.decode(response.body);
         return responseBody['data'];
       } else {
@@ -144,7 +144,7 @@ class BalanceService {
         throw responseBody["message"];
       }
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 }

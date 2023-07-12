@@ -44,12 +44,13 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
     return Scaffold(
         extendBodyBehindAppBar: true,
         resizeToAvoidBottomInset: false,
+        backgroundColor: whiteColor,
         appBar: AppBar(
           //create title widget
           title: Text("Informasi Personal",
               style: bodyTextStyle.copyWith(fontSize: 18)),
           centerTitle: true,
-          backgroundColor: Colors.transparent,
+          backgroundColor: whiteColor,
           elevation: 0,
           foregroundColor: Colors.black,
         ),
@@ -75,14 +76,14 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     height: height * 0.02,
                   ),
                   DropdownSearch<String>(
-                    popupProps: PopupProps.menu(
+                    popupProps: const PopupProps.menu(
                       fit: FlexFit.loose,
                       menuProps: MenuProps(
                         elevation: 10,
                       ),
                     ),
-                    items: ["pria", "wanita"],
-                    dropdownDecoratorProps: DropDownDecoratorProps(
+                    items: ["Pria", "Wanita"],
+                    dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                       labelText: "Jenis Kelamin",
                       hintText: "Pilih Jenis Kelamin",
@@ -102,7 +103,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     height: height * 0.02,
                   ),
                   DropdownSearch<String>(
-                    popupProps: PopupProps.menu(
+                    popupProps: const PopupProps.menu(
                       fit: FlexFit.loose,
                       menuProps: MenuProps(
                         elevation: 10,
@@ -117,7 +118,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                       "Honorer",
                       "Lainnya"
                     ],
-                    dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                       labelText: "Pekerjaan",
                       hintText: "Pilih Pekerjaan",
@@ -132,13 +133,13 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                     height: height * 0.02,
                   ),
                   DropdownSearch<String>(
-                    popupProps: PopupProps.menu(
+                    popupProps: const PopupProps.menu(
                       fit: FlexFit.loose,
                       menuProps: MenuProps(
                         elevation: 10,
                       ),
                     ),
-                    items: [
+                    items: const [
                       "< 1.000.000",
                       "1.000.000-5.000.000",
                       "5.000.000-10.000.000",
@@ -146,7 +147,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                       "20.000.000-50.000.000",
                       "> 50.000.000"
                     ],
-                    dropdownDecoratorProps: DropDownDecoratorProps(
+                    dropdownDecoratorProps: const DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                       labelText: "Pendapatan",
                       hintText: "Pilih Pendapatan",
@@ -170,7 +171,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                           if (_formKey.currentState!.validate()) {
                             await kycProvider.personal(
                                 nameController.text,
-                                gender,
+                                gender.toLowerCase(),
                                 birthDateController.text,
                                 work,
                                 salary,
@@ -188,7 +189,7 @@ class _PersonalInformationScreenState extends State<PersonalInformationScreen> {
                             }
                           }
                         },
-                        child: Text("Selanjutnya")),
+                        child: const Text("Selanjutnya")),
                   )
                 ],
               ),

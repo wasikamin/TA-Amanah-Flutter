@@ -27,7 +27,7 @@ class KonfirmasiPendanaanScreen extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: CustomAppBar(title: "Konfirmasi Pendanaan"),
+      appBar: const CustomAppBar(title: "Konfirmasi Pendanaan"),
       body: Container(
           padding: EdgeInsets.symmetric(
               horizontal: width * 0.05, vertical: height * 0.02),
@@ -74,7 +74,7 @@ class KonfirmasiPendanaanScreen extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              Container(
+              SizedBox(
                 width: width,
                 height: height * 0.07,
                 child: ElevatedButton(
@@ -87,7 +87,7 @@ class KonfirmasiPendanaanScreen extends StatelessWidget {
                   ),
                   onPressed: () {
                     loanService.download(
-                        loan.contractLink, "${loan.name} kontrak.pdf}");
+                        loan.contractLink, "${loan.name} kontrak.pdf");
                   },
                   child: Text(
                     "Lihat Kontrak",

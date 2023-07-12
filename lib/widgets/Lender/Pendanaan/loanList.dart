@@ -15,7 +15,7 @@ class LoanList extends StatefulWidget {
 class _LoanListState extends State<LoanList> {
   String formatCurrency(int amount) {
     final formatCurrency =
-        new NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.');
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.');
     return formatCurrency.format(amount);
   }
 
@@ -40,7 +40,7 @@ class _LoanListState extends State<LoanList> {
       if (loanProvider.loan.isEmpty) {
         return Container(
             margin: EdgeInsets.only(top: height * 0.2),
-            child: Center(child: Text("Belum ada pendanaan")));
+            child: const Center(child: Text("Belum ada pendanaan")));
       } else {
         List<Loan> loans = loanProvider.loan;
 
@@ -73,14 +73,15 @@ class _LoanListState extends State<LoanList> {
                                   backgroundColor: Colors.white,
                                   foregroundColor: primaryColor,
                                   child: Container(
-                                      child: Icon(Icons.person, size: 40),
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                          color: primaryColor, // Warna border
-                                          width: 2, // Lebar border
-                                        ),
-                                      )),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: primaryColor, // Warna border
+                                        width: 2, // Lebar border
+                                      ),
+                                    ),
+                                    child: const Icon(Icons.person, size: 40),
+                                  ),
                                 ),
                                 SizedBox(width: width * 0.05),
                                 SizedBox(
@@ -105,7 +106,7 @@ class _LoanListState extends State<LoanList> {
                                       ),
                                       vSpace(height: height * 0.005),
                                       Text(
-                                        "${loan.purpose}",
+                                        loan.purpose,
                                         style: bodyTextStyle.copyWith(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,

@@ -39,7 +39,7 @@ class LoanService {
       );
       if (response.statusCode < 400) {
         final responseBody = json.decode(response.body);
-        print(responseBody);
+        // print(responseBody);
         return responseBody;
       } else {
         final responseBody = json.decode(response.body);
@@ -73,6 +73,67 @@ class LoanService {
         final responseBody = json.decode(response.body);
         // print(responseBody);
         return responseBody;
+      } else {
+        final responseBody = json.decode(response.body);
+        throw responseBody["message"];
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  //fungsi autoloan
+  Future<dynamic> autoLend(int start, end, startYield, endYield, amount,
+      List<String> kategori) async {
+    try {
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final token = await _secureStorage.read(key: 'jwtToken');
+      const autoLendUrl = "/lenders/funding/auto";
+      final url = Uri.parse('$baseUrl$autoLendUrl');
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode({
+          "tenorLength": {"start": start, "end": end},
+          "yieldRange": {"start": startYield, "end": endYield},
+          "borrowingCategory": kategori,
+          "amountToLend": amount
+        }),
+      );
+      if (response.statusCode < 400) {
+        final responseBody = json.decode(response.body);
+        // print(responseBody);
+        return responseBody;
+      } else {
+        final responseBody = json.decode(response.body);
+        throw responseBody["message"];
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  //Get Auto Loan Status
+  Future<dynamic> getAutoLendStatus() async {
+    try {
+      final token = await _secureStorage.read(key: 'jwtToken');
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      const getAutoLoanUrl = "/lenders/funding/auto";
+      final url = Uri.parse('$baseUrl$getAutoLoanUrl');
+      final response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+      );
+      if (response.statusCode < 400) {
+        final responseBody = json.decode(response.body);
+        // print(responseBody);
+        return responseBody["data"];
       } else {
         final responseBody = json.decode(response.body);
         throw responseBody["message"];

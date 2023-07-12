@@ -1,5 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
+import 'package:amanah/screens/Borrower/pembayaran_pinjaman/pembayaran_screen.dart';
 // import 'package:amanah/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -34,17 +36,39 @@ class _pembayaranBulanIniState extends State<pembayaranBulanIni> {
   Map<dynamic, dynamic> loan = {};
   @override
   Widget build(BuildContext context) {
-    return Consumer<UserProvider>(builder: (context, userProvider, _) {
+    return Consumer2<UserProvider, AuthenticationProvider>(
+        builder: (context, userProvider, authenticationProvider, _) {
       // print(userProvider.tagihan?["currentMonth"]);
       return userProvider.loading == true
           ? const CircularProgressIndicator()
-          : Text(
-              userProvider.tagihan?["currentMonth"] == 0
-                  ? formatCurrency(0)
-                  : userProvider.tagihan?["currentMonth"] == null
+          : Row(
+              children: [
+                Text(
+                  userProvider.tagihan?["currentMonth"] == 0
                       ? formatCurrency(0)
-                      : formatCurrency(userProvider.tagihan?["currentMonth"]),
-              style: bodyTextStyle.copyWith(fontSize: 22),
+                      : userProvider.tagihan?["currentMonth"] == null
+                          ? formatCurrency(0)
+                          : formatCurrency(
+                              userProvider.tagihan?["currentMonth"]),
+                  style: bodyTextStyle.copyWith(fontSize: 22),
+                ),
+                const Spacer(),
+                if (authenticationProvider.kyced == "verified" &&
+                    userProvider.tagihan?["currentMonth"] != 0)
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const PembayaranScreen()));
+                      },
+                      child: Text(
+                        "Bayar",
+                        style: textButtonTextStyle.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ))
+              ],
             );
     });
   }

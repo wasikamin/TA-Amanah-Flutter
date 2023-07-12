@@ -2,7 +2,6 @@ import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/authentication_provider.dart';
 import 'package:amanah/providers/user_profile_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
-import 'package:amanah/screens/Borrower/pembayaran_pinjaman/pembayaran_screen.dart';
 import 'package:amanah/widgets/Borrower/JadwalPembayaran.dart';
 import 'package:amanah/widgets/Borrower/borrowerTopCard.dart';
 import 'package:amanah/widgets/Borrower/pembayaranBulanIni.dart';
@@ -63,6 +62,8 @@ class _DashboardState extends State<Dashboard> {
             await authenticationProvider.checkKyc();
             await userProvider.checkPinjaman();
             await userProfileProvider.getProfile();
+            await userProvider.getDisbursement();
+            await userProvider.checkTagihan();
           },
           child: SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -97,7 +98,7 @@ class _DashboardState extends State<Dashboard> {
                             margin: EdgeInsets.symmetric(vertical: 20),
                             child: SizedBox(
                               child: Text(
-                                "Pembayaran Bulan Ini",
+                                "Pembayaran Selanjutnya",
                                 style: titleTextStyle.copyWith(fontSize: 16),
                               ),
                             ),
@@ -112,27 +113,7 @@ class _DashboardState extends State<Dashboard> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20)),
                             ),
-                            child: Row(
-                              children: [
-                                const pembayaranBulanIni(),
-                                const Spacer(),
-                                if (authenticationProvider.kyced == "verified")
-                                  TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const PembayaranScreen()));
-                                      },
-                                      child: Text(
-                                        "Bayar",
-                                        style: textButtonTextStyle.copyWith(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      ))
-                              ],
-                            ),
+                            child: const pembayaranBulanIni(),
                           ),
                           Container(
                               width: double.infinity,

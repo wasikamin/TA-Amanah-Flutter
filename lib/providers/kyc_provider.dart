@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class KycProvider with ChangeNotifier {
+  // make variable for all data that will be used in kyc
+  bool _loading = false;
+
   String _ktpImage = "";
   get ktpImage => _ktpImage;
 
@@ -32,9 +35,16 @@ class KycProvider with ChangeNotifier {
   get relativeContactName2 => _relativeContactName2;
   get relativeContactRelation2 => _relativeContactRelation2;
   get relativeContactPhone2 => _relativeContactPhone2;
+  bool get loading => _loading;
 
+  // make set function for all variable above
   Future<void> setIdCardImage(String image) async {
     _ktpImage = image;
+    notifyListeners();
+  }
+
+  Future<void> setLoading(bool value) async {
+    _loading = value;
     notifyListeners();
   }
 

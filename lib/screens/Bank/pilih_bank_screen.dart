@@ -10,6 +10,7 @@ import 'package:amanah/screens/Lenders/Balance/withdraw_screen.dart';
 import 'package:amanah/services/loan_service.dart';
 import 'package:amanah/widgets/CustomAppBar.dart';
 import 'package:amanah/widgets/ToolTip.dart';
+import 'package:amanah/widgets/sweat_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -51,7 +52,7 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
         title: "Pilih Akun Bank",
         actions: [
           authProvider.role == "lender"
-              ? IconButton(
+              ? TextButton(
                   onPressed: () {
                     Navigator.push(
                         context,
@@ -59,14 +60,14 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                             builder: (context) =>
                                 const TransactionHistoryScreen()));
                   },
-                  icon: const Icon(Icons.restore_page_rounded))
-              : SizedBox.shrink(),
+                  child: const Text("Riwayat Transaksi"))
+              : const SizedBox.shrink(),
         ],
       ),
       body: RefreshIndicator(
         key: refreshKey,
         onRefresh: () async {
-          print("refresh");
+          // print("refresh");
           await Provider.of<UserProvider>(context, listen: false).getBank();
         },
         child: ListView(children: [
@@ -86,15 +87,16 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                     children: [
                       Text(
                         "Pilih Akun Bank",
-                        style: bodyTextStyle,
+                        style: titleTextStyle.copyWith(fontSize: 14),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       GestureDetector(
                         onTap: () {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => TambahBankScreen()));
+                                  builder: (context) =>
+                                      const TambahBankScreen()));
                         },
                         child: Row(
                           children: [
@@ -112,6 +114,9 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                     ],
                   ),
                 ),
+                vSpace(height: height * 0.02),
+                Text("Pilih salah satu akun bank yang terdaftar",
+                    style: bodyTextStyle.copyWith(fontSize: 12)),
                 vSpace(height: height * 0.02),
                 Card(
                   elevation: 0,
@@ -142,8 +147,8 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                                             fontSize: 12),
                                       ),
                                     )),
-                                    DataCell(Text("")),
-                                    DataCell(Text("")),
+                                    const DataCell(Text("")),
+                                    const DataCell(Text("")),
                                   ]),
                                 ]
                               : userProvider.banks.asMap().entries.map(
@@ -205,7 +210,7 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                                               );
                                             },
                                           ),
-                                          DataCell(Icon(
+                                          const DataCell(Icon(
                                             Icons.edit,
                                             size: 12,
                                           )),
@@ -230,17 +235,17 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                       onPressed: () async {
                         if (selectedBank?.bankCode == null) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Color.fromARGB(255, 211, 59,
+                            backgroundColor: const Color.fromARGB(255, 211, 59,
                                 59), // Customize the background color
-                            duration:
-                                Duration(seconds: 2), // Customize the duration
+                            duration: const Duration(
+                                seconds: 2), // Customize the duration
                             behavior: SnackBarBehavior
                                 .floating, // Customize the behavior
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   10), // Customize the border radius
                             ),
-                            content: Text("Pilih Bank terlebih dahulu"),
+                            content: const Text("Pilih Bank terlebih dahulu"),
                           ));
                         } else {
                           if (authProvider.role == "lender") {
@@ -253,18 +258,26 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                                           bankCode: selectedBank!.bankCode,
                                         )));
                           } else {
-                            final loanService = LoanService();
-                            await pengajuanLoanProvider.setDisbursementData(
-                                selectedBank!,
-                                userProvider.disbursement["loanId"]);
-                            loanService.postDisbursement(pengajuanLoanProvider);
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const BorrowerHomePage()),
-                              (Route<dynamic> route) => false,
-                            );
+                            try {
+                              final loanService = LoanService();
+                              await pengajuanLoanProvider.setDisbursementData(
+                                  selectedBank!,
+                                  userProvider.disbursement["loanId"]);
+                              loanService
+                                  .postDisbursement(pengajuanLoanProvider)
+                                  .then((value) {
+                                return successAlert(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const BorrowerHomePage()),
+                                    "Penarikan Anda Sedang Diproses",
+                                    "Harap Menunggu Pencairan Pinjaman Anda");
+                              });
+                            } catch (e) {
+                              return failedAlert(context,
+                                  "Penarikan Anda Gagal Diproses", "$e");
+                            }
                           }
                         }
                       },
@@ -273,7 +286,7 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
                       ),
-                      child: Text("Konfirmasi"),
+                      child: const Text("Konfirmasi"),
                     ))
               ],
             ),

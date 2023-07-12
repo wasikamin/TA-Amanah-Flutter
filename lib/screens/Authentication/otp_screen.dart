@@ -41,7 +41,8 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final authenticationProvider = Provider.of<AuthenticationProvider>(context);
+    final authenticationProvider =
+        Provider.of<AuthenticationProvider>(context, listen: true);
     return Scaffold(
       extendBodyBehindAppBar: true,
       resizeToAvoidBottomInset: false,
@@ -68,70 +69,99 @@ class _OtpScreenState extends State<OtpScreen> {
       ),
 
       //body
-      body: Container(
-        decoration: BoxDecoration(color: Color(0xffFAFAFA)),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-              child: Column(
-            children: <Widget>[
-              Flexible(flex: 1, child: Container()),
-              Flexible(
-                  flex: 2,
-                  child: Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          "Masukkan Kode OTP",
-                          style: bodyTextStyle.copyWith(fontSize: 24),
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          "Kami telah mengirimkan kode konfirmasi ke email",
-                          style: bodyTextStyle,
-                        ),
-                        SizedBox(
-                          height: 8,
-                        ),
-                        Text(
-                          email,
-                          style: subTitleTextStyle.copyWith(
-                              fontWeight: FontWeight.w700),
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(top: 40),
-                          child: OtpField(
-                            otpLength: 5,
-                            onOTPEntered: (value) {
-                              setState(
-                                () {
-                                  otp = value;
-                                },
-                              );
-                            },
-                            onCompleted: () async {
-                              await authenticationProvider.sendOtp(
-                                  otp, email, context);
-                            },
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+      body: Stack(
+        alignment: Alignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(color: Color(0xffFAFAFA)),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                  child: Column(
+                children: <Widget>[
+                  Flexible(flex: 1, child: Container()),
+                  Flexible(
+                      flex: 2,
+                      child: Container(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text("Belum menerima code?"),
-                            resendOtpButton(email: email),
+                            Text(
+                              "Masukkan Kode OTP",
+                              style: bodyTextStyle.copyWith(fontSize: 24),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              "Kami telah mengirimkan kode konfirmasi ke email",
+                              style: bodyTextStyle,
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              email,
+                              style: subTitleTextStyle.copyWith(
+                                  fontWeight: FontWeight.w700),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: 40),
+                              child: OtpField(
+                                otpLength: 5,
+                                onOTPEntered: (value) {
+                                  setState(
+                                    () {
+                                      otp = value;
+                                    },
+                                  );
+                                },
+                                onCompleted: () async {
+                                  authenticationProvider.setMessage("");
+                                  await authenticationProvider.sendOtp(
+                                      otp, email, context);
+                                },
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("Belum menerima code?"),
+                                resendOtpButton(email: email),
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    ),
+                        ),
+                      )),
+                  Flexible(flex: 1, child: Container()),
+                ],
+              )),
+            ),
+          ),
+          if (authenticationProvider.message != "")
+            Positioned(
+              bottom: 30,
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.red[400],
+                    borderRadius: const BorderRadius.all(Radius.circular(10))),
+                child: Text(authenticationProvider.message),
+              ),
+            ),
+          authenticationProvider.loading == true
+              ? Container(
+                  height: MediaQuery.of(context).size.height,
+                  color: Colors.white60,
+                  child: Center(
+                      child: Image.asset(
+                    "assets/images/Logo/amanah.gif",
+                    width: 100,
+                    height: 100,
                   )),
-              Flexible(flex: 1, child: Container()),
-            ],
-          )),
-        ),
+                )
+              : Container()
+        ],
       ),
     );
   }

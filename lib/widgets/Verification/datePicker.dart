@@ -1,3 +1,4 @@
+import 'package:amanah/constants/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -44,13 +45,17 @@ class _MyDatePickerState extends State<MyDatePicker> {
       children: [
         SizedBox(height: 16),
         Expanded(
-          child: TextFormField(
-            controller:
-                widget.controller, // Bind the controller to the text field
-            decoration: InputDecoration(
-              labelText: widget.hint,
+          child: GestureDetector(
+            onTap: () => _selectDate(context),
+            child: TextFormField(
+              controller:
+                  widget.controller, // Bind the controller to the text field
+              decoration: InputDecoration(
+                labelText: widget.hint,
+              ),
+              style: bodyTextStyle,
+              enabled: false, // Disable editing the text field
             ),
-            enabled: false, // Disable editing the text field
           ),
         ),
         IconButton(

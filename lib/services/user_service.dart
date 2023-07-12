@@ -157,7 +157,7 @@ class UserService {
         },
         body: json.encode({
           "loanId": userProvider.tagihan?["loanId"],
-          "billId": userProvider.paymentSchedule?[0]["billId"]
+          "billId": userProvider.paymentSchedule[0]["billId"]
         }),
       );
       if (response.statusCode == 200) {

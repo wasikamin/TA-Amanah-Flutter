@@ -17,7 +17,7 @@ class InformasiPerforma extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     String formatCurrency(int amount) {
-      final formatCurrency = new NumberFormat.currency(
+      final formatCurrency = NumberFormat.currency(
           locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
       return formatCurrency.format(amount);
     }

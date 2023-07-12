@@ -2,8 +2,8 @@ import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/web/web_view_screen.dart';
 import 'package:amanah/services/user_service.dart';
-import 'package:amanah/widgets/Borrower/pembayaranBulanIni.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PembayaranScreen extends StatelessWidget {
@@ -15,6 +15,12 @@ class PembayaranScreen extends StatelessWidget {
     final userService = UserService();
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    String formatCurrency(int? amount) {
+      final formatCurrency = NumberFormat.currency(
+          locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+      return formatCurrency.format(amount);
+    }
+
     return Scaffold(
       backgroundColor: const Color(0xfff2f7fa),
       appBar: AppBar(
@@ -47,7 +53,15 @@ class PembayaranScreen extends StatelessWidget {
                       style: bodyTextStyle.copyWith(fontSize: 16),
                     ),
                     const Spacer(),
-                    const pembayaranBulanIni(),
+                    Text(
+                      userProvider.tagihan?["currentMonth"] == 0
+                          ? formatCurrency(0)
+                          : userProvider.tagihan?["currentMonth"] == null
+                              ? formatCurrency(0)
+                              : formatCurrency(
+                                  userProvider.tagihan?["currentMonth"]),
+                      style: bodyTextStyle.copyWith(fontSize: 22),
+                    ),
                     const Spacer(),
                     Row(
                       children: [
@@ -55,7 +69,7 @@ class PembayaranScreen extends StatelessWidget {
                           "Sisa Pembayaran:",
                           style: bodyTextStyle.copyWith(fontSize: 12),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           "Rp. 0",
                           style: bodyTextStyle.copyWith(fontSize: 12),
@@ -68,7 +82,7 @@ class PembayaranScreen extends StatelessWidget {
                           "jatuh Tempo:",
                           style: bodyTextStyle.copyWith(fontSize: 12),
                         ),
-                        Spacer(),
+                        const Spacer(),
                         Text(
                           "-",
                           style: bodyTextStyle.copyWith(fontSize: 12),
@@ -79,23 +93,24 @@ class PembayaranScreen extends StatelessWidget {
                 ),
               ),
             ),
-            Spacer(),
+            const Spacer(),
             SizedBox(
                 width: double.infinity,
                 height: height * 0.07,
                 child: ElevatedButton(
                   onPressed: () async {
-                    final paymentLink = await userService.payLoan(userProvider);
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => WebViewScreen(
-                                  url: paymentLink["paymentLink"],
-                                )));
+                    await userService.payLoan(userProvider).then((value) {
+                      return Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WebViewScreen(
+                                    url: value["paymentLink"],
+                                  )));
+                    });
                   },
                   style: ElevatedButton.styleFrom(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 30),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                         side: BorderSide(color: primaryColor),

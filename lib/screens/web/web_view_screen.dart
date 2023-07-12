@@ -125,10 +125,8 @@ class _WebViewScreenState extends State<WebViewScreen> {
         children: [
           WebViewWidget(controller: _controller!),
           if (loadingPercentage < 100)
-            Center(
-              child: LinearProgressIndicator(
-                value: loadingPercentage / 100.0,
-              ),
+            LinearProgressIndicator(
+              value: loadingPercentage / 100.0,
             ),
         ],
       ),

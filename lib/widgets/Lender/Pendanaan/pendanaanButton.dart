@@ -1,6 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/screens/Lenders/home/homepage_screen.dart';
 import 'package:amanah/services/loan_service.dart';
+import 'package:amanah/widgets/sweat_alert.dart';
 import 'package:flutter/material.dart';
 
 class PendanaanButton extends StatefulWidget {
@@ -40,13 +41,18 @@ class _PendanaanButtonState extends State<PendanaanButton> {
                 setState(() {
                   isLoading = true;
                 });
-                await loanService.fundLoand(widget.amount, widget.loanID);
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const HomePage()),
-                    (Route<dynamic> route) => false);
+                await loanService
+                    .fundLoand(widget.amount, widget.loanID)
+                    .then((value) {
+                  return successAlert(
+                      context,
+                      MaterialPageRoute(builder: (context) => const HomePage()),
+                      "Berhasil Mendanai",
+                      "Anda Berhasil Telah Mendanai Pinjaman");
+                });
               } catch (e) {
                 print(e);
+                failedAlert(context, "Gagal Melakukan Pendanaan", "$e");
               } finally {
                 setState(() {
                   isLoading = false;

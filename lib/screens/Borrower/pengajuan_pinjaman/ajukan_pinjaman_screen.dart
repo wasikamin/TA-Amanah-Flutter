@@ -3,6 +3,7 @@ import 'package:amanah/providers/pengajuan_loan_provider.dart';
 import 'package:amanah/providers/user_profile_provider.dart';
 import 'package:amanah/screens/Borrower/pengajuan_pinjaman/konfirmasi_pinjaman_screen.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:extended_masked_text/extended_masked_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -19,8 +20,17 @@ enum PaymentScheme { Lunas, Cicilan }
 class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
   String durasi = "";
   String kategori = "";
-  final amountController = TextEditingController();
-  final yieldController = TextEditingController();
+  // final amountController = TextEditingController();
+  final amountController = MoneyMaskedTextController(
+      thousandSeparator: '.',
+      leftSymbol: 'Rp. ',
+      precision: 0,
+      decimalSeparator: "");
+  final yieldController = MoneyMaskedTextController(
+      thousandSeparator: '.',
+      leftSymbol: 'Rp. ',
+      precision: 0,
+      decimalSeparator: "");
   final tujuanController = TextEditingController();
   PaymentScheme scheme = PaymentScheme.Lunas;
   final _formKey = GlobalKey<FormState>();
@@ -38,7 +48,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: const Color(0xfff2f7fa),
-      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -78,10 +88,9 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             if (value!.isEmpty) {
                               return 'Please enter a value';
                             }
-                            int? parsedValue = int.tryParse(value);
-                            if (parsedValue == null) {
-                              return 'Invalid number';
-                            }
+                            int? parsedValue =
+                                amountController.numberValue.toInt();
+
                             if (parsedValue % 50000 != 0) {
                               return 'Pinjaman harus kelipatan Rp. 50.000';
                             }
@@ -99,7 +108,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                           height: height * 0.02,
                         ),
                         DropdownSearch<String>(
-                          popupProps: PopupProps.menu(
+                          popupProps: const PopupProps.menu(
                             fit: FlexFit.loose,
                             menuProps: MenuProps(
                               elevation: 10,
@@ -112,7 +121,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             return null; // Return null if the input is valid
                           },
                           items: ["3 Bulan", "6 Bulan", "12 Bulan"],
-                          dropdownDecoratorProps: DropDownDecoratorProps(
+                          dropdownDecoratorProps: const DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: "Durasi Pinjaman",
@@ -129,7 +138,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                         ),
                         TextFormField(
                           controller: yieldController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             label: Text("Imbal Hasil"),
                             hintText: "Masukkan Imbal Hasil",
@@ -140,10 +149,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             if (value!.isEmpty) {
                               return 'Masukkan imbal hasil';
                             }
-                            int? yield = int.tryParse(value);
-                            if (yield == null) {
-                              return 'Invalid number';
-                            }
+                            int? yield = yieldController.numberValue.toInt();
                             if (yield < 50000) {
                               return 'Minimum: Rp. 50.000';
                             }
@@ -154,14 +160,14 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                           height: height * 0.02,
                         ),
                         DropdownSearch<String>(
-                          popupProps: PopupProps.menu(
+                          popupProps: const PopupProps.menu(
                             fit: FlexFit.loose,
                             menuProps: MenuProps(
                               elevation: 10,
                             ),
                           ),
                           items: ["Pribadi", "Usaha", "Hiburan", "Pendidikan"],
-                          dropdownDecoratorProps: DropDownDecoratorProps(
+                          dropdownDecoratorProps: const DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
                             border: OutlineInputBorder(),
                             labelText: "Kategori",
@@ -184,7 +190,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                         ),
                         TextFormField(
                           controller: tujuanController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             border: OutlineInputBorder(),
                             label: Text("Tujuan Pinjaman"),
                             hintText: "Masukkan Tujuan Pinjaman",
@@ -201,7 +207,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                         vSpace(
                           height: height * 0.02,
                         ),
-                        Text(
+                        const Text(
                           "Skema Pembayaran",
                         ),
                         Row(
@@ -241,8 +247,8 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                                       tujuanController.text,
                                       scheme.name,
                                       durasi,
-                                      int.parse(amountController.text),
-                                      int.parse(yieldController.text));
+                                      amountController.numberValue.toInt(),
+                                      yieldController.numberValue.toInt());
                                   // print(amountController.text +
                                   //     durasi +
                                   //     yieldController.text +
@@ -257,7 +263,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                                               const KonfirmasiPinjaman()));
                                 }
                               },
-                              child: Text("Selanjutnya")),
+                              child: const Text("Selanjutnya")),
                         ),
                       ]),
                 ),

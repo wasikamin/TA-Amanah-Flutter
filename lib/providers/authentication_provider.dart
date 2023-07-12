@@ -13,12 +13,14 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthenticationProvider with ChangeNotifier {
+  bool _loading = false;
   bool _isLoggedIn = false;
   String _userId = "";
   String _email = "";
   String _message = "";
   String _role = "";
   String _kyced = "";
+  bool get loading => _loading;
   String get role => _role;
   String get email => _email;
   String get userId => _userId;
@@ -102,10 +104,13 @@ class AuthenticationProvider with ChangeNotifier {
 
   Future<void> sendOtp(String Otp, String email, BuildContext context) async {
     try {
+      _loading = true;
+      notifyListeners();
       await _authenticationService.sendOtp(Otp, email);
       final token = await _secureStorage.read(key: 'jwtToken');
+      _loading = false;
+      notifyListeners();
       checkJwt(token);
-      print(token);
       if (_role == "lender") {
         Navigator.pushReplacement(
           context,
@@ -123,8 +128,21 @@ class AuthenticationProvider with ChangeNotifier {
         );
       }
     } catch (error) {
-      print(error);
+      // print(error);
+      _loading = false;
+      _message = error.toString();
+      notifyListeners();
+      Future.delayed(const Duration(seconds: 5), () {
+        // code to be executed after 2 seconds
+        _message = "";
+        notifyListeners();
+      });
     }
+  }
+
+  setMessage(String message) {
+    _message = message;
+    notifyListeners();
   }
 
   Future<void> resendOtp(String email) async {

@@ -1,6 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/models/loan.dart';
 import 'package:amanah/services/loan_service.dart';
+import 'package:amanah/widgets/ToolTip.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +20,7 @@ class TopDetailPendanaan extends StatelessWidget {
   final double height;
   String formatCurrency(int amount) {
     final formatCurrency =
-        new NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.');
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.');
     return formatCurrency.format(amount);
   }
 
@@ -37,21 +38,27 @@ class TopDetailPendanaan extends StatelessWidget {
               backgroundColor: Colors.transparent,
               foregroundColor: primaryColor,
               child: Container(
-                  child: Icon(Icons.person, size: 40),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: primaryColor, // Warna border
-                      width: 2, // Lebar border
-                    ),
-                  )),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: primaryColor, // Warna border
+                    width: 2, // Lebar border
+                  ),
+                ),
+                child: const Icon(Icons.person, size: 40),
+              ),
             ),
             SizedBox(width: width * 0.05),
-            Text(
-              loan!.name,
-              style: bodyTextStyle.copyWith(
-                  fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            loan!.name.length > 8
+                ? CustomToolTip(
+                    text: loan!.name,
+                    textStyle: bodyTextStyle.copyWith(
+                        fontSize: 16, fontWeight: FontWeight.bold))
+                : Text(
+                    loan!.name,
+                    style: bodyTextStyle.copyWith(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
             Spacer(),
             ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(

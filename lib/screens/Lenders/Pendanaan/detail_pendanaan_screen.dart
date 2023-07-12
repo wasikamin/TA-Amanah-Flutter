@@ -31,6 +31,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
   final loanService = LoanService();
   String formattedDate = "";
   int value = 0;
+  @override
   initState() {
     super.initState();
     getLoan();
@@ -53,9 +54,9 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
 
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: CustomAppBar(title: "Detail Pinjaman"),
+      appBar: const CustomAppBar(title: "Detail Pinjaman"),
       body: loan == null
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Stack(
@@ -135,7 +136,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
                       padding: EdgeInsets.symmetric(
                           horizontal: width * 0.06, vertical: 5),
                       decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 255, 255, 255),
+                          color: const Color.fromARGB(255, 255, 255, 255),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.5),
@@ -181,7 +182,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
                               }
                               bottomSheet(context, width, height);
                             },
-                            child: Text("Danai"),
+                            child: const Text("Danai"),
                             style: ElevatedButton.styleFrom(
                               primary: loan!.status == 'tersedia'
                                   ? primaryColor
@@ -200,8 +201,8 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
   }
 
   String formatCurrency(int amount) {
-    final formatCurrency = new NumberFormat.currency(
-        locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    final formatCurrency =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
     return formatCurrency.format(amount);
   }
 
@@ -234,7 +235,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
                     ),
                     IconButton(
                       onPressed: () => Navigator.pop(context),
-                      icon: Icon(Icons.close),
+                      icon: const Icon(Icons.close),
                     )
                   ],
                 ),
@@ -272,7 +273,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
                   ],
                 ),
                 vSpace(height: height * 0.01),
-                Saldo(),
+                const Saldo(),
                 vSpace(height: height * 0.02),
                 Text(
                   "Atur Nominal Pinjaman",
@@ -316,7 +317,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
                                         TextButton(
                                           onPressed: () =>
                                               Navigator.pop(context),
-                                          child: Text("OK"),
+                                          child: const Text("OK"),
                                         ),
                                       ],
                                     ))
@@ -335,7 +336,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: Text("Danai")),
+                      child: const Text("Danai")),
                 )
               ])),
     );
@@ -350,7 +351,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text("OK"),
+            child: const Text("OK"),
           ),
         ],
       ),

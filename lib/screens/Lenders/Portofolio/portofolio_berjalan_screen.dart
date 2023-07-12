@@ -20,6 +20,7 @@ class PortofolioBerjalan extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return Consumer<UserProvider>(builder: (context, userProvider, _) {
       List<dynamic> funding = userProvider.portofolio!["active"]["funding"];
+      List<dynamic> reversedList = funding.reversed.toList();
       return Padding(
         padding: EdgeInsets.symmetric(
             horizontal: width * 0.05, vertical: height * 0.02),
@@ -103,11 +104,11 @@ class PortofolioBerjalan extends StatelessWidget {
             ),
             vSpace(height: height * 0.02),
             funding.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text("Tidak ada pendanaan berjalan"),
                   )
                 : Column(
-                    children: funding.map((fund) {
+                    children: reversedList.map((fund) {
                       final parsedDate =
                           DateTime.parse(fund["funds"]["repaymentDate"]);
                       // print(fund["funds"]);
@@ -130,7 +131,7 @@ class PortofolioBerjalan extends StatelessWidget {
                                     backgroundColor: Colors.transparent,
                                     foregroundColor: primaryColor,
                                     child: Container(
-                                        child: Icon(Icons.person),
+                                        child: const Icon(Icons.person),
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
                                           border: Border.all(
@@ -146,7 +147,7 @@ class PortofolioBerjalan extends StatelessWidget {
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   TextButton.icon(
                                       onPressed: () async {
                                         Navigator.push(

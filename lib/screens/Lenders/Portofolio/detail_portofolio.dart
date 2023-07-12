@@ -46,7 +46,7 @@ class _DetailPortofolioScreenState extends State<DetailPortofolioScreen> {
 
     return Scaffold(
       backgroundColor: whiteColor,
-      appBar: CustomAppBar(title: "Detail Pinjaman"),
+      appBar: const CustomAppBar(title: "Detail Pinjaman"),
       body: loan == null
           ? Center(
               child: CircularProgressIndicator(),

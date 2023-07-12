@@ -71,16 +71,16 @@ class AuthenticationService {
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'email': email, 'otp': Otp}));
     print(json.decode(response.body));
-
+    final responseBody = json.decode(response.body);
     if (response.statusCode == 200) {
       // OTP sent successfully
-      final responseBody = json.decode(response.body);
+
       final token = responseBody['data']['accessToken'] as String;
       final refreshToken = responseBody['data']['refreshToken'] as String;
       await _secureStorage.write(key: 'jwtToken', value: token);
       await _secureStorage.write(key: 'refreshToken', value: refreshToken);
     } else {
-      print('Failed to send OTP');
+      throw responseBody['message'];
     }
   }
 

@@ -33,7 +33,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
       appBar: CustomAppBar(
         title: "Top Up",
         actions: [
-          IconButton(
+          TextButton(
               onPressed: () {
                 Navigator.push(
                     context,
@@ -41,11 +41,7 @@ class _TopUpScreenState extends State<TopUpScreen> {
                         builder: (context) =>
                             const TransactionHistoryScreen()));
               },
-              icon: const Icon(
-                color: Colors.black,
-                Icons.restore_page_rounded,
-                size: 25,
-              ))
+              child: const Text("Riwayat Transaksi"))
         ],
       ),
       body: Padding(

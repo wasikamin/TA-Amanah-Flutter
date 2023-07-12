@@ -11,7 +11,7 @@ class UserProvider with ChangeNotifier {
   // final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   int _balance = 0;
   Map<dynamic, dynamic>? _tagihan;
-  List<dynamic>? _paymentSchedule;
+  List<dynamic> _paymentSchedule = [];
   Map<dynamic, dynamic> _active = {};
   List _history = [];
   bool _loading = true;
@@ -21,6 +21,7 @@ class UserProvider with ChangeNotifier {
   int _totalFunding = 0;
   Map<dynamic, dynamic>? _portofolio;
   Map<dynamic, dynamic> disbursement = {};
+  Map<dynamic, dynamic> _autoLend = {};
 
   List<Bank> get banks => _banks;
   List get history => _history;
@@ -29,11 +30,12 @@ class UserProvider with ChangeNotifier {
   int get totalFunding => _totalFunding;
   bool get kyc => _kyc;
   Map<dynamic, dynamic>? get tagihan => _tagihan;
-  List<dynamic>? get paymentSchedule => _paymentSchedule;
+  List<dynamic> get paymentSchedule => _paymentSchedule;
   int get balance => _balance;
   bool get loading => _loading;
   Map<dynamic, dynamic>? get portofolio => _portofolio;
   Map<dynamic, dynamic> get disburse => disbursement;
+  Map<dynamic, dynamic> get autoLend => _autoLend;
   final UserService _userService = UserService();
   final _balanceService = BalanceService();
   final _loanservice = LoanService();
@@ -81,6 +83,16 @@ class UserProvider with ChangeNotifier {
   //   // notifyListeners();
   // }
 
+  Future<void> checkAutoLend() async {
+    await Future.delayed(Duration.zero, () async {
+      _autoLend = {};
+      notifyListeners();
+    });
+    Map<dynamic, dynamic> response = await _loanservice.getAutoLendStatus();
+    _autoLend = response;
+    notifyListeners();
+  }
+
   deleteAll() async {
     print("hapus semua");
     _active = {};
@@ -94,6 +106,8 @@ class UserProvider with ChangeNotifier {
     _totalFunding = 0;
     _portofolio = null;
     _paymentSchedule = [];
+    disbursement = {};
+    _autoLend = {};
     notifyListeners();
   }
 
