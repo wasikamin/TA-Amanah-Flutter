@@ -1,4 +1,5 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/screens/Authentication/change_password_screen.dart';
 import 'package:amanah/screens/Authentication/login_screen.dart';
 import 'package:amanah/screens/Authentication/role_screen.dart';
 // import 'package:amanah/widgets/Authentication/Login/loginLogo.dart';
@@ -24,20 +25,37 @@ class _LandingScreenState extends State<LandingScreen> {
   }
 
   Future initDynamicLinks() async {
-    dynamicLinks.onLink.listen((event) {
-      // navigator ke halaman forget password
-      print('MASUKKKKKKKK');
-      var uid = event.link.queryParameters['uid'];
-      var token = event.link.queryParameters['token'];
-      print('dynmic link: ${event.link}');
-      print('userId: ' + uid.toString());
-      print('token: ' + token.toString());
-
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const LoginScreen()));
-    }).onError((error) {
-      print('error ${error.message}');
-    });
+    try {
+      dynamicLinks.onLink.listen((event) {
+        // navigator ke halaman forget password
+        print('MASUKKKKKKKK');
+        var uid = event.link.queryParameters['uid'];
+        var token = event.link.queryParameters['token'];
+        var type = event.link.queryParameters['type'];
+        print('dynmic link: ${event.link}');
+        print('userId: ' + uid.toString());
+        print('token: ' + token.toString());
+        print('type: ' + type.toString());
+        var email = event.link.queryParameters['email'];
+        if (type != 'forgetpassword') {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()));
+        } else {
+          print("Test");
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ChangePasswordScreen(
+                        email: email!,
+                        token: token!,
+                      )));
+        }
+      }).onError((error) {
+        print('error ${error.message}');
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -46,7 +64,7 @@ class _LandingScreenState extends State<LandingScreen> {
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(color: Color(0xffFAFAFA)),
+            decoration: const BoxDecoration(color: Color(0xffFAFAFA)),
             child: SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -56,14 +74,12 @@ class _LandingScreenState extends State<LandingScreen> {
                   ),
                   Expanded(
                     flex: 5,
-                    child: Container(
-                      child: LandingCarousel(),
-                    ),
+                    child: LandingCarousel(),
                   ),
                   Expanded(
                     flex: 2,
                     child: Container(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Column(
                         children: [
                           SizedBox(
@@ -73,20 +89,21 @@ class _LandingScreenState extends State<LandingScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => LoginScreen()),
+                                      builder: (context) =>
+                                          const LoginScreen()),
                                 );
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(30)),
                                 backgroundColor: primaryColor,
-                                minimumSize: Size.fromHeight(
+                                minimumSize: const Size.fromHeight(
                                     40), // fromHeight use double.infinity as width and 40 is the height
                               ),
-                              child: Text("Masuk"),
+                              child: const Text("Masuk"),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           SizedBox(
@@ -96,7 +113,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => RoleScreen()),
+                                      builder: (context) => const RoleScreen()),
                                 );
                               },
                               style: TextButton.styleFrom(
@@ -104,7 +121,7 @@ class _LandingScreenState extends State<LandingScreen> {
                                   borderRadius: BorderRadius.circular(30),
                                   side: BorderSide(color: primaryColor),
                                 ),
-                                minimumSize: Size.fromHeight(40),
+                                minimumSize: const Size.fromHeight(40),
                               ),
                               child: Text(
                                 "Belum Memiliki Akun?",

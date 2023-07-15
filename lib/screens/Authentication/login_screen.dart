@@ -1,4 +1,5 @@
 import 'package:amanah/providers/authentication_provider.dart';
+import 'package:amanah/screens/Authentication/forget_password_screen.dart';
 import 'package:amanah/screens/Authentication/role_screen.dart';
 import 'package:amanah/widgets/Authentication/card.dart';
 import 'package:amanah/widgets/Authentication/Login/loginLogo.dart';
@@ -147,7 +148,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: TextButton(
                                         style: TextButton.styleFrom(
                                             padding: EdgeInsets.zero),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(
+                                                  builder: (context) {
+                                            return ForgetPasswordScreen();
+                                          }));
+                                        },
                                         child: Text(
                                           "Lupa Password?",
                                           style: thinTextButtonTextStyle,

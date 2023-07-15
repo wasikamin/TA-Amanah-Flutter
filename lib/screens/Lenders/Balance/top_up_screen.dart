@@ -41,7 +41,10 @@ class _TopUpScreenState extends State<TopUpScreen> {
                         builder: (context) =>
                             const TransactionHistoryScreen()));
               },
-              child: const Text("Riwayat Transaksi"))
+              child: const Text(
+                "Riwayat",
+                style: TextStyle(fontSize: 16),
+              ))
         ],
       ),
       body: Padding(

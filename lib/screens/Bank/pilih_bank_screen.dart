@@ -60,7 +60,10 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                             builder: (context) =>
                                 const TransactionHistoryScreen()));
                   },
-                  child: const Text("Riwayat Transaksi"))
+                  child: const Text(
+                    "Riwayat",
+                    style: TextStyle(fontSize: 16),
+                  ))
               : const SizedBox.shrink(),
         ],
       ),

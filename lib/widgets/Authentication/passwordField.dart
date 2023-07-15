@@ -3,8 +3,12 @@ import 'package:flutter/material.dart';
 class PasswordField extends StatefulWidget {
   final TextEditingController controller;
   final bool useValidator;
-  PasswordField(
-      {required this.controller, super.key, this.useValidator = true});
+  final String label;
+  const PasswordField(
+      {required this.controller,
+      super.key,
+      this.useValidator = true,
+      this.label = "Password"});
 
   @override
   State<PasswordField> createState() => _PasswordFieldState();
@@ -56,7 +60,7 @@ class _PasswordFieldState extends State<PasswordField> {
       decoration: InputDecoration(
         isDense: true,
         prefixIcon: Icon(Icons.lock_outline_rounded),
-        labelText: 'Password',
+        labelText: widget.label,
         border: UnderlineInputBorder(),
         suffixIcon: IconButton(
           icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility),

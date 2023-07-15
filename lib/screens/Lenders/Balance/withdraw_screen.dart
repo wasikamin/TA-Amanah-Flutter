@@ -52,7 +52,7 @@ class WithdrawScreen extends StatelessWidget {
                         "Bank",
                         style: bodyTextStyle.copyWith(fontSize: 16),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         bankCode,
                         style: bodyTextStyle.copyWith(fontSize: 16),
@@ -66,7 +66,7 @@ class WithdrawScreen extends StatelessWidget {
                         "Nomor Rekening",
                         style: bodyTextStyle.copyWith(fontSize: 16),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       Text(
                         accountNumber.toString(),
                         style: bodyTextStyle.copyWith(fontSize: 16),
@@ -88,7 +88,7 @@ class WithdrawScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Container(
               margin: EdgeInsets.only(bottom: height * 0.05),
               height: height * 0.07,
@@ -98,17 +98,18 @@ class WithdrawScreen extends StatelessWidget {
                     try {
                       if (_amountController.numberValue.toInt() < 50000) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            backgroundColor: Color.fromARGB(255, 211, 59,
+                            backgroundColor: const Color.fromARGB(255, 211, 59,
                                 59), // Customize the background color
-                            duration:
-                                Duration(seconds: 2), // Customize the duration
+                            duration: const Duration(
+                                seconds: 2), // Customize the duration
                             behavior: SnackBarBehavior
                                 .floating, // Customize the behavior
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
                                   10), // Customize the border radius
                             ),
-                            content: Text("Minimal Withdraw Rp. 50.000")));
+                            content:
+                                const Text("Minimal Withdraw Rp. 50.000")));
                         return;
                       } else {
                         await _balanceservice.withdraw(accountNumber, bankCode,
@@ -125,7 +126,7 @@ class WithdrawScreen extends StatelessWidget {
                       failedAlert(context, "Withdraw Gagal", "$e");
                     }
                   },
-                  child: Text("Withdraw"),
+                  child: const Text("Withdraw"),
                   style: ElevatedButton.styleFrom(
                       primary: primaryColor,
                       shape: RoundedRectangleBorder(
