@@ -20,7 +20,7 @@ class TopDetailPendanaan extends StatelessWidget {
   final double height;
   String formatCurrency(int amount) {
     final formatCurrency =
-        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.');
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
     return formatCurrency.format(amount);
   }
 
@@ -59,7 +59,7 @@ class TopDetailPendanaan extends StatelessWidget {
                     style: bodyTextStyle.copyWith(
                         fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-            Spacer(),
+            const Spacer(),
             ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                     primary: primaryColor,
@@ -80,6 +80,11 @@ class TopDetailPendanaan extends StatelessWidget {
           ],
         ),
         vSpace(height: height * 0.02),
+        Text(
+          "Progress Pendanaan:",
+          style: bodyTextStyle.copyWith(fontSize: 11),
+        ),
+        vSpace(height: height * 0.005),
         Stack(children: [
           ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(20)),

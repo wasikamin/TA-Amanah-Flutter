@@ -66,3 +66,26 @@ void failedAlert(BuildContext context, String title, String desc) {
   ).show();
   return;
 }
+
+void succesAlertinSamePage(BuildContext context, String title, String desc) {
+  Alert(
+    context: context,
+    type: AlertType.success,
+    title: title,
+    style: alertStyle,
+    desc: desc,
+    buttons: [
+      DialogButton(
+        color: primaryColor,
+        child: const Text(
+          "Selanjutnya",
+          style: TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      )
+    ],
+  ).show();
+  return;
+}

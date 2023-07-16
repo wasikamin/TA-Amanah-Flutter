@@ -54,7 +54,11 @@ class UserProvider with ChangeNotifier {
     _totalYield = profit['totalYield'].round();
     _totalFunding = profit['totalFunding'];
     var saldo = await _userService.getBalance();
-    _balance = saldo;
+    if (saldo.runtimeType == double) {
+      _balance = saldo.toInt();
+    } else {
+      _balance = saldo;
+    }
     _loading = false;
     notifyListeners();
   }
@@ -93,6 +97,12 @@ class UserProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> deleteAutoLend() async {
+    await _loanservice.deleteAutoLend(autoLend['_id']);
+    checkAutoLend();
+    notifyListeners();
+  }
+
   deleteAll() async {
     print("hapus semua");
     _active = {};
@@ -127,6 +137,16 @@ class UserProvider with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<void> deleteBank(Bank bank) async {
+    try {
+      await _balanceService.deleteBankAccount(bank.accountNumber);
+      _banks.remove(bank);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
     }
   }
 

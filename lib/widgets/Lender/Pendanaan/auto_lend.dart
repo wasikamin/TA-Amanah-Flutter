@@ -1,3 +1,4 @@
+import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Lenders/home/homepage_screen.dart';
 import 'package:amanah/services/loan_service.dart';
 import 'package:amanah/widgets/sweat_alert.dart';
@@ -8,6 +9,7 @@ import "package:flutter/material.dart";
 import 'package:amanah/constants/app_theme.dart';
 // import 'package:amanah/providers/loan_provider.dart';
 import 'package:amanah/widgets/Lender/Pendanaan/durasiSlider.dart';
+import 'package:provider/provider.dart';
 // import 'package:provider/provider.dart';
 
 class AutoLend extends StatefulWidget {
@@ -54,6 +56,7 @@ class _AutoLendState extends State<AutoLend> {
 
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context, listen: true);
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(
@@ -91,12 +94,13 @@ class _AutoLendState extends State<AutoLend> {
                 validator: (value) {
                   if (_maxImbalController.numberValue == 0) {
                     return 'Maximal imbal hasil tidak boleh 0';
-                  } else {
-                    if (_maxImbalController.numberValue <
-                        _minImbalController.numberValue) {
-                      return 'Maximal imbal hasil harus lebih besar dari minimal imbal hasil';
-                    }
+                  } else if (_maxImbalController.numberValue <
+                      _minImbalController.numberValue) {
+                    return 'Maximal imbal hasil harus lebih besar dari minimal imbal hasil';
+                  } else if (_minImbalController.numberValue < 50000) {
+                    return 'Minimal imbal hasil tidak boleh kurang dari Rp. 50.000';
                   }
+
                   return null;
                 },
                 keyboardType: TextInputType.number,
@@ -229,7 +233,7 @@ class _AutoLendState extends State<AutoLend> {
                   color: primaryColor,
                 ),
                 title: Text(
-                  'Imbal Hasil',
+                  'Jumlah Pendanaan',
                   style: titleTextStyle.copyWith(fontSize: 16),
                 ),
               ),
@@ -242,6 +246,9 @@ class _AutoLendState extends State<AutoLend> {
                     return "Jumlah pendanaan minimal Rp. 100.000";
                   } else if (_amountController.numberValue % 50000 != 0) {
                     return "Jumlah pendanaan harus kelipatan Rp. 50.000";
+                  } else if (_amountController.numberValue >
+                      userProvider.balance) {
+                    return "Junlah pendanaan tidak boleh melebihi saldo anda";
                   }
                   return null;
                 },

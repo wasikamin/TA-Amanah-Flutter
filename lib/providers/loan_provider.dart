@@ -6,9 +6,11 @@ class LoanProvider with ChangeNotifier {
   final LoanService _loanService = LoanService();
   bool loading = true;
   List<Loan> _loan = [];
+  List<Loan> _loanRekomendasi = [];
 
   //getter
   get loan => _loan;
+  get loanRekomendasi => _loanRekomendasi;
 
   Future<void> getLoan(
       {int tenorMin = 0,
@@ -25,6 +27,17 @@ class LoanProvider with ChangeNotifier {
         yieldMax: yieldMax,
         yieldMin: yieldMin);
     _loan = loan;
+    loading = false;
+    notifyListeners();
+  }
+
+  Future<void> getLoanRekomendasi() async {
+    // print("masuk provider");
+    await Future.delayed(Duration.zero, () async {
+      setLoading();
+    });
+    List<Loan> loan = await _loanService.getRecommendationLoan();
+    _loanRekomendasi = loan;
     loading = false;
     notifyListeners();
   }

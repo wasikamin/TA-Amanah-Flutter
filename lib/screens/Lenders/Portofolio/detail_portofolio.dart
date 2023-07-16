@@ -24,6 +24,7 @@ class _DetailPortofolioScreenState extends State<DetailPortofolioScreen> {
   final loanService = LoanService();
   String formattedDate = "";
   int value = 0;
+  @override
   initState() {
     super.initState();
     getLoan();
@@ -48,7 +49,7 @@ class _DetailPortofolioScreenState extends State<DetailPortofolioScreen> {
       backgroundColor: whiteColor,
       appBar: const CustomAppBar(title: "Detail Pinjaman"),
       body: loan == null
-          ? Center(
+          ? const Center(
               child: CircularProgressIndicator(),
             )
           : Stack(
@@ -125,8 +126,8 @@ class _DetailPortofolioScreenState extends State<DetailPortofolioScreen> {
   }
 
   String formatCurrency(int amount) {
-    final formatCurrency = new NumberFormat.currency(
-        locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+    final formatCurrency =
+        NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
     return formatCurrency.format(amount);
   }
 }

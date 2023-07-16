@@ -55,10 +55,12 @@ class _ChangePasswordsScreenState extends State<ForgetPasswordScreen> {
                   style: TextStyle(color: Colors.white, fontSize: 14),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const LoginScreen()));
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
+                    (Route<dynamic> route) => true,
+                  );
                 },
               )
             ],
@@ -147,7 +149,7 @@ class _ChangePasswordsScreenState extends State<ForgetPasswordScreen> {
                                     }
                                     return null;
                                   },
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     isDense: true,
                                     prefixIcon:
                                         Icon(Icons.mail_outline_rounded),
@@ -170,7 +172,6 @@ class _ChangePasswordsScreenState extends State<ForgetPasswordScreen> {
                                     onPressed: () async {
                                       if (_formKey.currentState!.validate()) {
                                         // login logic here
-
                                         forgetPassword();
                                       }
                                     },

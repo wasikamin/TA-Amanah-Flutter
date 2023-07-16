@@ -73,10 +73,10 @@ class _ListPendanaanScreenState extends State<ListPendanaanScreen> {
               children: [
                 Container(
                   height: height * 0.05,
-                  width: width * 0.3,
+                  width: width * 0.32,
                   decoration: BoxDecoration(
                     color: primaryColor,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(30),
                   ),
                   child: GestureDetector(
                     onTap: () {
@@ -96,7 +96,7 @@ class _ListPendanaanScreenState extends State<ListPendanaanScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.filter_alt_rounded,
                           color: Colors.white,
                         ),
@@ -127,11 +127,11 @@ class _ListPendanaanScreenState extends State<ListPendanaanScreen> {
                         });
                   },
                   child: Container(
-                    height: height * 0.07,
-                    width: width * 0.35,
+                    height: height * 0.05,
+                    width: width * 0.32,
                     decoration: BoxDecoration(
                       color: primaryColor,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(30),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

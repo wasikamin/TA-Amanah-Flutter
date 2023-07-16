@@ -122,20 +122,22 @@ class AuthenticationService {
   }
 
   Future<void> forgetPassword(String email) async {
-    final baseUrl = dotenv.env['API_BASE_URL'].toString();
-    const changePasswordUrl = "/authentication/password/reset/request";
-    final url = Uri.parse('$baseUrl$changePasswordUrl');
-    final response = await http.post(url,
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode({'email': email, 'platform': "mobile"}));
-    print(json.decode(response.body));
-
-    if (response.statusCode == 200) {
-      // OTP resent successfully
+    try {
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      const changePasswordUrl = "/authentication/password/reset/request";
+      final url = Uri.parse('$baseUrl$changePasswordUrl');
+      final response = await http.post(url,
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({'email': email, 'platform': "mobile"}));
       final responseBody = json.decode(response.body);
-      return responseBody['message'];
-    } else {
-      print('Failed to resend OTP');
+
+      if (response.statusCode == 200) {
+        return responseBody['message'];
+      } else {
+        throw responseBody['message'];
+      }
+    } catch (e) {
+      rethrow;
     }
   }
 

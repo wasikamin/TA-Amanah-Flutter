@@ -7,12 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class LoanList extends StatefulWidget {
+class RekomendasiPendanaan extends StatefulWidget {
+  const RekomendasiPendanaan({
+    super.key,
+  });
+
   @override
-  State<LoanList> createState() => _LoanListState();
+  State<RekomendasiPendanaan> createState() => _RekomendasiPendanaanState();
 }
 
-class _LoanListState extends State<LoanList> {
+class _RekomendasiPendanaanState extends State<RekomendasiPendanaan> {
+  @override
+  initState() {
+    super.initState();
+    Provider.of<LoanProvider>(context, listen: false).getLoanRekomendasi();
+  }
+
   String formatCurrency(int amount) {
     final formatCurrency =
         NumberFormat.currency(locale: 'id_ID', symbol: 'Rp.');
@@ -20,30 +30,30 @@ class _LoanListState extends State<LoanList> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Provider.of<LoanProvider>(context, listen: false).getLoan();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-
     return Consumer<LoanProvider>(builder: (context, loanProvider, _) {
-      if (loanProvider.loading == true) {
+      if (loanProvider.loading) {
         return Container(
-            margin: EdgeInsets.only(top: height * 0.2),
-            child: const Center(child: CircularProgressIndicator()));
+          constraints: const BoxConstraints(
+            minHeight: 100,
+          ),
+          width: width,
+          decoration: BoxDecoration(
+            color: whiteColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+            ],
+          ),
+        );
       }
-      if (loanProvider.loan.isEmpty) {
-        return Container(
-            margin: EdgeInsets.only(top: height * 0.2),
-            child: const Center(child: Text("Belum ada pendanaan")));
-      } else {
-        List<Loan> loans = loanProvider.loan;
-
+      if (loanProvider.loanRekomendasi.isNotEmpty) {
+        List<Loan> loans = loanProvider.loanRekomendasi;
         return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: loans
@@ -56,12 +66,13 @@ class _LoanListState extends State<LoanList> {
                           left: width * 0.05,
                           right: width * 0.05,
                           top: height * 0.06,
+                          bottom: height * 0.02,
                         ),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        margin: EdgeInsets.only(bottom: height * 0.02),
+                        margin: EdgeInsets.only(bottom: height * 0.01),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -117,7 +128,7 @@ class _LoanListState extends State<LoanList> {
                                 ),
                               ],
                             ),
-                            vSpace(height: height * 0.03),
+                            vSpace(height: height * 0.01),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -165,7 +176,7 @@ class _LoanListState extends State<LoanList> {
                                     ),
                                     vSpace(height: height * 0.01),
                                     Text(
-                                      "${loan.paymentSchema}",
+                                      loan.paymentSchema,
                                       style: bodyTextStyle.copyWith(
                                           fontSize: 11,
                                           fontWeight: FontWeight.bold),
@@ -174,7 +185,7 @@ class _LoanListState extends State<LoanList> {
                                 ),
                               ],
                             ),
-                            vSpace(height: height * 0.03),
+                            vSpace(height: height * 0.015),
                             Text("Progress Pendanaan: ",
                                 style: bodyTextStyle.copyWith(fontSize: 11)),
                             vSpace(height: height * 0.005),
@@ -285,6 +296,25 @@ class _LoanListState extends State<LoanList> {
                   ),
                 )
                 .toList());
+      } else {
+        return Container(
+          constraints: const BoxConstraints(
+            minHeight: 100,
+          ),
+          width: width,
+          decoration: BoxDecoration(
+            color: whiteColor,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text("Belum ada rekomendasi pendanaan",
+                  style: bodyTextStyle.copyWith(
+                      fontSize: 14, color: primaryColor)),
+            ],
+          ),
+        );
       }
     });
   }

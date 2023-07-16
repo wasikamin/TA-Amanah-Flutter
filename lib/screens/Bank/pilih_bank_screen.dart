@@ -129,11 +129,12 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                     return Column(
                       children: [
                         DataTable(
+                          columnSpacing: 40,
                           headingRowHeight: 50, // Height of the header row
                           columns: const [
-                            DataColumn(label: Text('Nomor')),
+                            DataColumn(label: Text('Terpilih')),
                             DataColumn(label: Text('Bank')),
-                            DataColumn(label: Text('Action')),
+                            DataColumn(label: Text('Nomor')),
                           ],
                           headingRowColor: MaterialStateColor.resolveWith(
                               (states) => accentColor),
@@ -142,7 +143,7 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                           rows: userProvider.banks.isEmpty
                               ? [
                                   DataRow(cells: [
-                                    DataCell(Container(
+                                    DataCell(SizedBox(
                                       width: width * 0.22,
                                       child: Text(
                                         "",
@@ -166,27 +167,20 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                                                 ? Colors.grey.withOpacity(0.3)
                                                 : Colors.white),
                                         cells: [
-                                          DataCell(
-                                              SizedBox(
-                                                width: width * 0.22,
-                                                child: Text(
-                                                  bank.accountNumber,
-                                                  style: bodyTextStyle.copyWith(
-                                                      fontSize: 12),
-                                                ),
-                                              ), onTap: () {
-                                            setState(() {
-                                              if (isSelected) {
-                                                selectedRowIndex = index;
-                                                selectedBank = bank;
-                                                // print(bank.bankCode);
-                                              } else {
-                                                selectedRowIndex = index;
-                                                selectedBank = bank;
-                                                // print(bank.bankCode);
-                                              }
-                                            });
-                                          }),
+                                          DataCell(SizedBox(
+                                            width: 30,
+                                            child: Radio(
+                                              value: index,
+                                              groupValue: selectedRowIndex,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  selectedRowIndex = index;
+                                                  selectedBank = bank;
+                                                  // print(selectedBank?.bankCode);
+                                                });
+                                              },
+                                            ),
+                                          )),
                                           DataCell(
                                             bank.bankName.length < 8
                                                 ? Text(
@@ -213,10 +207,26 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                                               );
                                             },
                                           ),
-                                          const DataCell(Icon(
-                                            Icons.edit,
-                                            size: 12,
-                                          )),
+                                          DataCell(
+                                              SizedBox(
+                                                width: width * 0.22,
+                                                child: Text(
+                                                  bank.accountNumber,
+                                                  style: bodyTextStyle.copyWith(
+                                                      fontSize: 12),
+                                                ),
+                                              ), onTap: () {
+                                            setState(() {
+                                              if (isSelected) {
+                                                selectedRowIndex = index;
+                                                selectedBank = bank;
+                                              } else {
+                                                selectedRowIndex = index;
+                                                selectedBank = bank;
+                                                // print(bank.bankCode);
+                                              }
+                                            });
+                                          }),
                                         ]);
                                   },
                                 ).toList(),
@@ -290,6 +300,49 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                             borderRadius: BorderRadius.circular(20)),
                       ),
                       child: const Text("Konfirmasi"),
+                    )),
+                Container(
+                    margin: EdgeInsets.only(top: height * 0.01),
+                    width: double.infinity,
+                    height: height * 0.06,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (selectedBank?.bankCode == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: const Color.fromARGB(255, 211, 59,
+                                59), // Customize the background color
+                            duration: const Duration(
+                                seconds: 2), // Customize the duration
+                            behavior: SnackBarBehavior
+                                .floating, // Customize the behavior
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10), // Customize the border radius
+                            ),
+                            content: const Text("Pilih Bank terlebih dahulu"),
+                          ));
+                        } else {
+                          try {
+                            userProvider
+                                .deleteBank(selectedBank!)
+                                .then((value) {
+                              return succesAlertinSamePage(
+                                  context,
+                                  "Berhasil Menghapus Bank",
+                                  "Akun Bank Anda Berhasil Dihapus");
+                            });
+                          } catch (e) {
+                            return failedAlert(
+                                context, "Gagal Menghapus Bank", "$e");
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red[400],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20)),
+                      ),
+                      child: const Text("Hapus Akun Bank"),
                     ))
               ],
             ),

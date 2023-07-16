@@ -116,6 +116,32 @@ class LoanService {
     }
   }
 
+  Future<dynamic> deleteAutoLend(String autoLendId) async {
+    try {
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final token = await _secureStorage.read(key: 'jwtToken');
+      final autoLendUrl = "/lenders/funding/auto/$autoLendId";
+      final url = Uri.parse('$baseUrl$autoLendUrl');
+      final response = await http.delete(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+      );
+      if (response.statusCode < 400) {
+        final responseBody = json.decode(response.body);
+        // print(responseBody);
+        return responseBody;
+      } else {
+        final responseBody = json.decode(response.body);
+        throw responseBody["message"];
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   //Get Auto Loan Status
   Future<dynamic> getAutoLendStatus() async {
     try {
@@ -192,6 +218,53 @@ class LoanService {
       }
     } catch (e) {
       print(e);
+    }
+  }
+
+  Future<dynamic> getRecommendationLoan() async {
+    try {
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final token = await _secureStorage.read(key: 'jwtToken');
+      const getRecommendationLoan = "/loans/available/recommended";
+      final url = Uri.parse('$baseUrl$getRecommendationLoan');
+      final response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+      );
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body);
+        // print(responseBody['data']);
+        List<dynamic> loanData = responseBody['data'];
+
+        List<Loan> loans = loanData
+            .map<Loan>((item) => Loan(
+                  loanId: item['loanId'],
+                  userId: item['userId'],
+                  purpose: item['purpose'],
+                  borrowingCategory: item['borrowingCategory'],
+                  amount: item['amount'],
+                  tenor: item['tenor'],
+                  yieldReturn: item['yieldReturn'],
+                  status: item['status'],
+                  totalFunding: item['totalFunding'],
+                  borrowerId: item['borrower']['borrowerId'],
+                  name: item['borrower']['name'],
+                  email: item['borrower']['email'],
+                  paymentSchema: item['paymentSchema'],
+                  createdDate: "",
+                ))
+            .toList();
+        return loans;
+      } else {
+        final responseBody = json.decode(response.body);
+        throw responseBody["message"];
+      }
+    } catch (e) {
+      print(e);
+      rethrow;
     }
   }
 

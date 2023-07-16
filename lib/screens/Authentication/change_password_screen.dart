@@ -52,7 +52,7 @@ class _ChangePasswordsScreenState extends State<ChangePasswordScreen> {
               "Anda berhasil mengubah password");
         });
       } catch (e) {
-        print(e.toString());
+        // print(e.toString());
         setState(() {
           _errorMessage = e.toString();
         });

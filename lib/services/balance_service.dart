@@ -116,6 +116,37 @@ class BalanceService {
     }
   }
 
+  Future<dynamic> deleteBankAccount(String accountNumber) async {
+    try {
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final token = await _secureStorage.read(key: 'jwtToken');
+      const String deleteBankAccountUrl = "/balance/account";
+      final url = Uri.parse('$baseUrl$deleteBankAccountUrl');
+      final response = await http.delete(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token"
+        },
+        body: json.encode({
+          "accountNumber": accountNumber,
+        }),
+      );
+      if (response.statusCode < 400) {
+        final responseBody = json.decode(response.body);
+        // print(responseBody);
+        var models = Bank.fromJsonList(responseBody['data']);
+        // print(models);
+        return models;
+      } else {
+        final responseBody = json.decode(response.body);
+        throw responseBody["message"];
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> withdraw(
       int accountNumber, String bankCode, int amount) async {
     try {

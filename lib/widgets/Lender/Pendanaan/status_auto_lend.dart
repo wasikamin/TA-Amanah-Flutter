@@ -1,5 +1,6 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/user_provider.dart';
+import 'package:amanah/widgets/sweat_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,7 @@ class StatusAutoLend extends StatelessWidget {
                 ),
                 SizedBox(width: width * 0.02),
                 Text(
-                  "Auto Lend",
+                  "Auto Lend: Active",
                   style: bodyTextStyle.copyWith(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
@@ -54,7 +55,7 @@ class StatusAutoLend extends StatelessWidget {
               ),
               const vSpace(height: 10),
               RowAutoLend(
-                  leftText: "Bunga",
+                  leftText: "Imbal Hasil",
                   rightText:
                       " ${formatCurrency(userProvider.autoLend["yieldRange"]["start"])}  -  ${formatCurrency(userProvider.autoLend["yieldRange"]["end"])}"),
               const vSpace(height: 10),
@@ -65,6 +66,25 @@ class StatusAutoLend extends StatelessWidget {
               const vSpace(height: 10),
               RowAutoLend(leftText: "Kategori", rightText: category.join(", ")),
               const vSpace(height: 10),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                      onPressed: () {
+                        try {
+                          userProvider.deleteAutoLend().then((value) {
+                            return succesAlertinSamePage(
+                                context,
+                                "Berhasil Membatalkan Auto Lend",
+                                "Auto Lend Berhasil Dibatalkan");
+                          });
+                        } catch (e) {
+                          failedAlert(
+                              context, "Gagal Membatalkan Auto Lend", "$e");
+                        }
+                      },
+                      child: Text("Cancel",
+                          style: titleTextStyle.copyWith(
+                              fontSize: 16, color: Colors.red[500]))))
             ],
           ),
         );
