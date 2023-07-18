@@ -69,7 +69,7 @@ class _RoleScreenState extends State<RoleScreen> {
                             style: subTitleTextStyle.copyWith(
                                 fontWeight: FontWeight.w500),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           const RoleSelect(),
@@ -88,7 +88,7 @@ class _RoleScreenState extends State<RoleScreen> {
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                LoginScreen()));
+                                                const LoginScreen()));
                                   },
                                   child: Text(
                                     "Login di Sini!",

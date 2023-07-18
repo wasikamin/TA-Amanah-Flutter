@@ -32,6 +32,7 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
       precision: 0,
       decimalSeparator: "");
   final tujuanController = TextEditingController();
+  final linkController = TextEditingController();
   PaymentScheme scheme = PaymentScheme.Lunas;
   final _formKey = GlobalKey<FormState>();
   String formatCurrency(int? amount) {
@@ -81,7 +82,6 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             border: OutlineInputBorder(),
                             label: Text("Jumlah Pinjaman"),
                             hintText: "Masukkan Jumlah Pinjaman",
-                            helperText: 'Kelipatan 50.000 dan minimal 500.000',
                           ),
                           keyboardType: TextInputType.number,
                           validator: (value) {
@@ -91,12 +91,6 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             int? parsedValue =
                                 amountController.numberValue.toInt();
 
-                            if (parsedValue % 50000 != 0) {
-                              return 'Pinjaman harus kelipatan Rp. 50.000';
-                            }
-                            if (parsedValue < 500000) {
-                              return 'Minimal pinjaman Rp. 500.000';
-                            }
                             if (parsedValue >
                                 int.parse(userProfileProvider.loanLimit)) {
                               return 'Limit pinjaman anda: ${formatCurrency(int.parse(userProfileProvider.loanLimit))}';
@@ -140,8 +134,8 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                           controller: yieldController,
                           decoration: const InputDecoration(
                             border: OutlineInputBorder(),
-                            label: Text("Imbal Hasil"),
-                            hintText: "Masukkan Imbal Hasil",
+                            label: Text("Keuntungan Pinjaman"),
+                            hintText: "Masukkan Keuntungan Pinjaman",
                             helperText: 'Minimal Rp. 50.000',
                           ),
                           keyboardType: TextInputType.number,
@@ -166,7 +160,13 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                               elevation: 10,
                             ),
                           ),
-                          items: ["Pribadi", "Usaha", "Hiburan", "Pendidikan"],
+                          items: const [
+                            "Bisnis Kecil",
+                            "Tempat Tinggal",
+                            "Kesehatan",
+                            "Kendaraan",
+                            "Pembelian Besar"
+                          ],
                           dropdownDecoratorProps: const DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
                             border: OutlineInputBorder(),
@@ -194,11 +194,28 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                             border: OutlineInputBorder(),
                             label: Text("Tujuan Pinjaman"),
                             hintText: "Masukkan Tujuan Pinjaman",
-                            helperText: 'Tuliskan detail tujuan pinjaman',
                           ),
                           validator: (value) {
                             if (value!.isEmpty) {
                               return 'Masukkan tujuan pinjaman';
+                            }
+
+                            return null; // Return null if the input is valid
+                          },
+                        ),
+                        vSpace(
+                          height: height * 0.02,
+                        ),
+                        TextFormField(
+                          controller: linkController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            label: Text("Link Item Pembelian"),
+                            hintText: "Masukkan Link Item Pembelian",
+                          ),
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Masukkan link item pembelian';
                             }
 
                             return null; // Return null if the input is valid
@@ -242,25 +259,28 @@ class _AjukanPinjamanScreenState extends State<AjukanPinjamanScreen> {
                                   backgroundColor: primaryColor),
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  await pengajuanLoanProvider.setBorrowing(
-                                      kategori,
-                                      tujuanController.text,
-                                      scheme.name,
-                                      durasi,
-                                      amountController.numberValue.toInt(),
-                                      yieldController.numberValue.toInt());
+                                  await pengajuanLoanProvider
+                                      .setBorrowing(
+                                          kategori,
+                                          tujuanController.text,
+                                          scheme.name,
+                                          durasi,
+                                          amountController.numberValue.toInt(),
+                                          yieldController.numberValue.toInt(),
+                                          linkController.text)
+                                      .then((value) {
+                                    return Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const KonfirmasiPinjaman()));
+                                  });
                                   // print(amountController.text +
                                   //     durasi +
                                   //     yieldController.text +
                                   //     scheme.name +
                                   //     kategori +
                                   //     tujuanController.text);
-
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const KonfirmasiPinjaman()));
                                 }
                               },
                               child: const Text("Selanjutnya")),

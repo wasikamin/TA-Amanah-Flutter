@@ -24,6 +24,7 @@ class BorrowerTopCard extends StatelessWidget {
     return Consumer3<AuthenticationProvider, UserProvider, UserProfileProvider>(
         builder: (context, authenticationProvider, userProvider,
             userProfileProvider, _) {
+      // print(userProfileProvider.loanLimit);
       return Container(
         height: screenHeight * 0.25,
         width: double.infinity,

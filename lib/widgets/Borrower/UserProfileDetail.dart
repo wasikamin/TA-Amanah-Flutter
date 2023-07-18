@@ -38,32 +38,32 @@ class _UserProfileDetailState extends State<UserProfileDetail> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
-                    radius: 60,
+                    radius: 50,
                     backgroundImage: NetworkImage(
                       "https://ui-avatars.com/api/?name=${userProfileProvider.name}&size=512&color=0297c6",
                     ),
                   ),
                   SizedBox(
-                    height: height * 0.03,
+                    height: height * 0.01,
                   ),
                   Text(
                     userProfileProvider.name,
                     style: titleTextStyle.copyWith(
-                      fontSize: 20,
+                      fontSize: 14,
                     ),
                   ),
                   SizedBox(
-                    height: height * 0.01,
+                    height: height * 0.005,
                   ),
                   Text(userProfileProvider.phoneNumber,
                       style: bodyTextStyle.copyWith(
-                          fontSize: 14, color: Colors.grey)),
+                          fontSize: 12, color: Colors.grey)),
                   SizedBox(
-                    height: height * 0.01,
+                    height: height * 0.005,
                   ),
                   Text(userProfileProvider.email,
                       style: bodyTextStyle.copyWith(
-                          fontSize: 14, color: Colors.grey)),
+                          fontSize: 12, color: Colors.grey)),
                   SizedBox(
                     height: height * 0.03,
                   ),

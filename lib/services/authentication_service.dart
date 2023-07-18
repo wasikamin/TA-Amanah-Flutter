@@ -149,8 +149,8 @@ class AuthenticationService {
     final response = await http.post(url,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({'refreshToken': refreshToken}));
+    final responseBody = json.decode(response.body);
     if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
       final jwtToken = responseBody['data']['accessToken'] as String;
       final newRefreshToken = responseBody['data']['refreshToken'] as String;
       await _secureStorage.write(key: 'jwtToken', value: jwtToken);
@@ -158,6 +158,8 @@ class AuthenticationService {
       // print(responseBody);
       return responseBody['message'];
     } else {
+      // print(refreshToken);
+      // print(responseBody['message']);
       throw Exception('Failed to refresh token');
     }
   }

@@ -18,7 +18,8 @@ class RoleSelect extends StatelessWidget {
               Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => RegisterScreen(role: "Lender")));
+                      builder: (context) =>
+                          const RegisterScreen(role: "Lender")));
             },
             child: CustomCard(
                 padding: 10,
@@ -37,7 +38,7 @@ class RoleSelect extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        "Danai Pinjaman untuk dapatkan imbal hasil",
+                        "Danai Pinjaman untuk dapatkan imbalan dari peminjam",
                         style: thinBodyTextStyle,
                         textAlign: TextAlign.center,
                       ),
@@ -52,7 +53,8 @@ class RoleSelect extends StatelessWidget {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => RegisterScreen(role: "Borrower")));
+                    builder: (context) =>
+                        const RegisterScreen(role: "Borrower")));
           },
           child: CustomCard(
               padding: 10,

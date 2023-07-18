@@ -14,14 +14,16 @@ class KycProvider with ChangeNotifier {
       _gender = "",
       _birthDate = "",
       _work = "",
-      _salary = "",
       _relativeContactName1 = "",
       _relativeContactRelation1 = "",
       _relativeContactPhone1 = "",
       _relativeContactName2 = "",
       _relativeContactRelation2 = "",
       _relativeContactPhone2 = "",
-      _idCardNumber = "";
+      _idCardNumber = "",
+      _homeOwnershipType = "";
+
+  int _salary = 0, _annualIncome = 0, _totalMonthlyDebt = 0;
 
   get fullName => _fullName;
   get gender => _gender;
@@ -35,6 +37,10 @@ class KycProvider with ChangeNotifier {
   get relativeContactName2 => _relativeContactName2;
   get relativeContactRelation2 => _relativeContactRelation2;
   get relativeContactPhone2 => _relativeContactPhone2;
+  get annualIncome => _annualIncome;
+  get totalMonthlyDebt => _totalMonthlyDebt;
+  get homeOwnershipType => _homeOwnershipType;
+
   bool get loading => _loading;
 
   // make set function for all variable above
@@ -55,13 +61,28 @@ class KycProvider with ChangeNotifier {
 
   // make set funtion for all variable above
   Future<void> personal(
-      String name, gender, birthDate, work, salary, idCardNumber) async {
+      name, gender, birthDate, work, salary, idCardNumber) async {
     _fullName = name;
     _birthDate = birthDate;
     _work = work;
     _salary = salary;
     _gender = gender;
     _idCardNumber = idCardNumber;
+    notifyListeners();
+  }
+
+  Future<void> setAnnualIncome(int annualIncome) async {
+    _annualIncome = annualIncome;
+    notifyListeners();
+  }
+
+  Future<void> setTotalMonthlyDebt(int totalMonthlyDebt) async {
+    _totalMonthlyDebt = totalMonthlyDebt;
+    notifyListeners();
+  }
+
+  Future<void> setHomeOwnershipType(String homeOwnershipType) async {
+    _homeOwnershipType = homeOwnershipType;
     notifyListeners();
   }
 

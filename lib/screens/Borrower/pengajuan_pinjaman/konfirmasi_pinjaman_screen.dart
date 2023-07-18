@@ -1,6 +1,9 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/pengajuan_loan_provider.dart';
-import 'package:amanah/screens/Borrower/pengajuan_pinjaman/kontrak_pengajuan_screen.dart';
+import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
+// import 'package:amanah/screens/Borrower/pengajuan_pinjaman/kontrak_pengajuan_screen.dart';
+import 'package:amanah/services/loan_service.dart';
+import 'package:amanah/widgets/sweat_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +20,7 @@ class KonfirmasiPinjaman extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+    final LoanService loanService = LoanService();
     return Scaffold(
       backgroundColor: const Color(0xfff2f7fa),
       appBar: AppBar(
@@ -72,7 +76,7 @@ class KonfirmasiPinjaman extends StatelessWidget {
                       ]),
                 ),
               ),
-              Spacer(),
+              const Spacer(),
               Container(
                   margin: EdgeInsets.only(bottom: height * 0.05),
                   width: double.infinity,
@@ -82,13 +86,30 @@ class KonfirmasiPinjaman extends StatelessWidget {
                           primary: primaryColor,
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30))),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => KontrakPengajuan()));
+                      onPressed: () async {
+                        try {
+                          pengajuanLoanProvider.setLoading(true);
+                          await loanService
+                              .postLoan(pengajuanLoanProvider)
+                              .then((value) async {
+                            pengajuanLoanProvider.setLoading(false);
+                            return successAlert(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const BorrowerHomePage()),
+                                "Berhasil Mengajukan Pinjaman",
+                                "Silahkan Menunggu Pinjaman Anda Terdanai");
+                          });
+                          // print("Berhasil");
+                        } catch (e) {
+                          pengajuanLoanProvider.setLoading(false);
+                          failedAlert(context, "Pengajuan Pinjaman Gagal",
+                              "Terdapat Kesalahan Dalam Pengajuan Pinjaman");
+                          print(e);
+                        }
                       },
-                      child: Text("Konfirmasi"))),
+                      child: const Text("Konfirmasi"))),
             ],
           ),
         );
@@ -104,17 +125,22 @@ class CustomRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     // TODO: implement build
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             leftText,
             style: bodyTextStyle.copyWith(fontSize: 12),
           ),
           Spacer(),
-          Text(rightText, style: bodyTextStyle.copyWith(fontSize: 12)),
+          SizedBox(
+              width: width * 0.4,
+              child:
+                  Text(rightText, style: bodyTextStyle.copyWith(fontSize: 12))),
         ],
       ),
     );

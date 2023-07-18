@@ -8,6 +8,7 @@ class UserProfileProvider with ChangeNotifier {
   String _email = "";
   bool _isVerified = false;
   String _loanLimit = "0";
+  Map<dynamic, dynamic> performance = {};
 
   String get name => _name;
   String get phoneNumber => _phoneNumber;
@@ -26,9 +27,11 @@ class UserProfileProvider with ChangeNotifier {
     _email = response['email'];
     _isVerified = response['verified'];
     if (response['loanLimit'] != null) {
+      // print(response['loanLimit']);
       _loanLimit = response['loanLimit'];
-    } else {
-      _loanLimit = "0";
+    }
+    if (response['performance'] != null) {
+      performance = response['performance'];
     }
     notifyListeners();
   }

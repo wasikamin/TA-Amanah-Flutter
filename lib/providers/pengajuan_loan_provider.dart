@@ -5,7 +5,7 @@ class PengajuanLoanProvider with ChangeNotifier {
   String _borrowingCategory = "", _purpose = "", _paymentSchema = "";
 
   Bank? _bank;
-  String _loanId = "";
+  String _loanId = "", _productLink = "";
   int _tenor = 0, _amount = 0, _yieldReturn = 0;
   bool _loading = false;
 
@@ -18,13 +18,21 @@ class PengajuanLoanProvider with ChangeNotifier {
   get bank => _bank;
   get loanId => _loanId;
   get loading => _loading;
+  get productLink => _productLink;
 
-  Future<void> setBorrowing(String borrowingCategory, String purpose,
-      String paymentScheme, String tenor, int amount, int yieldReturn) async {
+  Future<void> setBorrowing(
+      String borrowingCategory,
+      String purpose,
+      String paymentScheme,
+      String tenor,
+      int amount,
+      int yieldReturn,
+      String productLink) async {
     _borrowingCategory = borrowingCategory;
     _purpose = purpose;
     _amount = amount;
     _yieldReturn = yieldReturn;
+    _productLink = productLink;
     switch (tenor) {
       case '3 Bulan':
         _tenor = 3;

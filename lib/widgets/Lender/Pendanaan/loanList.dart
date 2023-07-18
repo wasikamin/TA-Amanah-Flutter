@@ -125,23 +125,6 @@ class _LoanListState extends State<LoanList> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Imbal Hasil",
-                                      style:
-                                          bodyTextStyle.copyWith(fontSize: 11),
-                                    ),
-                                    vSpace(height: height * 0.01),
-                                    Text(
-                                      formatCurrency(loan.yieldReturn),
-                                      style: bodyTextStyle.copyWith(
-                                          fontSize: 11,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
                                       "Tenor",
                                       style:
                                           bodyTextStyle.copyWith(fontSize: 11),

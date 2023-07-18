@@ -69,7 +69,7 @@ class _DashboardState extends State<Dashboard> {
             physics: const AlwaysScrollableScrollPhysics(),
             child: Stack(
               children: [
-                topBackground(screenHeight: screenHeight),
+                const topBackground(),
                 SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(16),

@@ -23,7 +23,10 @@ class KycService {
       'personal.gender': kycProvider.gender,
       'personal.birthDate': kycProvider.birthDate,
       'personal.work.name': kycProvider.work,
-      'personal.work.salary': kycProvider.salary,
+      'personal.work.salary': kycProvider.salary.toString(),
+      'personal.work.annualIncome': kycProvider.annualIncome.toString(),
+      'personal.homeOwnershipType': kycProvider.homeOwnershipType,
+      'personal.work.totalMonthlyDebt': kycProvider.totalMonthlyDebt.toString(),
       'personal.idCardNumber': kycProvider.idCardNumber,
       'relativesContact.firstRelative.name': kycProvider.relativeContactName1,
       'relativesContact.firstRelative.relation':
@@ -36,6 +39,7 @@ class KycService {
       'relativesContact.secondRelative.phoneNumber':
           kycProvider.relativeContactPhone2,
     });
+
     request.files.add(http.MultipartFile.fromBytes(
         'idCardImage', await File(kycProvider.ktpImage).readAsBytes(),
         filename: 'ktpImage.webp', contentType: MediaType("image", "webp")));
@@ -45,7 +49,6 @@ class KycService {
       filename: 'FaceImage.webp',
       contentType: MediaType('image', 'webp'),
     ));
-
     http.StreamedResponse response = await request.send();
 
     if (response.statusCode == 200) {
@@ -53,8 +56,8 @@ class KycService {
       // print(await response.stream.bytesToString());
       return response.statusCode;
     } else {
-      // print(await response.stream.bytesToString());
-      return response.statusCode;
+      print(await response.stream.bytesToString());
+      throw response.statusCode;
     }
   }
 

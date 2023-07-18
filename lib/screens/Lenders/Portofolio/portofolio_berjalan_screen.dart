@@ -76,25 +76,6 @@ class PortofolioBerjalan extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Text("Est. Imbal Hasil",
-                                    style: bodyTextStyle.copyWith(
-                                        fontSize: 14, color: whiteColor)),
-                                vSpace(
-                                  height: height * 0.03,
-                                ),
-                                Text(
-                                    formatCurrency(userProvider
-                                        .portofolio!["active"]["summary"]
-                                            ["totalYield"]
-                                        .round()),
-                                    style: bodyTextStyle.copyWith(
-                                        color: whiteColor)),
-                              ],
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -109,11 +90,11 @@ class PortofolioBerjalan extends StatelessWidget {
                   )
                 : Column(
                     children: reversedList.map((fund) {
-                      final parsedDate =
-                          DateTime.parse(fund["funds"]["repaymentDate"]);
-                      // print(fund["funds"]);
-                      String formattedDate =
-                          DateFormat.yMMMMd().format(parsedDate);
+                      // final parsedDate =
+                      //     DateTime.parse(fund["funds"]["repaymentDate"]);
+                      print(fund);
+                      // String formattedDate =
+                      //     DateFormat.yMMMMd().format(parsedDate);
                       return Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
@@ -181,9 +162,9 @@ class PortofolioBerjalan extends StatelessWidget {
                                   left: "Est. Imbal Hasil",
                                   right: formatCurrency(
                                       fund["funds"]["yieldReturn"].round())),
-                              InformationRow(
-                                  left: "Est. Pengembalian",
-                                  right: formattedDate),
+                              // InformationRow(
+                              //     left: "Est. Pengembalian",
+                              //     right: formattedDate),
                             ],
                           ),
                         ),

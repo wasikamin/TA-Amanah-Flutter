@@ -35,6 +35,7 @@ class LoanService {
           "tenor": pengajuanLoanProvider.tenor,
           "yieldReturn": pengajuanLoanProvider.yieldReturn,
           "paymentSchema": pengajuanLoanProvider.paymentSchema,
+          "productLink": pengajuanLoanProvider.productLink,
         }),
       );
       if (response.statusCode < 400) {
