@@ -76,6 +76,26 @@ class PortofolioBerjalan extends StatelessWidget {
                               ],
                             ),
                           ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "Est. Keuntungan",
+                                  style: bodyTextStyle.copyWith(
+                                      fontSize: 14, color: whiteColor),
+                                ),
+                                vSpace(
+                                  height: height * 0.03,
+                                ),
+                                Text(
+                                    formatCurrency(
+                                        userProvider.portofolio!["active"]
+                                            ["summary"]["totalYield"]),
+                                    style: bodyTextStyle.copyWith(
+                                        color: whiteColor)),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -90,11 +110,11 @@ class PortofolioBerjalan extends StatelessWidget {
                   )
                 : Column(
                     children: reversedList.map((fund) {
-                      // final parsedDate =
-                      //     DateTime.parse(fund["funds"]["repaymentDate"]);
-                      print(fund);
-                      // String formattedDate =
-                      //     DateFormat.yMMMMd().format(parsedDate);
+                      final parsedDate =
+                          DateTime.parse(fund["funds"]["createdDate"]);
+                      // print(fund);
+                      String formattedDate =
+                          DateFormat.yMMMMd().format(parsedDate);
                       return Card(
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)),
@@ -112,14 +132,15 @@ class PortofolioBerjalan extends StatelessWidget {
                                     backgroundColor: Colors.transparent,
                                     foregroundColor: primaryColor,
                                     child: Container(
-                                        child: const Icon(Icons.person),
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          border: Border.all(
-                                            color: primaryColor, // Warna border
-                                            width: 2, // Lebar border
-                                          ),
-                                        )),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: primaryColor, // Warna border
+                                          width: 2, // Lebar border
+                                        ),
+                                      ),
+                                      child: const Icon(Icons.person),
+                                    ),
                                   ),
                                   SizedBox(width: width * 0.05),
                                   Text(
@@ -159,9 +180,12 @@ class PortofolioBerjalan extends StatelessWidget {
                                   right:
                                       formatCurrency(fund["funds"]["amount"])),
                               InformationRow(
-                                  left: "Est. Imbal Hasil",
+                                  left: "Est. Keuntungan",
                                   right: formatCurrency(
                                       fund["funds"]["yieldReturn"].round())),
+                              InformationRow(
+                                  left: "Tanggal Pinjaman",
+                                  right: formattedDate),
                               // InformationRow(
                               //     left: "Est. Pengembalian",
                               //     right: formattedDate),

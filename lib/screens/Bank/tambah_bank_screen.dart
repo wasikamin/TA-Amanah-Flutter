@@ -67,7 +67,7 @@ class _TambahBankScreenState extends State<TambahBankScreen> {
 
                         for (var element in response) {
                           allBank.add(AvailableBank(
-                            bank_code: element.bank_code,
+                            bankCode: element.bankCode,
                             name: element.name,
                             fee: element.fee,
                             queue: element.queue,
@@ -145,7 +145,7 @@ class _TambahBankScreenState extends State<TambahBankScreen> {
                 onPressed: () async {
                   if (formKey.currentState!.validate()) {
                     try {
-                      await balanceService.addBankAccount(bank!.bank_code,
+                      await balanceService.addBankAccount(bank!.bankCode,
                           int.parse(noRekeningController.text), bank!.name);
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {

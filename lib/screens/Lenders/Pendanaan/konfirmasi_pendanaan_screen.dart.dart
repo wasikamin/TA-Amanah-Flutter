@@ -61,7 +61,7 @@ class KonfirmasiPendanaanScreen extends StatelessWidget {
                         right: "${loan.tenor} Bulan",
                       ),
                       InformationRow(
-                        left: "Imbal Hasil",
+                        left: "Keuntungan",
                         right:
                             "${(loan.yieldReturn / loan.amount * 100).toStringAsFixed(2)}%",
                       ),

@@ -1,5 +1,6 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/models/loan.dart';
+import 'package:amanah/screens/web/product_view.dart';
 import 'package:amanah/services/loan_service.dart';
 import 'package:amanah/widgets/ToolTip.dart';
 import 'package:flutter/material.dart';
@@ -75,9 +76,37 @@ class TopDetailPendanaan extends StatelessWidget {
                     print(e);
                   }
                 },
-                icon: Icon(Icons.file_present_rounded),
-                label: Text("Kontrak"))
+                icon: const Icon(Icons.file_present_rounded),
+                label: const Text("Kontrak"))
           ],
+        ),
+        vSpace(height: height * 0.02),
+        Container(
+          height: height * 0.07,
+          width: width,
+          decoration: BoxDecoration(
+              color: Colors.blue[50], borderRadius: BorderRadius.circular(10)),
+          child: TextButton.icon(
+            icon: Icon(
+              Icons.link_rounded,
+              color: primaryColor,
+            ),
+            onPressed: () {
+              // print(loan!.productLink);
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+                return ProductScreen(
+                  url: loan!.productLink,
+                );
+              }));
+            },
+            label: Text(
+              "Link Produk",
+              style: bodyTextStyle.copyWith(
+                  fontSize: 11,
+                  color: primaryColor,
+                  decoration: TextDecoration.underline),
+            ),
+          ),
         ),
         vSpace(height: height * 0.02),
         Text(
@@ -87,7 +116,7 @@ class TopDetailPendanaan extends StatelessWidget {
         vSpace(height: height * 0.005),
         Stack(children: [
           ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(20)),
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
             child: LinearProgressIndicator(
               minHeight: height * 0.02,
               value: loan!.totalFunding / loan!.amount,

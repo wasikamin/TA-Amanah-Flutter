@@ -117,7 +117,7 @@ class _LoanListState extends State<LoanList> {
                                 ),
                               ],
                             ),
-                            vSpace(height: height * 0.03),
+                            vSpace(height: height * 0.01),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -252,14 +252,14 @@ class _LoanListState extends State<LoanList> {
                                   text: loan.borrowingCategory,
                                   textStyle: bodyTextStyle.copyWith(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold),
                                 )
                               : Text(
                                   loan.borrowingCategory,
                                   style: bodyTextStyle.copyWith(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold),
                                 ),
                         ),

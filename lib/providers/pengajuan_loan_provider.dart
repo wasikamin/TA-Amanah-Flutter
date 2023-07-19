@@ -1,3 +1,4 @@
+import 'package:amanah/models/availableBank.dart';
 import 'package:amanah/models/bank.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,9 @@ class PengajuanLoanProvider with ChangeNotifier {
   String _loanId = "", _productLink = "";
   int _tenor = 0, _amount = 0, _yieldReturn = 0;
   bool _loading = false;
+  String _account = "";
+
+  AvailableBank? _availableBank;
 
   get borrowingCategory => _borrowingCategory;
   get purpose => _purpose;
@@ -19,6 +23,8 @@ class PengajuanLoanProvider with ChangeNotifier {
   get loanId => _loanId;
   get loading => _loading;
   get productLink => _productLink;
+  get account => _account;
+  get availableBank => _availableBank;
 
   Future<void> setBorrowing(
       String borrowingCategory,
@@ -64,9 +70,12 @@ class PengajuanLoanProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> setDisbursementData(Bank bank, dynamic loanId) async {
-    _bank = bank;
+  Future<void> setDisbursementData(
+      AvailableBank bank, dynamic loanId, account) async {
+    _availableBank = bank;
     _loanId = loanId;
+    _account = account;
+
     notifyListeners();
   }
 }

@@ -1,5 +1,6 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/user_provider.dart';
+import 'package:amanah/widgets/Borrower/status_pinjaman.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +30,7 @@ class _RiwayatBerjalanState extends State<RiwayatBerjalan> {
     final height = MediaQuery.of(context).size.height;
     return Consumer<UserProvider>(builder: (context, userProvider, _) {
       if (userProvider.loading == true) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       }
@@ -60,20 +61,22 @@ class _RiwayatBerjalanState extends State<RiwayatBerjalan> {
                     children: <Widget>[
                       // Add additional widgets or content for each item here
                       ListTile(
-                        title: Text('Imbal Hasil'),
+                        title: const Text('Tambahan Harga Beli'),
                         subtitle: Text(NumberFormat.currency(symbol: 'Rp. ')
                             .format(userProvider.active["yieldReturn"])),
                       ),
                       ListTile(
-                        title: Text('Status'),
-                        subtitle: Text(userProvider.active["status"]),
+                        title: const Text('Status'),
+                        subtitle: StatusPinjaman(
+                          status: userProvider.active["status"],
+                        ),
                       ),
                       ListTile(
-                        title: Text('Tenor'),
+                        title: const Text('Tenor'),
                         subtitle: Text("${userProvider.active["tenor"]} bulan"),
                       ),
                       ListTile(
-                        title: Text('Kategori'),
+                        title: const Text('Kategori'),
                         subtitle:
                             Text(userProvider.active["borrowingCategory"]),
                       ),

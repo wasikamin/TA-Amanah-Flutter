@@ -1,6 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/user_provider.dart';
-import 'package:amanah/screens/Bank/pilih_bank_screen.dart';
+// import 'package:amanah/screens/Bank/pilih_bank_screen.dart';
+import 'package:amanah/screens/Borrower/pencairan_pinjaman/pencairan_pinjaman_screen.dart';
 import 'package:amanah/services/user_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -56,7 +57,7 @@ class _PinjamanAktifState extends State<PinjamanAktif> {
               const vSpace(height: 10),
               Stack(children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
                   child: LinearProgressIndicator(
                     minHeight: screenHeight * 0.015,
                     value: userProvider.active["totalFund"] /
@@ -98,9 +99,9 @@ class _PinjamanAktifState extends State<PinjamanAktif> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      const PilihBankScreen()));
+                                      const PencairanPinjamanScreen()));
                         },
-                        child: Text("Cairkan",
+                        child: Text("Bayar sekarang",
                             style: bodyTextStyle.copyWith(
                                 fontSize: 14,
                                 color: Colors.blue[700],

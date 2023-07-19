@@ -2,13 +2,15 @@ import "package:amanah/constants/app_theme.dart";
 import "package:amanah/models/loan.dart";
 import "package:amanah/providers/authentication_provider.dart";
 import "package:amanah/providers/user_provider.dart";
+// import "package:amanah/providers/user_provider.dart";
 import "package:amanah/screens/Lenders/Pendanaan/konfirmasi_pendanaan_screen.dart.dart";
 import "package:amanah/services/loan_service.dart";
 import "package:amanah/widgets/CustomAppBar.dart";
 import "package:amanah/widgets/Lender/Pendanaan/InformasiPerforma.dart";
 import "package:amanah/widgets/Lender/Pendanaan/InformasiPinjaman.dart";
+import "package:amanah/widgets/Lender/Pendanaan/InformationRow.dart";
 import "package:amanah/widgets/Lender/Pendanaan/TopCard.dart";
-import "package:amanah/widgets/Lender/Pendanaan/jumlahPinjamanSlider.dart";
+// import "package:amanah/widgets/Lender/Pendanaan/jumlahPinjamanSlider.dart";
 import "package:amanah/widgets/Lender/Pendanaan/topDetailPendanaan.dart";
 import "package:amanah/widgets/Lender/saldo.dart";
 import "package:flutter/material.dart";
@@ -30,7 +32,6 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
   Loan? loan;
   final loanService = LoanService();
   String formattedDate = "";
-  int value = 0;
   @override
   initState() {
     super.initState();
@@ -275,41 +276,42 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
                 vSpace(height: height * 0.01),
                 const Saldo(),
                 vSpace(height: height * 0.02),
-                Text(
-                  "Atur Nominal Pinjaman",
-                  style: titleTextStyle.copyWith(fontSize: 14),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.summarize_rounded,
+                      color: primaryColor,
+                    ),
+                    SizedBox(width: width * 0.02),
+                    Text(
+                      "Ringkasan",
+                      style: bodyTextStyle.copyWith(color: primaryColor),
+                    ),
+                  ],
                 ),
+                vSpace(height: height * 0.02),
+                InformationRow(
+                    left: "Est. Keuntungan",
+                    right: formatCurrency((loan!.yieldReturn).toInt())),
                 vSpace(height: height * 0.01),
-                JumlahPinjamanSlider(
-                  yield: loan!.yieldReturn / loan!.amount,
-                  endValue: Provider.of<UserProvider>(context, listen: false)
-                              .balance
-                              .toDouble() <
-                          loan!.amount.toDouble() -
-                              loan!.totalFunding.toDouble()
-                      ? Provider.of<UserProvider>(context, listen: false)
-                          .balance
-                          .toDouble()
-                      : loan!.amount.toDouble() - loan!.totalFunding.toDouble(),
-                  onChanged: (value) {
-                    setState(() {
-                      this.value = value;
-                    });
-                  },
-                ),
+                InformationRow(
+                    left: "Est. Total Dana Kembali",
+                    right: formatCurrency(loan!.amount + loan!.yieldReturn)),
                 vSpace(height: height * 0.02),
                 SizedBox(
                   width: double.infinity,
                   height: height * 0.06,
                   child: ElevatedButton(
                       onPressed: () {
-                        value % 50000 != 0 || value < 100000
+                        Provider.of<UserProvider>(context, listen: false)
+                                    .balance <
+                                loan!.amount
                             ? showDialog(
                                 context: context,
                                 builder: (context) => AlertDialog(
                                       title: const Text("Peringatan"),
                                       content: Text(
-                                        "Nominal harus kelipatan Rp. 50.000 dan Minimal Rp.100.000",
+                                        "Saldo anda tidak cukup, harap top up terlebih dahulu",
                                         style: bodyTextStyle.copyWith(
                                             fontSize: 12),
                                       ),
@@ -327,7 +329,7 @@ class _DetailPendanaanScreenState extends State<DetailPendanaanScreen> {
                                     builder: (context) =>
                                         KonfirmasiPendanaanScreen(
                                           loan: loan!,
-                                          amount: value,
+                                          amount: loan!.amount,
                                         )));
                       },
                       style: ElevatedButton.styleFrom(

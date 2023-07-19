@@ -1,13 +1,13 @@
 class AvailableBank {
   final String name;
-  final String bank_code;
+  final String bankCode;
   final String status;
   final int fee;
   final int queue;
 
   AvailableBank({
     required this.name,
-    required this.bank_code,
+    required this.bankCode,
     required this.status,
     required this.fee,
     required this.queue,
@@ -16,7 +16,7 @@ class AvailableBank {
   factory AvailableBank.fromJson(Map<String, dynamic> json) {
     return AvailableBank(
       name: json["name"],
-      bank_code: json["bank_code"],
+      bankCode: json["bank_code"],
       status: json["status"],
       fee: json["fee"],
       queue: json["queue"],

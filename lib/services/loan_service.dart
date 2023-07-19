@@ -8,6 +8,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 // import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
+// import 'package:http_parser/http_parser.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -17,11 +20,11 @@ class LoanService {
   //Post New Loan
   Future<dynamic> postLoan(PengajuanLoanProvider pengajuanLoanProvider) async {
     try {
-      final _baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
 
       final token = await _secureStorage.read(key: 'jwtToken');
-      final _postLoanUrl = "/borrowers/loan";
-      final url = Uri.parse('$_baseUrl$_postLoanUrl');
+      const postLoanUrl = "/borrowers/loan";
+      final url = Uri.parse('$baseUrl$postLoanUrl');
       final response = await http.post(
         url,
         headers: {
@@ -53,30 +56,34 @@ class LoanService {
 
   //dishbursement
   Future<dynamic> postDisbursement(
-      PengajuanLoanProvider pengajuanLoanProvider) async {
+      PengajuanLoanProvider pengajuanLoanProvider, XFile xfile) async {
     try {
       final baseUrl = dotenv.env['API_BASE_URL'].toString();
       final token = await _secureStorage.read(key: 'jwtToken');
       const postDisbursementUrl = "/borrowers/loan/disbursement";
       final url = Uri.parse('$baseUrl$postDisbursementUrl');
-      final response = await http.post(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: json.encode({
-          "loanId": pengajuanLoanProvider.loanId,
-          "bankId": pengajuanLoanProvider.bank!.id,
-        }),
-      );
+      var request = http.MultipartRequest('POST', url);
+      // request.headers['Content-Type'] = 'multipart/form-data';
+      request.headers['authorization'] = 'Bearer $token';
+
+      request.fields.addAll({
+        "loanId": pengajuanLoanProvider.loanId,
+        "bankCode": pengajuanLoanProvider.availableBank!.bankCode,
+        "account": pengajuanLoanProvider.account,
+      });
+      File file = File(xfile.path);
+      // print('File Path: ${file.path}');
+      // print('File Exists: ${file.existsSync()}');
+      request.files.add(http.MultipartFile.fromBytes(
+        'productPageImage',
+        file.readAsBytesSync(),
+      ));
+      var response = await request.send();
       if (response.statusCode < 400) {
-        final responseBody = json.decode(response.body);
-        // print(responseBody);
-        return responseBody;
+        return response.statusCode;
       } else {
-        final responseBody = json.decode(response.body);
-        throw responseBody["message"];
+        print(response.statusCode);
+        throw response.reasonPhrase.toString();
       }
     } catch (e) {
       rethrow;
@@ -177,11 +184,11 @@ class LoanService {
       int yieldMin = 0,
       yieldMax = 1000000000}) async {
     try {
-      final _baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
       final token = await _secureStorage.read(key: 'jwtToken');
-      final _getAvailableLoanUrl =
+      final getAvailableLoanUrl =
           "/loans/available?sort=createdDate&order=desc&page=1&limit=10&tenor_min=$tenorMin&tenor_max=$tenorMax&yield_min=$yieldMin&yield_max=$yieldMax";
-      final url = Uri.parse('$_baseUrl$_getAvailableLoanUrl');
+      final url = Uri.parse('$baseUrl$getAvailableLoanUrl');
       final response = await http.get(
         url,
         headers: {
@@ -210,6 +217,7 @@ class LoanService {
                   email: item['borrower']['email'],
                   paymentSchema: item['paymentSchema'],
                   createdDate: item['createdDate'],
+                  productLink: item['productLink'],
                 ))
             .toList();
         return loans;
@@ -255,6 +263,7 @@ class LoanService {
                   name: item['borrower']['name'],
                   email: item['borrower']['email'],
                   paymentSchema: item['paymentSchema'],
+                  productLink: item['productLink'],
                   createdDate: "",
                 ))
             .toList();
@@ -288,6 +297,7 @@ class LoanService {
         // print(responseBody['data']);
         Loan loan = Loan(
           loanId: loanData['loanId'],
+          productLink: loanData['productLink'],
           userId: "",
           purpose: loanData['purpose'],
           borrowingCategory: loanData['borrowingCategory'],

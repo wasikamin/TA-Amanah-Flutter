@@ -1,5 +1,6 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/user_provider.dart';
+import 'package:amanah/widgets/Borrower/status_pinjaman.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ class _SelesaiScreentState extends State<SelesaiScreen> {
     final height = MediaQuery.of(context).size.height;
     return Consumer<UserProvider>(builder: (context, userProvider, _) {
       if (userProvider.loading == true) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(),
         );
       }
@@ -50,19 +51,23 @@ class _SelesaiScreentState extends State<SelesaiScreen> {
                       children: <Widget>[
                         // Add additional widgets or content for each item here
                         ListTile(
-                          title: Text('Imbal Hasil'),
+                          title: const Text('Tambahan Harga Beli'),
                           subtitle: Text(NumberFormat.currency(symbol: 'Rp. ')
                               .format(
                                   userProvider.history[index]["yieldReturn"])),
                         ),
                         ListTile(
-                          title: Text('Tenor'),
-                          subtitle: Text(
-                              userProvider.history[index]["tenor"].toString() +
-                                  " bulan"),
+                          title: const Text('Tambahan Harga Beli'),
+                          subtitle: StatusPinjaman(
+                              status: userProvider.history[index]["status"]),
                         ),
                         ListTile(
-                          title: Text('Kategori'),
+                          title: const Text('Tenor'),
+                          subtitle: Text(
+                              "${userProvider.history[index]["tenor"]} bulan"),
+                        ),
+                        ListTile(
+                          title: const Text('Kategori'),
                           subtitle: Text(
                               userProvider.history[index]["borrowingCategory"]),
                         ),

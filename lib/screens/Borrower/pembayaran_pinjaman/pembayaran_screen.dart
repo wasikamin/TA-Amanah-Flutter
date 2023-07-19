@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PembayaranScreen extends StatelessWidget {
-  const PembayaranScreen({super.key});
-
+  const PembayaranScreen({super.key, required this.tagihan});
+  final int tagihan;
   @override
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
@@ -71,20 +71,7 @@ class PembayaranScreen extends StatelessWidget {
                         ),
                         const Spacer(),
                         Text(
-                          "Rp. 0",
-                          style: bodyTextStyle.copyWith(fontSize: 12),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "jatuh Tempo:",
-                          style: bodyTextStyle.copyWith(fontSize: 12),
-                        ),
-                        const Spacer(),
-                        Text(
-                          "-",
+                          formatCurrency(tagihan),
                           style: bodyTextStyle.copyWith(fontSize: 12),
                         ),
                       ],

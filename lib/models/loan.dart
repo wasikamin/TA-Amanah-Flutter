@@ -13,6 +13,7 @@ class Loan {
   String email;
   String paymentSchema;
   String contractLink;
+  String productLink;
   String risk;
   String createdDate;
   int borrowedFund;
@@ -36,6 +37,7 @@ class Loan {
       required this.email,
       required this.paymentSchema,
       required this.createdDate,
+      required this.productLink,
       this.contractLink = "",
       this.risk = "",
       this.borrowedFund = 0,
@@ -62,6 +64,7 @@ class Loan {
       contractLink: json['contractLink'],
       risk: json['risk'],
       createdDate: json['createdDate'],
+      productLink: json['productLink'],
     );
   }
 }

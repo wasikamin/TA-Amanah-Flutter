@@ -36,9 +36,15 @@ class _pembayaranBulanIniState extends State<pembayaranBulanIni> {
   Map<dynamic, dynamic> loan = {};
   @override
   Widget build(BuildContext context) {
+    int tagihan = 0;
     return Consumer2<UserProvider, AuthenticationProvider>(
         builder: (context, userProvider, authenticationProvider, _) {
-      // print(userProvider.tagihan?["currentMonth"]);
+      userProvider.paymentSchedule
+          .where((element) => element["status"] == "unpaid")
+          .forEach((element) {
+        tagihan = tagihan + element["amount"] as int;
+      });
+      // print(tagihan);
       return userProvider.loading == true
           ? const CircularProgressIndicator()
           : Row(
@@ -60,8 +66,9 @@ class _pembayaranBulanIniState extends State<pembayaranBulanIni> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const PembayaranScreen()));
+                                builder: (context) => PembayaranScreen(
+                                      tagihan: tagihan,
+                                    )));
                       },
                       child: Text(
                         "Bayar",

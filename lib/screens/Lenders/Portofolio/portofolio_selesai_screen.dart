@@ -78,7 +78,7 @@ class PortofolioSelesai extends StatelessWidget {
                           Expanded(
                             child: Column(
                               children: [
-                                Text("Est. Imbal Hasil",
+                                Text("Keuntungan",
                                     style: bodyTextStyle.copyWith(
                                         fontSize: 14, color: whiteColor)),
                                 vSpace(
@@ -103,13 +103,13 @@ class PortofolioSelesai extends StatelessWidget {
             ),
             vSpace(height: height * 0.02),
             funding.isEmpty
-                ? Center(
+                ? const Center(
                     child: Text("Tidak ada pendanaan Selesai"),
                   )
                 : Column(
                     children: funding.map((fund) {
                       final parsedDate =
-                          DateTime.parse(fund["funds"]["repaymentDate"]);
+                          DateTime.parse(fund["funds"]["createdDate"]);
                       String formattedDate =
                           DateFormat.yMMMMd().format(parsedDate);
                       return Card(
@@ -145,7 +145,7 @@ class PortofolioSelesai extends StatelessWidget {
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  Spacer(),
+                                  const Spacer(),
                                   TextButton.icon(
                                       onPressed: () async {
                                         Navigator.push(
@@ -176,11 +176,12 @@ class PortofolioSelesai extends StatelessWidget {
                                   right:
                                       formatCurrency(fund["funds"]["amount"])),
                               InformationRow(
-                                  left: "Imbal Hasil",
+                                  left: "Keuntungan",
                                   right: formatCurrency(
                                       fund["funds"]["yieldReturn"].round())),
                               InformationRow(
-                                  left: "Pengembalian", right: formattedDate),
+                                  left: "Tanggal Pinjaman",
+                                  right: formattedDate),
                             ],
                           ),
                         ),

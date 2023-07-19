@@ -1,13 +1,13 @@
 import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/models/bank.dart';
 import 'package:amanah/providers/authentication_provider.dart';
-import 'package:amanah/providers/pengajuan_loan_provider.dart';
+// import 'package:amanah/providers/pengajuan_loan_provider.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/Bank/tambah_bank_screen.dart';
-import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
+// import 'package:amanah/screens/Borrower/Home/borrower_homepage_screen.dart';
 import 'package:amanah/screens/Lenders/Balance/transaction_history_screen.dart';
 import 'package:amanah/screens/Lenders/Balance/withdraw_screen.dart';
-import 'package:amanah/services/loan_service.dart';
+// import 'package:amanah/services/loan_service.dart';
 import 'package:amanah/widgets/CustomAppBar.dart';
 import 'package:amanah/widgets/ToolTip.dart';
 import 'package:amanah/widgets/sweat_alert.dart';
@@ -42,7 +42,7 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final pengajuanLoanProvider = Provider.of<PengajuanLoanProvider>(context);
+    // final pengajuanLoanProvider = Provider.of<PengajuanLoanProvider>(context);
     final userProvider = Provider.of<UserProvider>(context);
     final authProvider = Provider.of<AuthenticationProvider>(context);
 
@@ -261,37 +261,14 @@ class _PilihBankScreenState extends State<PilihBankScreen> {
                             content: const Text("Pilih Bank terlebih dahulu"),
                           ));
                         } else {
-                          if (authProvider.role == "lender") {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => WithdrawScreen(
-                                          accountNumber: int.parse(
-                                              selectedBank!.accountNumber),
-                                          bankCode: selectedBank!.bankCode,
-                                        )));
-                          } else {
-                            try {
-                              final loanService = LoanService();
-                              await pengajuanLoanProvider.setDisbursementData(
-                                  selectedBank!,
-                                  userProvider.disbursement["loanId"]);
-                              loanService
-                                  .postDisbursement(pengajuanLoanProvider)
-                                  .then((value) {
-                                return successAlert(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            const BorrowerHomePage()),
-                                    "Penarikan Anda Sedang Diproses",
-                                    "Harap Menunggu Pencairan Pinjaman Anda");
-                              });
-                            } catch (e) {
-                              return failedAlert(context,
-                                  "Penarikan Anda Gagal Diproses", "$e");
-                            }
-                          }
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WithdrawScreen(
+                                        accountNumber: int.parse(
+                                            selectedBank!.accountNumber),
+                                        bankCode: selectedBank!.bankCode,
+                                      )));
                         }
                       },
                       style: ElevatedButton.styleFrom(

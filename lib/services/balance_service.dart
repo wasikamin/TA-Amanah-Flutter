@@ -10,10 +10,10 @@ class BalanceService {
   final FlutterSecureStorage _secureStorage = FlutterSecureStorage();
   Future<dynamic> deposit(int amount) async {
     try {
-      final _baseUrl = dotenv.env['API_BASE_URL'].toString();
-      final _depositUrl = '/balance/deposit';
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final depositUrl = '/balance/deposit';
       final token = await _secureStorage.read(key: 'jwtToken');
-      final url = Uri.parse('$_baseUrl$_depositUrl');
+      final url = Uri.parse('$baseUrl$depositUrl');
       final response = await http.post(
         url,
         headers: {
@@ -59,10 +59,10 @@ class BalanceService {
   Future<dynamic> addBankAccount(
       String bankCode, int accountNumber, String bankName) async {
     try {
-      final _baseUrl = dotenv.env['API_BASE_URL'].toString();
-      final _addBankUrl = '/balance/account';
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final addBankUrl = '/balance/account';
       final token = await _secureStorage.read(key: 'jwtToken');
-      final url = Uri.parse('$_baseUrl$_addBankUrl');
+      final url = Uri.parse('$baseUrl$addBankUrl');
       final response = await http.post(
         url,
         headers: {
@@ -83,16 +83,16 @@ class BalanceService {
         throw responseBody["message"];
       }
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 
   Future<dynamic> getBankAccount() async {
     try {
-      final _baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
       final token = await _secureStorage.read(key: 'jwtToken');
-      const String _getBankAccountUrl = "/balance/account";
-      final url = Uri.parse('$_baseUrl$_getBankAccountUrl');
+      const String getBankAccountUrl = "/balance/account";
+      final url = Uri.parse('$baseUrl$getBankAccountUrl');
       final response = await http.get(
         url,
         headers: {
@@ -150,10 +150,10 @@ class BalanceService {
   Future<dynamic> withdraw(
       int accountNumber, String bankCode, int amount) async {
     try {
-      final _baseUrl = dotenv.env['API_BASE_URL'].toString();
-      final _depositUrl = '/balance/withdraw';
+      final baseUrl = dotenv.env['API_BASE_URL'].toString();
+      final depositUrl = '/balance/withdraw';
       final token = await _secureStorage.read(key: 'jwtToken');
-      final url = Uri.parse('$_baseUrl$_depositUrl');
+      final url = Uri.parse('$baseUrl$depositUrl');
       final response = await http.post(
         url,
         headers: {

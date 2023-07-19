@@ -1,8 +1,8 @@
 import 'package:amanah/constants/app_theme.dart';
-import 'package:amanah/widgets/Lender/Pendanaan/InformationRow.dart';
+// import 'package:amanah/widgets/Lender/Pendanaan/InformationRow.dart';
 import 'package:flutter/material.dart';
 import 'package:extended_masked_text/extended_masked_text.dart';
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 class JumlahPinjamanSlider extends StatefulWidget {
   const JumlahPinjamanSlider(
@@ -35,16 +35,16 @@ class JumlahPinjamanSliderState extends State<JumlahPinjamanSlider> {
     super.initState();
   }
 
-  String formatCurrency(int amount) {
-    final formatCurrency = new NumberFormat.currency(
-        locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
-    return formatCurrency.format(amount);
-  }
+  // String formatCurrency(int amount) {
+  //   final formatCurrency = new NumberFormat.currency(
+  //       locale: 'id_ID', symbol: 'Rp.', decimalDigits: 0);
+  //   return formatCurrency.format(amount);
+  // }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+    // final width = MediaQuery.of(context).size.width;
+    // final height = MediaQuery.of(context).size.height;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -88,28 +88,6 @@ class JumlahPinjamanSliderState extends State<JumlahPinjamanSlider> {
             widget.onChanged(sharedValue.value.round());
           },
         ),
-        Row(
-          children: [
-            Icon(
-              Icons.summarize_rounded,
-              color: primaryColor,
-            ),
-            SizedBox(width: width * 0.02),
-            Text(
-              "Ringkasan",
-              style: bodyTextStyle.copyWith(color: primaryColor),
-            ),
-          ],
-        ),
-        vSpace(height: height * 0.02),
-        InformationRow(
-            left: "Est. Imbal Hasil",
-            right: formatCurrency((sharedValue.value * widget.yield).toInt())),
-        vSpace(height: height * 0.01),
-        InformationRow(
-            left: "Est. Total Dana Kembali",
-            right: formatCurrency(sharedValue.value.toInt() +
-                (sharedValue.value * widget.yield).toInt())),
       ],
     );
   }
