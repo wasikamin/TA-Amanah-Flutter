@@ -20,7 +20,7 @@ class PortofolioBerjalan extends StatelessWidget {
     final height = MediaQuery.of(context).size.height;
     return Consumer<UserProvider>(builder: (context, userProvider, _) {
       List<dynamic> funding = userProvider.portofolio!["active"]["funding"];
-      List<dynamic> reversedList = funding.reversed.toList();
+
       return Padding(
         padding: EdgeInsets.symmetric(
             horizontal: width * 0.05, vertical: height * 0.02),
@@ -109,7 +109,7 @@ class PortofolioBerjalan extends StatelessWidget {
                     child: Text("Tidak ada pendanaan berjalan"),
                   )
                 : Column(
-                    children: reversedList.map((fund) {
+                    children: funding.map((fund) {
                       final parsedDate =
                           DateTime.parse(fund["funds"]["createdDate"]);
                       // print(fund);

@@ -136,7 +136,7 @@ class _RekomendasiPendanaanState extends State<RekomendasiPendanaan> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Imbal Hasil",
+                                      "Keuntungan",
                                       style:
                                           bodyTextStyle.copyWith(fontSize: 11),
                                     ),
@@ -280,14 +280,14 @@ class _RekomendasiPendanaanState extends State<RekomendasiPendanaan> {
                                   text: loan.borrowingCategory,
                                   textStyle: bodyTextStyle.copyWith(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold),
                                 )
                               : Text(
                                   loan.borrowingCategory,
                                   style: bodyTextStyle.copyWith(
                                       color: Colors.white,
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.bold),
                                 ),
                         ),

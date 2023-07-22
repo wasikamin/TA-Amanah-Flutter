@@ -187,7 +187,13 @@ class _AutoLendState extends State<AutoLend> {
                 ),
               ),
               DropdownSearch<String>.multiSelection(
-                items: const ["Pendidikan", "Hiburan", "Pribadi", "Usaha"],
+                items: const [
+                  "Bisnis Kecil",
+                  "Tempat Tinggal",
+                  "Kesehatan",
+                  "Kendaraan",
+                  "Pembelian Besar"
+                ],
                 dropdownButtonProps: DropdownButtonProps(
                   icon: const Icon(Icons.arrow_drop_down_rounded),
                   iconSize: 24,
