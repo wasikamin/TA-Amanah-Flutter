@@ -28,10 +28,10 @@ class BorrowerTopCard extends StatelessWidget {
       return Container(
         height: screenHeight * 0.25,
         width: double.infinity,
-        margin: EdgeInsets.only(top: 20),
+        margin: const EdgeInsets.only(top: 20),
         decoration: BoxDecoration(
           color: whiteColor,
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -43,7 +43,7 @@ class BorrowerTopCard extends StatelessWidget {
             SizedBox(
               height: screenHeight * 0.015,
             ),
-            Text("Maksimal Limit: Rp. 11.000.000"),
+            const Text("Maksimal Limit: Rp. 80.000.000"),
             SizedBox(
               height: screenHeight * 0.025,
             ),
@@ -54,7 +54,8 @@ class BorrowerTopCard extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => PersonalInformationScreen()));
+                          builder: (context) =>
+                              const PersonalInformationScreen()));
                 },
                 child: Text(
                   "Verifikasi Data",
@@ -65,10 +66,11 @@ class BorrowerTopCard extends StatelessWidget {
             if (authenticationProvider.kyced == "pending" &&
                 userProvider.loading == false)
               Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 decoration: BoxDecoration(
                   color: primaryColor.withOpacity(0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(30)),
+                  borderRadius: const BorderRadius.all(Radius.circular(30)),
                 ),
                 child:
                     Text("Status Verifikasi: ${authenticationProvider.kyced}",
@@ -83,10 +85,11 @@ class BorrowerTopCard extends StatelessWidget {
                   return;
                 },
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 30),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
-                      side: BorderSide(color: Colors.grey),
+                      side: const BorderSide(color: Colors.grey),
                     ),
                     backgroundColor: Colors.grey),
                 child: Text(
@@ -110,7 +113,8 @@ class BorrowerTopCard extends StatelessWidget {
                   style: buttonTextStyle,
                 ),
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 30),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                       side: BorderSide(color: primaryColor),

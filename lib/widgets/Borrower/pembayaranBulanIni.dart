@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class pembayaranBulanIni extends StatefulWidget {
-  const pembayaranBulanIni({
+class PembayaranBulanIni extends StatefulWidget {
+  const PembayaranBulanIni({
     super.key,
   });
   @override
-  State<pembayaranBulanIni> createState() => _pembayaranBulanIniState();
+  State<PembayaranBulanIni> createState() => _PembayaranBulanIniState();
 }
 
-class _pembayaranBulanIniState extends State<pembayaranBulanIni> {
+class _PembayaranBulanIniState extends State<PembayaranBulanIni> {
   @override
   void initState() {
     // TODO: implement initState

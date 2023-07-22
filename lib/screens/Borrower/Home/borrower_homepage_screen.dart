@@ -44,7 +44,7 @@ class _BorrowerHomePage extends State<BorrowerHomePage> {
               _currentIndex = index;
             });
           },
-          items: [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'Home',

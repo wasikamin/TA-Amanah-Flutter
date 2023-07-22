@@ -82,7 +82,7 @@ class _DashboardState extends State<Dashboard> {
                                   height: 20,
                                   child: Image.asset(
                                       "assets/images/Logo/LogoAmana2.png")),
-                              SizedBox(
+                              const SizedBox(
                                 width: 10,
                               ),
                               Text(
@@ -95,7 +95,7 @@ class _DashboardState extends State<Dashboard> {
                           const BorrowerTopCard(),
                           const PinjamanAktif(),
                           Container(
-                            margin: EdgeInsets.symmetric(vertical: 20),
+                            margin: const EdgeInsets.symmetric(vertical: 20),
                             child: SizedBox(
                               child: Text(
                                 "Pembayaran Selanjutnya",
@@ -111,13 +111,13 @@ class _DashboardState extends State<Dashboard> {
                             decoration: BoxDecoration(
                               color: whiteColor,
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(20)),
+                                  const BorderRadius.all(Radius.circular(20)),
                             ),
-                            child: const pembayaranBulanIni(),
+                            child: const PembayaranBulanIni(),
                           ),
                           Container(
                               width: double.infinity,
-                              constraints: BoxConstraints(
+                              constraints: const BoxConstraints(
                                 minHeight: 100,
                               ),
                               padding: const EdgeInsets.all(16),
@@ -126,7 +126,7 @@ class _DashboardState extends State<Dashboard> {
                               decoration: BoxDecoration(
                                 color: whiteColor,
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(20)),
+                                    const BorderRadius.all(Radius.circular(20)),
                               ),
                               child: const JadwalPembayaran()),
                         ]),

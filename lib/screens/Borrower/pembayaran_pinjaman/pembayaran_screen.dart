@@ -2,6 +2,7 @@ import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/providers/user_provider.dart';
 import 'package:amanah/screens/web/web_view_screen.dart';
 import 'package:amanah/services/user_service.dart';
+import 'package:amanah/widgets/Lender/Pendanaan/InformationRow.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -45,7 +46,7 @@ class PembayaranScreen extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.all(width * 0.05),
                 width: double.infinity,
-                height: height * 0.23,
+                height: height * 0.2,
                 child: Column(
                   children: [
                     Text(
@@ -63,21 +64,48 @@ class PembayaranScreen extends StatelessWidget {
                       style: bodyTextStyle.copyWith(fontSize: 22),
                     ),
                     const Spacer(),
-                    Row(
-                      children: [
-                        Text(
-                          "Sisa Pembayaran:",
-                          style: bodyTextStyle.copyWith(fontSize: 12),
-                        ),
-                        const Spacer(),
-                        Text(
-                          formatCurrency(tagihan),
-                          style: bodyTextStyle.copyWith(fontSize: 12),
-                        ),
-                      ],
-                    )
+                    Text(
+                      "Sisa Pembayaran: ${formatCurrency(tagihan)}",
+                      style: bodyTextStyle.copyWith(fontSize: 12),
+                    ),
+                    const vSpace(
+                      height: 10,
+                    ),
                   ],
                 ),
+              ),
+            ),
+            vSpace(height: height * 0.05),
+            Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(
+                  horizontal: width * 0.05, vertical: height * 0.02),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Rincian Total Tagihan:",
+                        style: bodyTextStyle.copyWith(
+                            fontSize: 16, color: primaryColor)),
+                  ),
+                  const vSpace(
+                    height: 10,
+                  ),
+                  InformationRow(
+                      left: "Total Pinjaman: ",
+                      right: formatCurrency(userProvider.active["amount"])),
+                  InformationRow(
+                      left: "Keuntungan: ",
+                      right:
+                          formatCurrency(userProvider.active["yieldReturn"])),
+                  const InformationRow(
+                      left: "biaya admin:", right: "Rp. 10.000"),
+                  InformationRow(
+                      left: "Total Tagihan:",
+                      right: formatCurrency(userProvider.active["amount"] +
+                          userProvider.active["yieldReturn"] +
+                          10000)),
+                ],
               ),
             ),
             const Spacer(),
