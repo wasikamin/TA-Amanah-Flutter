@@ -2,10 +2,11 @@ import 'package:amanah/constants/app_theme.dart';
 import 'package:amanah/screens/profile/informasi_aplikasi_screen.dart';
 import 'package:amanah/widgets/Borrower/user_performance.dart';
 import 'package:amanah/widgets/borrower/UserProfileDetail.dart';
+import 'package:amanah/widgets/sweat_alert.dart';
 import 'package:amanah/widgets/topBackground.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../../providers/authentication_provider.dart';
+// import 'package:provider/provider.dart';
+// import '../../../providers/authentication_provider.dart';
 
 class BorrowerProfile extends StatelessWidget {
   const BorrowerProfile({super.key});
@@ -14,7 +15,7 @@ class BorrowerProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final authenticationProvider = Provider.of<AuthenticationProvider>(context);
+    // final authenticationProvider = Provider.of<AuthenticationProvider>(context);
     return Scaffold(
       backgroundColor: whiteColor,
       body: Stack(
@@ -128,7 +129,8 @@ class BorrowerProfile extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))),
                       onPressed: () async {
-                        await authenticationProvider.logout(context);
+                        logoutAlert(context, "Konfirmasi Keluar",
+                            "Apakah anda yakin ingin keluar?");
                       },
                       child: const Text(
                         'Keluar',

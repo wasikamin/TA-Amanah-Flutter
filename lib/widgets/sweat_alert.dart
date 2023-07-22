@@ -1,5 +1,7 @@
 import 'package:amanah/constants/app_theme.dart';
+import 'package:amanah/providers/authentication_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 var alertStyle = AlertStyle(
@@ -83,6 +85,41 @@ void succesAlertinSamePage(BuildContext context, String title, String desc) {
         ),
         onPressed: () {
           Navigator.pop(context);
+        },
+      )
+    ],
+  ).show();
+  return;
+}
+
+void logoutAlert(BuildContext context, String title, String desc) {
+  final authenticationProvider =
+      Provider.of<AuthenticationProvider>(context, listen: false);
+  Alert(
+    style: alertStyle,
+    context: context,
+    type: AlertType.warning,
+    title: title,
+    desc: desc,
+    buttons: [
+      DialogButton(
+        color: Colors.grey,
+        child: const Text(
+          "Batal",
+          style: TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+      DialogButton(
+        color: Colors.red[400],
+        child: const Text(
+          "Keluar",
+          style: TextStyle(color: Colors.white, fontSize: 14),
+        ),
+        onPressed: () async {
+          await authenticationProvider.logout(context);
         },
       )
     ],
